@@ -21,8 +21,10 @@
 html,body{
     margin:0;
     padding:0;
+
     width:100%;
     height:100%;
+
     overflow:hidden;
 
     background:#070910;
@@ -36,11 +38,6 @@ html,body{
 button{
     font-family:inherit;
 }
-
-
-/* =====================================================
-   COMMON
-===================================================== */
 
 .screen{
     position:absolute;
@@ -82,7 +79,9 @@ button{
 
 .logo-small{
     color:#63f5ff;
+
     font-size:11px;
+
     letter-spacing:5px;
 
     margin-bottom:15px;
@@ -90,6 +89,7 @@ button{
 
 .logo{
     font-size:38px;
+
     font-weight:900;
 
     letter-spacing:4px;
@@ -165,6 +165,7 @@ button{
     color:#63f5ff;
 
     font-size:15px;
+
     font-weight:bold;
 
     letter-spacing:2px;
@@ -180,7 +181,7 @@ button{
 
 
 /* =====================================================
-   CARGO SELECT
+   CARGO
 ===================================================== */
 
 #cargoScreen{
@@ -229,7 +230,7 @@ button{
     display:grid;
 
     grid-template-columns:
-        repeat(2, minmax(0,1fr));
+        repeat(2,minmax(0,1fr));
 
     gap:9px;
 
@@ -246,8 +247,6 @@ button{
     background:#10141e;
 
     border:1px solid #303746;
-
-    transition:.15s;
 }
 
 .cargo-card.selected{
@@ -270,6 +269,7 @@ button{
     color:#ddd;
 
     font-size:11px;
+
     font-weight:bold;
 }
 
@@ -312,6 +312,7 @@ button{
 
 .cargo-card.selected .check{
     background:#63f5ff;
+
     color:#071016;
 
     border-color:#63f5ff;
@@ -351,6 +352,7 @@ button{
 
 .cargo-start:disabled{
     border-color:#2d3340;
+
     color:#555b67;
 }
 
@@ -365,6 +367,7 @@ button{
 
 #gameCanvas{
     position:absolute;
+
     inset:0;
 
     width:100%;
@@ -485,7 +488,7 @@ button{
     top:107px;
     left:9px;
 
-    width:150px;
+    width:160px;
 
     background:rgba(5,7,14,.86);
 
@@ -732,7 +735,7 @@ button{
     </button>
 
     <div class="version">
-        MOBILE PROTOTYPE v0.2
+        MOBILE PROTOTYPE v0.3
     </div>
 
 </section>
@@ -955,10 +958,10 @@ button{
 <script>
 
 /* =====================================================
-   DATA
+   CARGO DATA
 ===================================================== */
 
-const cargoData = [
+const cargoData=[
 
     {
         id:"ramen",
@@ -1033,7 +1036,7 @@ let selectedCargo=[];
 
 
 /* =====================================================
-   SCREEN CONTROL
+   SCREEN
 ===================================================== */
 
 function showScreen(id){
@@ -1051,7 +1054,7 @@ function showScreen(id){
 
 
 /* =====================================================
-   CARGO SCREEN
+   CARGO
 ===================================================== */
 
 function showCargoScreen(){
@@ -1064,7 +1067,7 @@ function showCargoScreen(){
 
 function renderCargo(){
 
-    const grid =
+    const grid=
         document.getElementById(
             "cargoGrid"
         );
@@ -1074,14 +1077,16 @@ function renderCargo(){
 
     cargoData.forEach(item=>{
 
-        const card =
+        const card=
             document.createElement("div");
 
         card.className="cargo-card";
 
 
         if(
-            selectedCargo.includes(item.id)
+            selectedCargo.includes(
+                item.id
+            )
         ){
 
             card.classList.add(
@@ -1130,7 +1135,7 @@ function renderCargo(){
 
 function toggleCargo(id){
 
-    const index =
+    const index=
         selectedCargo.indexOf(id);
 
 
@@ -1156,7 +1161,7 @@ function updateCargoSelection(){
 
     document.getElementById(
         "selectedCount"
-    ).textContent =
+    ).textContent=
         "선택된 물품: "+
         selectedCargo.length+
         "개";
@@ -1164,7 +1169,7 @@ function updateCargoSelection(){
 
     document.getElementById(
         "cargoStart"
-    ).disabled =
+    ).disabled=
         selectedCargo.length===0;
 }
 
@@ -1266,11 +1271,71 @@ let visitedSegments=new Set();
 
 let triggeredEvents=new Set();
 
-let animationId=null;
+let W=0;
+
+let H=0;
 
 
 /* =====================================================
-   START ROUTE PLANNING
+   CANVAS
+===================================================== */
+
+const canvas=
+    document.getElementById(
+        "gameCanvas"
+    );
+
+const ctx=
+    canvas.getContext("2d");
+
+
+function resize(){
+
+    const dpr=
+        Math.min(
+            window.devicePixelRatio||1,
+            2
+        );
+
+
+    W=window.innerWidth;
+
+    H=window.innerHeight;
+
+
+    canvas.width=W*dpr;
+    canvas.height=H*dpr;
+
+
+    canvas.style.width=
+        W+"px";
+
+    canvas.style.height=
+        H+"px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    draw();
+}
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =====================================================
+   START
 ===================================================== */
 
 function startRoutePlanning(){
@@ -1282,11 +1347,15 @@ function startRoutePlanning(){
 
     delivering=false;
 
+    drawing=false;
+
+
     route=[];
 
     routeDistance=0;
 
     damage=0;
+
 
     deliveredCargo.clear();
 
@@ -1297,8 +1366,8 @@ function startRoutePlanning(){
 
     document.getElementById(
         "modeMessage"
-    ).textContent =
-        "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
+    ).textContent=
+        "출발점에서 손가락을 누르고 도로를 따라 이동하세요";
 
 
     document.getElementById(
@@ -1324,88 +1393,14 @@ function startRoutePlanning(){
 
 
 /* =====================================================
-   CANVAS
-===================================================== */
-
-const canvas =
-    document.getElementById(
-        "gameCanvas"
-    );
-
-const ctx =
-    canvas.getContext("2d");
-
-
-let W=0;
-let H=0;
-
-
-function resize(){
-
-    const dpr =
-        Math.min(
-            window.devicePixelRatio||1,
-            2
-        );
-
-
-    W=window.innerWidth;
-
-    H=window.innerHeight;
-
-
-    canvas.width=W*dpr;
-    canvas.height=H*dpr;
-
-    canvas.style.width=W+"px";
-    canvas.style.height=H+"px";
-
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
-
-    draw();
-}
-
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-
-/* =====================================================
    ROAD GEOMETRY
 ===================================================== */
 
 /*
-    각 도로는 여러 개의
-    작은 SEGMENT로 나누어진다.
+    가장 가까운 도로 segment를 찾는다.
 
-    예:
-
-    A ---- B ---- C
-
-    A-B를 지나갔다면
-    A-B는 다시 갈 수 없다.
-
-    하지만
-
-       |
-       |
-    ---+---
-
-    수직으로 교차하는 것은
-    서로 다른 segment이므로 가능하다.
+    판정 범위는 넉넉하게 70px.
 */
-
 
 function roadPoint(x,y){
 
@@ -1446,11 +1441,13 @@ function roadPoint(x,y){
 
 
             const dx=b.x-a.x;
+
             const dy=b.y-a.y;
 
 
             const len2=
-                dx*dx+dy*dy;
+                dx*dx+
+                dy*dy;
 
 
             let t=
@@ -1460,17 +1457,23 @@ function roadPoint(x,y){
                 )/len2;
 
 
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
+            t=
+                Math.max(
+                    0,
+                    Math.min(
+                        1,
+                        t
+                    )
+                );
 
 
             const px=
-                a.x+dx*t;
+                a.x+
+                dx*t;
 
             const py=
-                a.y+dy*t;
+                a.y+
+                dy*t;
 
 
             const d=
@@ -1490,13 +1493,16 @@ function roadPoint(x,y){
                 };
 
                 bestRoad=r;
+
                 bestSegment=s;
             }
+
         }
+
     }
 
 
-    return {
+    return{
         point:best,
         distance:bestDistance,
         road:bestRoad,
@@ -1506,17 +1512,92 @@ function roadPoint(x,y){
 
 
 /* =====================================================
-   SEGMENT KEY
+   SEGMENT HELPERS
 ===================================================== */
 
-function segmentKey(road,segment){
-
-    /*
-       방향에 상관없이
-       같은 도로를 같은 것으로 취급한다.
-    */
+function segmentKey(
+    road,
+    segment
+){
 
     return road+"_"+segment;
+}
+
+
+function getSegment(
+    road,
+    segment
+){
+
+    return{
+        a:{
+            x:roads[road][segment][0],
+            y:roads[road][segment][1]
+        },
+
+        b:{
+            x:roads[road][segment+1][0],
+            y:roads[road][segment+1][1]
+        }
+    };
+}
+
+
+/*
+    두 segment가 공유하는 교차점 / 코너를 찾는다.
+*/
+
+function sharedPoint(
+    r1,s1,
+    r2,s2
+){
+
+    const a=
+        getSegment(r1,s1);
+
+    const b=
+        getSegment(r2,s2);
+
+
+    const pointsA=[
+        a.a,
+        a.b
+    ];
+
+    const pointsB=[
+        b.a,
+        b.b
+    ];
+
+
+    for(
+        const p of pointsA
+    ){
+
+        for(
+            const q of pointsB
+        ){
+
+            if(
+                Math.abs(
+                    p.x-q.x
+                )<0.0001
+                &&
+                Math.abs(
+                    p.y-q.y
+                )<0.0001
+            ){
+
+                return{
+                    x:p.x,
+                    y:p.y
+                };
+            }
+        }
+    }
+
+
+    return null;
 }
 
 
@@ -1530,18 +1611,40 @@ function pointerPosition(e){
         canvas.getBoundingClientRect();
 
 
-    const touch=
-        e.touches
-        ? e.touches[0]
-        : e;
+    let clientX;
+    let clientY;
 
 
-    return {
-        x:touch.clientX-rect.left,
-        y:touch.clientY-rect.top
+    if(
+        e.touches &&
+        e.touches.length
+    ){
+
+        clientX=
+            e.touches[0].clientX;
+
+        clientY=
+            e.touches[0].clientY;
+
+    }else{
+
+        clientX=e.clientX;
+
+        clientY=e.clientY;
+
+    }
+
+
+    return{
+        x:clientX-rect.left,
+        y:clientY-rect.top
     };
 }
 
+
+/* =====================================================
+   POINTER DOWN
+===================================================== */
 
 function pointerDown(e){
 
@@ -1563,40 +1666,105 @@ function pointerDown(e){
         startPoint.y*H;
 
 
+    /*
+       시작점 판정도 넉넉하게.
+    */
+
     if(
         Math.hypot(
             p.x-sx,
             p.y-sy
-        )>48
+        )>70
     ){
 
         return;
     }
 
 
-    drawing=true;
+    const first=
+        roadPoint(
+            p.x,
+            p.y
+        );
 
 
-    route=[{
-        x:startPoint.x,
-        y:startPoint.y
-    }];
+    if(
+        !first.point ||
+        first.distance>70
+    ){
+
+        return;
+    }
 
 
-    routeDistance=0;
+    /*
+       출발점에서 실제 첫 segment로
+       연결될 수 있는 경우만 시작.
+    */
+
+    const firstKey=
+        segmentKey(
+            first.road,
+            first.segment
+        );
+
+
+    route=[
+        {
+            x:startPoint.x,
+            y:startPoint.y
+        }
+    ];
+
 
     visitedSegments.clear();
 
-    deliveredCargo.clear();
+
+    visitedSegments.add(
+        firstKey
+    );
+
+
+    route.push(
+        first.point
+    );
+
+
+    routeDistance=
+        Math.hypot(
+            (
+                first.point.x-
+                startPoint.x
+            )*W,
+
+            (
+                first.point.y-
+                startPoint.y
+            )*H
+        );
+
+
+    drawing=true;
+
+
+    checkDestination(
+        first.point
+    );
 
 
     updateHUD();
 
     updateCargoHud();
 
+    updateDeliverButton();
+
     draw();
 }
 
+
+/* =====================================================
+   POINTER MOVE
+===================================================== */
 
 function pointerMove(e){
 
@@ -1622,13 +1790,16 @@ function pointerMove(e){
 
 
     /*
-       도로에서 너무 멀면
-       경로를 추가하지 않는다.
+       아주 넉넉한 도로 판정.
+
+       모바일에서 손가락은 실제 위치가
+       도로 중앙과 정확하게 일치하기 어렵기 때문에
+       70px까지 허용한다.
     */
 
     if(
         !road.point ||
-        road.distance>35
+        road.distance>70
     ){
 
         return;
@@ -1641,31 +1812,40 @@ function pointerMove(e){
         ];
 
 
-    const dx=
-        (road.point.x-last.x)*W;
+    /*
+       현재 마지막으로 사용 중인 segment 찾기
+    */
 
-    const dy=
-        (road.point.y-last.y)*H;
-
-
-    const distance=
-        Math.hypot(
-            dx,
-            dy
-        );
-
-
-    if(distance<4)
-        return;
+    const lastRoadInfo=
+        getLastSegment();
 
 
     /*
-       =================================================
-       이미 지나간 도로인지 검사
-       =================================================
+       같은 segment 안에서 움직이는 경우
+       그냥 직선으로 추가한다.
     */
 
-    const key=
+    if(
+        lastRoadInfo &&
+        lastRoadInfo.road===
+        road.road &&
+        lastRoadInfo.segment===
+        road.segment
+    ){
+
+        addRoutePoint(
+            road.point
+        );
+
+        return;
+    }
+
+
+    /*
+       새로운 segment로 넘어가는 경우.
+    */
+
+    const newKey=
         segmentKey(
             road.road,
             road.segment
@@ -1673,58 +1853,97 @@ function pointerMove(e){
 
 
     /*
-       같은 segment를 다시 지나가려고 하면
-       해당 움직임을 거부한다.
-
-       따라서:
-
-       ------>
-       <------
-
-       같은 도로를 되돌아가는 것도 불가능.
+       이미 사용한 segment라면 금지.
     */
 
     if(
-        visitedSegments.has(key)
+        visitedSegments.has(
+            newKey
+        )
     ){
 
         drawing=false;
 
-        document.getElementById(
-            "modeMessage"
-        ).textContent =
-            "⚠ 이미 지나간 도로입니다! 다른 길로 이동하세요";
-
-        setTimeout(()=>{
-
-            if(planning){
-
-                document.getElementById(
-                    "modeMessage"
-                ).textContent =
-                    "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
-            }
-
-        },1400);
-
+        showTemporaryMessage(
+            "⚠ 이미 지나간 도로입니다!"
+        );
 
         return;
     }
 
 
     /*
-       현재 segment 기록
+       마지막 segment와 현재 segment가
+       실제로 연결되는지 확인.
     */
 
-    visitedSegments.add(key);
+    if(lastRoadInfo){
+
+        const corner=
+            sharedPoint(
+                lastRoadInfo.road,
+                lastRoadInfo.segment,
+
+                road.road,
+                road.segment
+            );
 
 
-    route.push(
-        road.point
-    );
+        if(!corner){
+
+            /*
+               연결되지 않은 도로로
+               손가락이 순간이동한 경우.
+
+               아무 선도 그리지 않는다.
+            */
+
+            return;
+        }
 
 
-    routeDistance+=distance;
+        /*
+           ★ 핵심 ★
+
+           여기서 대각선으로 바로 연결하지 않고
+
+           기존 도로
+              ↓
+           [교차점]
+              ↓
+           새로운 도로
+
+           순서로 정확히 추가한다.
+
+           따라서 경로는 항상
+           수평 / 수직 / 90도 코너가 된다.
+        */
+
+        addRoutePoint(
+            corner
+        );
+
+
+        visitedSegments.add(
+            newKey
+        );
+
+
+        addRoutePoint(
+            road.point
+        );
+
+
+    }else{
+
+        visitedSegments.add(
+            newKey
+        );
+
+        addRoutePoint(
+            road.point
+        );
+    }
 
 
     checkDestination(
@@ -1742,6 +1961,112 @@ function pointerMove(e){
 }
 
 
+/* =====================================================
+   GET LAST SEGMENT
+===================================================== */
+
+function getLastSegment(){
+
+    if(
+        visitedSegments.size===0
+    )
+        return null;
+
+
+    const arr=
+        Array.from(
+            visitedSegments
+        );
+
+
+    const key=
+        arr[arr.length-1];
+
+
+    const parts=
+        key.split("_");
+
+
+    return{
+        road:Number(parts[0]),
+        segment:Number(parts[1])
+    };
+}
+
+
+/* =====================================================
+   ADD ROUTE POINT
+===================================================== */
+
+function addRoutePoint(point){
+
+    if(!point)
+        return;
+
+
+    const last=
+        route[
+            route.length-1
+        ];
+
+
+    if(!last){
+
+        route.push({
+            x:point.x,
+            y:point.y
+        });
+
+        return;
+    }
+
+
+    const dx=
+        (point.x-last.x)*W;
+
+    const dy=
+        (point.y-last.y)*H;
+
+
+    const distance=
+        Math.hypot(
+            dx,
+            dy
+        );
+
+
+    if(distance<2)
+        return;
+
+
+    /*
+       실제 이동거리 기록
+    */
+
+    routeDistance+=distance;
+
+
+    route.push({
+        x:point.x,
+        y:point.y
+    });
+
+
+    /*
+       경로가 업데이트될 때마다
+       모든 배송지를 검사한다.
+    */
+
+    checkDestination(
+        point
+    );
+}
+
+
+/* =====================================================
+   POINTER UP
+===================================================== */
+
 function pointerUp(e){
 
     if(e)
@@ -1750,6 +2075,7 @@ function pointerUp(e){
 
     drawing=false;
 
+
     updateDeliverButton();
 
     draw();
@@ -1757,45 +2083,34 @@ function pointerUp(e){
 
 
 /* =====================================================
-   EVENTS
+   TEMP MESSAGE
 ===================================================== */
 
-canvas.addEventListener(
-    "touchstart",
-    pointerDown,
-    {passive:false}
-);
+function showTemporaryMessage(
+    message
+){
 
-canvas.addEventListener(
-    "touchmove",
-    pointerMove,
-    {passive:false}
-);
+    document.getElementById(
+        "modeMessage"
+    ).textContent=message;
 
-canvas.addEventListener(
-    "touchend",
-    pointerUp,
-    {passive:false}
-);
 
-canvas.addEventListener(
-    "mousedown",
-    pointerDown
-);
+    setTimeout(()=>{
 
-canvas.addEventListener(
-    "mousemove",
-    pointerMove
-);
+        if(planning){
 
-canvas.addEventListener(
-    "mouseup",
-    pointerUp
-);
+            document.getElementById(
+                "modeMessage"
+            ).textContent=
+                "도로를 따라 손가락을 움직여 경로를 만드세요";
+        }
+
+    },1200);
+}
 
 
 /* =====================================================
-   DESTINATIONS
+   DESTINATION CHECK
 ===================================================== */
 
 function checkDestination(point){
@@ -1825,13 +2140,15 @@ function checkDestination(point){
             );
 
 
-        if(d<.055){
+        /*
+           배송지 판정도 넉넉하게.
+        */
+
+        if(d<.065){
 
             deliveredCargo.add(
                 item.id
             );
-
-            updateCargoHud();
         }
 
     });
@@ -1856,11 +2173,13 @@ function clearRoute(){
 
     visitedSegments.clear();
 
+    drawing=false;
+
 
     document.getElementById(
         "modeMessage"
-    ).textContent =
-        "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
+    ).textContent=
+        "출발점에서 손가락을 누르고 도로를 따라 이동하세요";
 
 
     updateHUD();
@@ -1886,6 +2205,7 @@ function updateDeliverButton(){
 
 
     const complete=
+        selectedCargo.length>0 &&
         deliveredCargo.size===
         selectedCargo.length;
 
@@ -1921,12 +2241,23 @@ function startDelivery(){
 
     delivering=true;
 
+
     damage=0;
 
     deliveryProgress=0;
 
     deliveryStart=
         performance.now();
+
+    deliveryElapsed=0;
+
+
+    /*
+       배송 시작 시 배송 여부를
+       다시 계산하기 위해 초기화.
+    */
+
+    deliveredCargo.clear();
 
 
     document.getElementById(
@@ -1941,34 +2272,27 @@ function startDelivery(){
 
     document.getElementById(
         "modeMessage"
-    ).textContent =
+    ).textContent=
         "계획한 경로를 따라 배송 중";
 
 
-    /*
-       기존처럼 화면 중앙을 가리는
-       팝업이 아니라 작은 상태바.
-    */
-
     document.getElementById(
         "deliveryStatus"
-    ).style.display="block";
+    ).style.display=
+        "block";
 
-
-    deliveredCargo.clear();
 
     updateCargoHud();
 
 
-    animationId=
-        requestAnimationFrame(
-            deliveryLoop
-        );
+    requestAnimationFrame(
+        deliveryLoop
+    );
 }
 
 
 /* =====================================================
-   DELIVERY
+   DELIVERY LOOP
 ===================================================== */
 
 function deliveryLoop(now){
@@ -1978,28 +2302,156 @@ function deliveryLoop(now){
 
 
     deliveryElapsed=
-        (now-deliveryStart)/1000;
+        (
+            now-
+            deliveryStart
+        )/1000;
 
 
     /*
-       이전보다 상당히 빠르게.
+       빠른 배송 속도.
 
-       약 430px/sec.
+       실제 화면 크기에 관계없이
+       일정한 속도로 이동하도록 계산.
     */
 
-    const speed=430;
+    const speed=500;
 
 
-    const frameDistance=
-        speed/60;
+    /*
+       requestAnimationFrame의 실제
+       시간 차이를 이용한다.
+    */
+
+    const dt=
+        Math.min(
+            0.05,
+            (now-
+             (deliveryLoop.lastTime||
+              now))/1000
+        );
 
 
-    const progressStep=
-        frameDistance/10;
+    deliveryLoop.lastTime=now;
 
 
-    deliveryProgress+=
-        progressStep;
+    const movement=
+        speed*dt;
+
+
+    /*
+       routeProgress를 거리 기반으로
+       처리한다.
+
+       단순 배열 index 방식보다
+       부드럽고 정확하다.
+    */
+
+    let remaining=
+        movement;
+
+
+    while(
+        remaining>0 &&
+        deliveryProgress<
+        route.length-1
+    ){
+
+        const index=
+            Math.floor(
+                deliveryProgress
+            );
+
+
+        const fraction=
+            deliveryProgress-index;
+
+
+        const a=
+            route[index];
+
+        const b=
+            route[
+                index+1
+            ];
+
+
+        const segmentLength=
+            Math.hypot(
+                (
+                    b.x-a.x
+                )*W,
+
+                (
+                    b.y-a.y
+                )*H
+            );
+
+
+        const remainingOnSegment=
+            segmentLength*
+            (1-fraction);
+
+
+        if(
+            remaining<
+            remainingOnSegment
+        ){
+
+            deliveryProgress+=
+                remaining/
+                segmentLength;
+
+            remaining=0;
+
+        }else{
+
+            remaining-=
+                remainingOnSegment;
+
+            deliveryProgress=
+                index+1;
+        }
+
+    }
+
+
+    /*
+       현재 위치에서 배송지 검사.
+    */
+
+    checkDeliveryDestinations();
+
+
+    /*
+       손상
+    */
+
+    const rate=
+        getDamageRate();
+
+
+    damage+=
+        movement*
+        .002*
+        rate;
+
+
+    damage=
+        Math.min(
+            100,
+            damage
+        );
+
+
+    checkEvent();
+
+
+    updateHUD();
+
+    updateCargoHud();
+
+    drawDelivery();
 
 
     if(
@@ -2013,43 +2465,112 @@ function deliveryLoop(now){
     }
 
 
-    /*
-       손상
-    */
-
-    const rate=
-        getDamageRate();
+    requestAnimationFrame(
+        deliveryLoop
+    );
+}
 
 
-    damage +=
-        frameDistance*
-        .0025*
-        rate;
+/* =====================================================
+   DELIVERY POSITION
+===================================================== */
+
+function getDeliveryPosition(){
+
+    if(
+        route.length===0
+    )
+        return startPoint;
 
 
-    damage=
-        Math.min(
-            100,
-            damage
+    const index=
+        Math.floor(
+            deliveryProgress
         );
 
 
-    /*
-       이벤트
-    */
+    if(
+        index>=route.length-1
+    ){
 
-    checkEvent();
-
-
-    drawDelivery();
-
-    updateHUD();
+        return route[
+            route.length-1
+        ];
+    }
 
 
-    animationId=
-        requestAnimationFrame(
-            deliveryLoop
-        );
+    const fraction=
+        deliveryProgress-
+        index;
+
+
+    const a=
+        route[index];
+
+    const b=
+        route[index+1];
+
+
+    return{
+        x:
+            a.x+
+            (
+                b.x-a.x
+            )*fraction,
+
+        y:
+            a.y+
+            (
+                b.y-a.y
+            )*fraction
+    };
+}
+
+
+/* =====================================================
+   DELIVERY DESTINATION
+===================================================== */
+
+function checkDeliveryDestinations(){
+
+    const p=
+        getDeliveryPosition();
+
+
+    cargoData.forEach(item=>{
+
+        if(
+            !selectedCargo.includes(
+                item.id
+            )
+        )
+            return;
+
+
+        if(
+            deliveredCargo.has(
+                item.id
+            )
+        )
+            return;
+
+
+        const d=
+            Math.hypot(
+                p.x-item.x,
+                p.y-item.y
+            );
+
+
+        if(d<.065){
+
+            deliveredCargo.add(
+                item.id
+            );
+
+        }
+
+    });
 }
 
 
@@ -2074,10 +2595,12 @@ function getDamageRate(){
 
         if(item){
 
-            total+=item.damageRate;
+            total+=
+                item.damageRate;
 
             count++;
         }
+
     });
 
 
@@ -2088,136 +2611,28 @@ function getDamageRate(){
 
 
 /* =====================================================
-   DELIVERY DRAW
-===================================================== */
-
-function drawDelivery(){
-
-    draw();
-
-
-    const index=
-        Math.floor(
-            deliveryProgress
-        );
-
-
-    const next=
-        Math.min(
-            index+1,
-            route.length-1
-        );
-
-
-    const t=
-        deliveryProgress-index;
-
-
-    const a=
-        route[index];
-
-    const b=
-        route[next];
-
-
-    const x=
-        a.x+
-        (b.x-a.x)*t;
-
-
-    const y=
-        a.y+
-        (b.y-a.y)*t;
-
-
-    /*
-       배달 차량
-    */
-
-    ctx.save();
-
-
-    ctx.shadowColor="#ff3c91";
-
-    ctx.shadowBlur=20;
-
-
-    ctx.fillStyle="#ff3c91";
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x*W,
-        y*H,
-        10,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    ctx.shadowBlur=0;
-
-
-    ctx.fillStyle="#fff";
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        x*W+5,
-        y*H-4,
-        3,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    ctx.restore();
-}
-
-
-/* =====================================================
    EVENT
 ===================================================== */
 
 function checkEvent(){
 
-    const center={
-        x:.50,
-        y:.50
-    };
-
-
     if(
-        triggeredEvents.has("center")
+        triggeredEvents.has(
+            "center"
+        )
     )
         return;
 
 
-    const index=
-        Math.floor(
-            deliveryProgress
-        );
-
-
-    if(!route[index])
-        return;
-
-
     const p=
-        route[index];
+        getDeliveryPosition();
 
 
     if(
         Math.hypot(
-            p.x-center.x,
-            p.y-center.y
-        )<.04
+            p.x-.50,
+            p.y-.50
+        )<.035
     ){
 
         triggeredEvents.add(
@@ -2230,29 +2645,36 @@ function checkEvent(){
 
         showEvent(
             "⚡ ELECTROMAGNETIC STORM",
-            "도시 중앙을 지나던 중 강한<br>" +
-            "전자기 폭풍이 발생했습니다.<br><br>" +
+
+            "도시 중앙을 지나던 중 강한<br>"+
+            "전자기 폭풍이 발생했습니다.<br><br>"+
             "배송품 손상도 +5%"
         );
     }
 }
 
 
-function showEvent(title,text){
+function showEvent(
+    title,
+    text
+){
 
     document.getElementById(
         "eventTitle"
-    ).textContent=title;
+    ).textContent=
+        title;
 
 
     document.getElementById(
         "eventText"
-    ).innerHTML=text;
+    ).innerHTML=
+        text;
 
 
     document.getElementById(
         "event"
-    ).style.display="block";
+    ).style.display=
+        "block";
 }
 
 
@@ -2260,7 +2682,8 @@ function closeEvent(){
 
     document.getElementById(
         "event"
-    ).style.display="none";
+    ).style.display=
+        "none";
 }
 
 
@@ -2273,9 +2696,14 @@ function finishDelivery(){
     delivering=false;
 
 
+    deliveryLoop.lastTime=
+        null;
+
+
     document.getElementById(
         "deliveryStatus"
-    ).style.display="none";
+    ).style.display=
+        "none";
 
 
     damage=
@@ -2294,10 +2722,12 @@ function finishDelivery(){
             0,
             Math.min(
                 100,
+
                 100-
                 Math.max(
                     0,
-                    routeDistance-ideal
+                    routeDistance-
+                    ideal
                 )/8
             )
         );
@@ -2341,10 +2771,13 @@ function finishDelivery(){
 
     if(score>=92)
         grade="S";
+
     else if(score>=82)
         grade="A";
+
     else if(score>=68)
         grade="B";
+
     else if(score>=52)
         grade="C";
 
@@ -2360,13 +2793,15 @@ function finishDelivery(){
     document.getElementById(
         "resultTime"
     ).textContent=
-        deliveryElapsed.toFixed(1)+"s";
+        deliveryElapsed.toFixed(1)+
+        "s";
 
 
     document.getElementById(
         "resultDamage"
     ).textContent=
-        damage.toFixed(1)+"%";
+        damage.toFixed(1)+
+        "%";
 
 
     document.getElementById(
@@ -2374,7 +2809,8 @@ function finishDelivery(){
     ).textContent=
         Math.round(
             efficiency
-        )+"%";
+        )+
+        "%";
 
 
     document.getElementById(
@@ -2388,7 +2824,8 @@ function finishDelivery(){
 
     document.getElementById(
         "grade"
-    ).textContent=grade;
+    ).textContent=
+        grade;
 
 
     showScreen(
@@ -2403,16 +2840,10 @@ function finishDelivery(){
 
 function getIdealDistance(){
 
-    /*
-       간단한 기준값.
-
-       나중에는 실제 그래프 탐색
-       알고리즘으로 최단거리를 계산하도록
-       바꿀 수 있다.
-    */
-
-    return 750+
-        selectedCargo.length*90;
+    return(
+        750+
+        selectedCargo.length*90
+    );
 }
 
 
@@ -2427,7 +2858,8 @@ function updateHUD(){
     ).textContent=
         Math.round(
             routeDistance
-        )+"m";
+        )+
+        "m";
 
 
     document.getElementById(
@@ -2441,7 +2873,8 @@ function updateHUD(){
     document.getElementById(
         "damage"
     ).textContent=
-        damage.toFixed(1)+"%";
+        damage.toFixed(1)+
+        "%";
 }
 
 
@@ -2458,9 +2891,11 @@ function updateCargoHud(){
 
 
     hud.innerHTML=
-        `<div class="cargo-hud-title">
+        `
+        <div class="cargo-hud-title">
             DELIVERY LIST
-        </div>`;
+        </div>
+        `;
 
 
     selectedCargo.forEach(id=>{
@@ -2476,7 +2911,9 @@ function updateCargoHud(){
 
 
         const div=
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         div.className=
@@ -2497,7 +2934,9 @@ function updateCargoHud(){
 
         div.textContent=
             (
-                deliveredCargo.has(id)
+                deliveredCargo.has(
+                    id
+                )
                 ? "✓ "
                 : "○ "
             )+
@@ -2560,17 +2999,33 @@ function draw(){
 
             const roadX=
                 Math.min(
-                    Math.abs(x/W-.2),
-                    Math.abs(x/W-.5),
-                    Math.abs(x/W-.8)
+                    Math.abs(
+                        x/W-.20
+                    ),
+
+                    Math.abs(
+                        x/W-.50
+                    ),
+
+                    Math.abs(
+                        x/W-.80
+                    )
                 )<.07;
 
 
             const roadY=
                 Math.min(
-                    Math.abs(y/H-.2),
-                    Math.abs(y/H-.5),
-                    Math.abs(y/H-.8)
+                    Math.abs(
+                        y/H-.20
+                    ),
+
+                    Math.abs(
+                        y/H-.50
+                    ),
+
+                    Math.abs(
+                        y/H-.80
+                    )
                 )<.07;
 
 
@@ -2582,7 +3037,9 @@ function draw(){
 
 
             ctx.fillStyle=
-                ((x+y)/42)%2===0
+                (
+                    (x+y)/42
+                )%2===0
                 ? "#111521"
                 : "#0d111a";
 
@@ -2593,12 +3050,13 @@ function draw(){
                 36,
                 36
             );
+
         }
     }
 
 
     /*
-       ROAD
+       ROADS
     */
 
     roads.forEach(path=>{
@@ -2618,33 +3076,34 @@ function draw(){
 
                 if(index===0)
                     ctx.moveTo(x,y);
+
                 else
                     ctx.lineTo(x,y);
+
             }
         );
 
 
         ctx.lineWidth=31;
 
-        ctx.strokeStyle="#252a36";
+        ctx.strokeStyle=
+            "#252a36";
 
         ctx.stroke();
 
 
         ctx.lineWidth=2;
 
-        ctx.strokeStyle="#4a5060";
+        ctx.strokeStyle=
+            "#4a5060";
 
         ctx.stroke();
 
 
-        /*
-           도로 중앙선
-        */
-
         ctx.setLineDash(
             [8,9]
         );
+
 
         ctx.lineWidth=1;
 
@@ -2655,11 +3114,12 @@ function draw(){
 
 
         ctx.setLineDash([]);
+
     });
 
 
     /*
-       CENTER EVENT
+       EVENT NODE
     */
 
     ctx.fillStyle="#ffcf55";
@@ -2672,8 +3132,8 @@ function draw(){
     ctx.beginPath();
 
     ctx.arc(
-        W*.5,
-        H*.5,
+        W*.50,
+        H*.50,
         7,
         0,
         Math.PI*2
@@ -2712,10 +3172,6 @@ function draw(){
             );
 
 
-        /*
-           외곽 원
-        */
-
         ctx.strokeStyle=
             done
             ? "#5cff9a"
@@ -2736,10 +3192,6 @@ function draw(){
 
         ctx.stroke();
 
-
-        /*
-           내부
-        */
 
         ctx.fillStyle=
             done
@@ -2782,7 +3234,7 @@ function draw(){
 
 
     /*
-       ROUTE LINE
+       ROUTE
     */
 
     if(route.length>1){
@@ -2805,8 +3257,10 @@ function draw(){
 
                 if(index===0)
                     ctx.moveTo(x,y);
+
                 else
                     ctx.lineTo(x,y);
+
             }
         );
 
@@ -2815,7 +3269,7 @@ function draw(){
            GLOW
         */
 
-        ctx.lineWidth=10;
+        ctx.lineWidth=11;
 
         ctx.strokeStyle=
             delivering
@@ -2826,8 +3280,16 @@ function draw(){
 
 
         /*
-           MAIN LINE
+           MAIN ROUTE
+
+           lineJoin = miter로 해서
+           코너가 날카롭게 연결되도록 함.
         */
+
+        ctx.lineJoin="miter";
+
+        ctx.lineCap="square";
+
 
         ctx.lineWidth=5;
 
@@ -2836,24 +3298,24 @@ function draw(){
             ? "#ff3c91"
             : "#63f5ff";
 
+
         ctx.shadowColor=
             delivering
             ? "#ff3c91"
             : "#63f5ff";
+
 
         ctx.shadowBlur=10;
 
         ctx.stroke();
 
 
-        ctx.shadowBlur=0;
-
         ctx.restore();
     }
 
 
     /*
-       START
+       START POINT
     */
 
     const sx=
@@ -2895,6 +3357,7 @@ function draw(){
 
     ctx.textBaseline="middle";
 
+
     ctx.fillText(
         "S",
         sx,
@@ -2903,7 +3366,7 @@ function draw(){
 
 
     /*
-       시작점 안내 링
+       START RING
     */
 
     if(
@@ -2915,6 +3378,7 @@ function draw(){
             "rgba(99,245,255,.35)";
 
         ctx.lineWidth=2;
+
 
         ctx.beginPath();
 
@@ -2928,6 +3392,70 @@ function draw(){
 
         ctx.stroke();
     }
+}
+
+
+/* =====================================================
+   DELIVERY DRAW
+===================================================== */
+
+function drawDelivery(){
+
+    draw();
+
+
+    const p=
+        getDeliveryPosition();
+
+
+    /*
+       CYBER DELIVERY VEHICLE
+    */
+
+    ctx.save();
+
+
+    ctx.shadowColor="#ff3c91";
+
+    ctx.shadowBlur=20;
+
+
+    ctx.fillStyle="#ff3c91";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        p.x*W,
+        p.y*H,
+        10,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.shadowBlur=0;
+
+
+    ctx.fillStyle="#fff";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        p.x*W+5,
+        p.y*H-4,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
 }
 
 </script>

@@ -1165,6 +1165,17 @@ let routeDistance=0;
 
 let drawing=false;
 
+/*
+   현재 드래그 중인 도로와 진행 방향.
+   같은 도로에서 뒤로 되돌아가는 입력은 막는다.
+*/
+let activeRoadId=null;
+let activeRoadDirection=0;
+let lastPointer=null;
+
+const ROUTE_POINT_MIN_DISTANCE=4;
+const INTERSECTION_TOUCH_DISTANCE=52;
+
 let planning=false;
 
 let delivering=false;
@@ -1230,16 +1241,12 @@ window.addEventListener(
 function getRoadPoint(road,t){
 
     return{
-        x:
-            road.x1+
+        x:road.x1+
             (road.x2-road.x1)*t,
-
-        y:
-            road.y1+
+        y:road.y1+
             (road.y2-road.y1)*t
     };
 }
-
 
 function roadLength(road){
 
@@ -1249,149 +1256,98 @@ function roadLength(road){
     );
 }
 
+function clamp01(v){
+    return Math.max(0,Math.min(1,v));
+}
+
+function projectToRoad(road,x,y){
+
+    const ax=road.x1*W;
+    const ay=road.y1*H;
+    const bx=road.x2*W;
+    const by=road.y2*H;
+
+    const dx=bx-ax;
+    const dy=by-ay;
+    const len2=dx*dx+dy*dy;
+
+    let t=0;
+
+    if(len2>0){
+        t=((x-ax)*dx+(y-ay)*dy)/len2;
+    }
+
+    t=clamp01(t);
+
+    const point=getRoadPoint(road,t);
+
+    return{
+        road,
+        t,
+        point,
+        x:point.x*W,
+        y:point.y*H,
+        distance:Math.hypot(x-point.x*W,y-point.y*H)
+    };
+}
 
 /*
-   손가락 위치에서 가장 가까운 도로를 찾는다.
-
-   기존의 모든 선분 검사 대신
-   도로 6개만 검사하므로 훨씬 가볍다.
+   현재 위치에서 가장 가까운 도로.
+   교차로에서는 현재 도로를 우선한다.
 */
-
 function findRoad(x,y){
 
     let best=null;
     let bestDistance=Infinity;
-    let bestT=0;
 
     for(const road of roads){
 
-        let t;
-
-        if(road.type==="h"){
-
-            t=
-                (x/W-road.x1)/
-                (road.x2-road.x1);
-
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
-
-        }else{
-
-            t=
-                (y/H-road.y1)/
-                (road.y2-road.y1);
-
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
-        }
-
-        const point=
-            getRoadPoint(
-                road,
-                t
-            );
-
-        const dx=
-            x-point.x*W;
-
-        const dy=
-            y-point.y*H;
-
-        const distance=
-            Math.hypot(dx,dy);
-
-        /*
-           도로 폭 + 터치 여유
-        */
+        const hit=projectToRoad(road,x,y);
 
         if(
-            distance<75 &&
-            distance<bestDistance
+            road.id===activeRoadId &&
+            hit.distance<=bestDistance+8
         ){
+            best=hit;
+            bestDistance=hit.distance;
+            continue;
+        }
 
-            bestDistance=distance;
-
-            best={
-                road,
-                t,
-                point,
-                distance
-            };
+        if(hit.distance<bestDistance){
+            best=hit;
+            bestDistance=hit.distance;
         }
     }
 
-    return best;
+    return best && best.distance<=78 ? best : null;
 }
-
-
-/*
-   두 도로가 교차하는지 확인
-*/
 
 function roadsConnected(a,b){
 
-    if(!a || !b)
+    if(!a || !b || a.id===b.id)
         return false;
 
-    if(a.id===b.id)
+    if(a.type===b.type)
         return false;
 
-    /*
-       수평 + 수직
-    */
+    const h=a.type==="h" ? a : b;
+    const v=a.type==="v" ? a : b;
 
-    if(a.type!==b.type){
-
-        const h=
-            a.type==="h"
-            ? a
-            : b;
-
-        const v=
-            a.type==="v"
-            ? a
-            : b;
-
-        return(
-            v.x1>=h.x1 &&
-            v.x1<=h.x2 &&
-            h.y1>=v.y1 &&
-            h.y1<=v.y2
-        );
-    }
-
-    /*
-       평행한 도로는 연결되지 않는다.
-       같은 도로만 계속 따라갈 수 있다.
-    */
-
-    return false;
+    return(
+        v.x1>=h.x1 &&
+        v.x1<=h.x2 &&
+        h.y1>=v.y1 &&
+        h.y1<=v.y2
+    );
 }
-
-
-/*
-   두 도로의 교차점
-*/
 
 function getIntersection(a,b){
 
     if(!roadsConnected(a,b))
         return null;
 
-    const h=
-        a.type==="h"
-        ? a
-        : b;
-
-    const v=
-        a.type==="v"
-        ? a
-        : b;
+    const h=a.type==="h" ? a : b;
+    const v=a.type==="v" ? a : b;
 
     return{
         x:v.x1,
@@ -1399,217 +1355,222 @@ function getIntersection(a,b){
     };
 }
 
+function normalizedDistance(a,b){
 
-/* =====================================================
-   BUILD ROUTE
-===================================================== */
-
-function rebuildRoute(){
-
-    route=[];
-
-    if(
-        routeRoads.length===0
-    ){
-
-        routeDistance=0;
-
-        return;
-    }
-
-
-    /*
-       시작점
-    */
-
-    route.push({
-        x:startPoint.x,
-        y:startPoint.y
-    });
-
-
-    for(
-        let i=0;
-        i<routeRoads.length;
-        i++
-    ){
-
-        const road=routeRoads[i];
-
-
-        /*
-           첫 도로
-        */
-
-        if(i===0){
-
-            /*
-               시작점에서 해당 도로 위로
-            */
-
-            let t;
-
-            if(road.type==="h"){
-
-                t=
-                    (
-                        startPoint.x-
-                        road.x1
-                    )/
-                    (
-                        road.x2-
-                        road.x1
-                    );
-
-            }else{
-
-                t=
-                    (
-                        startPoint.y-
-                        road.y1
-                    )/
-                    (
-                        road.y2-
-                        road.y1
-                    );
-            }
-
-
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
-
-
-            /*
-               시작점과 반대쪽 방향으로
-               도로를 따라가도록 끝점을 만든다.
-            */
-
-            const p=
-                getRoadPoint(
-                    road,
-                    1
-                );
-
-            const startOnRoad=
-                getRoadPoint(
-                    road,
-                    t
-                );
-
-
-            if(
-                Math.hypot(
-                    (
-                        startOnRoad.x-
-                        startPoint.x
-                    )*W,
-                    (
-                        startOnRoad.y-
-                        startPoint.y
-                    )*H
-                )>2
-            ){
-
-                route.push(
-                    startOnRoad
-                );
-            }
-
-
-            /*
-               첫 도로의 끝
-            */
-
-            route.push(p);
-
-            continue;
-        }
-
-
-        const previous=
-            routeRoads[i-1];
-
-        const corner=
-            getIntersection(
-                previous,
-                road
-            );
-
-        if(corner){
-
-            route.push(corner);
-
-            /*
-               새 도로의 반대쪽 끝으로 이동
-            */
-
-            let endpoint;
-
-            if(
-                Math.abs(
-                    road.x1-corner.x
-                )+
-                Math.abs(
-                    road.y1-corner.y
-                )
-                <
-                Math.abs(
-                    road.x2-corner.x
-                )+
-                Math.abs(
-                    road.y2-corner.y
-                )
-            ){
-
-                endpoint={
-                    x:road.x2,
-                    y:road.y2
-                };
-
-            }else{
-
-                endpoint={
-                    x:road.x1,
-                    y:road.y1
-                };
-            }
-
-            route.push(endpoint);
-        }
-    }
-
-
-    /*
-       중복점 제거
-    */
-
-    const clean=[];
-
-    for(const p of route){
-
-        const last=
-            clean[clean.length-1];
-
-        if(
-            !last ||
-            Math.hypot(
-                (p.x-last.x)*W,
-                (p.y-last.y)*H
-            )>1
-        ){
-
-            clean.push(p);
-        }
-    }
-
-    route=clean;
-
-    routeDistance=
-        calculateRouteDistance();
+    return Math.hypot(
+        (a.x-b.x)*W,
+        (a.y-b.y)*H
+    );
 }
 
+function pushRoutePoint(p){
+
+    if(!p)
+        return false;
+
+    const last=route[route.length-1];
+
+    if(last && normalizedDistance(last,p)<ROUTE_POINT_MIN_DISTANCE)
+        return false;
+
+    route.push({
+        x:clamp01(p.x),
+        y:clamp01(p.y)
+    });
+
+    routeDistance=calculateRouteDistance();
+    return true;
+}
+
+function getRoadById(id){
+    return roads.find(r=>r.id===id)||null;
+}
+
+function getLastRoadT(){
+
+    if(route.length===0)
+        return null;
+
+    const road=getRoadById(activeRoadId);
+
+    if(!road)
+        return null;
+
+    const p=route[route.length-1];
+
+    if(road.type==="h"){
+        return clamp01(
+            (p.x-road.x1)/(road.x2-road.x1)
+        );
+    }
+
+    return clamp01(
+        (p.y-road.y1)/(road.y2-road.y1)
+    );
+}
+
+function directionFromT(previousT,currentT){
+
+    const delta=currentT-previousT;
+
+    if(Math.abs(delta)<0.002)
+        return 0;
+
+    return delta>0 ? 1 : -1;
+}
+
+function isNearStart(hit){
+
+    const sx=startPoint.x*W;
+    const sy=startPoint.y*H;
+
+    return Math.hypot(
+        hit.x-sx,
+        hit.y-sy
+    )<=90;
+}
+
+function continueOnCurrentRoad(hit){
+
+    const lastT=getLastRoadT();
+
+    if(lastT===null)
+        return false;
+
+    const newDirection=directionFromT(lastT,hit.t);
+
+    if(
+        activeRoadDirection===0 &&
+        newDirection!==0
+    ){
+        activeRoadDirection=newDirection;
+    }
+
+    /*
+       같은 도로를 이미 방문했으므로
+       현재 진행방향의 반대로 되돌아가는 것을 막는다.
+    */
+    if(
+        activeRoadDirection!==0 &&
+        newDirection!==0 &&
+        newDirection!==activeRoadDirection
+    ){
+        showTemporaryMessage(
+            "이미 지나간 방향으로 되돌아갈 수 없습니다"
+        );
+        return false;
+    }
+
+    return pushRoutePoint(hit.point);
+}
+
+function beginFirstRoad(hit){
+
+    if(!isNearStart(hit)){
+        showTemporaryMessage(
+            "출발점 근처에서 시작하세요"
+        );
+        return false;
+    }
+
+    activeRoadId=hit.road.id;
+    routeRoads=[hit.road];
+    visitedRoads.add(hit.road.id);
+    activeRoadDirection=0;
+
+    route=[{
+        x:startPoint.x,
+        y:startPoint.y
+    }];
+
+    pushRoutePoint(hit.point);
+
+    lastPointer={x:hit.x,y:hit.y};
+
+    checkDestinationsOnRoute();
+    updateAll();
+    draw();
+
+    return true;
+}
+
+function switchToNextRoad(hit){
+
+    const previous=getRoadById(activeRoadId);
+
+    if(!previous || hit.road.id===previous.id)
+        return false;
+
+    if(!roadsConnected(previous,hit.road)){
+        showTemporaryMessage(
+            "교차로에서 다른 도로로 이동하세요"
+        );
+        return false;
+    }
+
+    if(visitedRoads.has(hit.road.id)){
+        showTemporaryMessage(
+            "이미 지나간 도로입니다"
+        );
+        return false;
+    }
+
+    const corner=getIntersection(previous,hit.road);
+
+    if(!corner)
+        return false;
+
+    const cx=corner.x*W;
+    const cy=corner.y*H;
+
+    /*
+       새 도로는 실제 교차로 근처에서만 선택 가능.
+       멀리 떨어진 도로를 향해 포인터가 순간 이동해도
+       경로가 갑자기 꺾이지 않는다.
+    */
+    if(
+        Math.hypot(
+            hit.x-cx,
+            hit.y-cy
+        )>INTERSECTION_TOUCH_DISTANCE
+    ){
+        return false;
+    }
+
+    pushRoutePoint(corner);
+
+    routeRoads.push(hit.road);
+    visitedRoads.add(hit.road.id);
+    activeRoadId=hit.road.id;
+    activeRoadDirection=0;
+
+    /*
+       교차로에서 어느 방향으로 출발했는지 결정.
+    */
+    const cornerT=
+        hit.road.type==="h"
+            ? clamp01(
+                (corner.x-hit.road.x1)/
+                (hit.road.x2-hit.road.x1)
+            )
+            : clamp01(
+                (corner.y-hit.road.y1)/
+                (hit.road.y2-hit.road.y1)
+            );
+
+    activeRoadDirection=
+        directionFromT(cornerT,hit.t);
+
+    pushRoutePoint(hit.point);
+
+    lastPointer={x:hit.x,y:hit.y};
+
+    checkDestinationsOnRoute();
+    updateAll();
+    draw();
+
+    return true;
+}
 
 /* =====================================================
    START PLANNING
@@ -1635,6 +1596,10 @@ function startRoutePlanning(){
     deliveredCargo.clear();
     triggeredEvents.clear();
 
+    activeRoadId=null;
+    activeRoadDirection=0;
+    lastPointer=null;
+
     modeMessage.textContent=
         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
@@ -1648,147 +1613,6 @@ function startRoutePlanning(){
 
     resize();
 }
-
-
-/* =====================================================
-   ADD ROAD
-===================================================== */
-
-function tryAddRoad(hit){
-
-    if(!hit)
-        return false;
-
-    const road=hit.road;
-
-    /*
-       이미 방문한 도로는 절대 추가하지 않는다.
-    */
-
-    if(
-        visitedRoads.has(road.id)
-    ){
-
-        showTemporaryMessage(
-            "이미 지나간 도로입니다"
-        );
-
-        return false;
-    }
-
-
-    /*
-       첫 도로는 출발점에서 시작
-    */
-
-    if(
-        routeRoads.length===0
-    ){
-
-        /*
-           출발점과 도로가 연결되어 있는지 확인
-        */
-
-        const sx=startPoint.x*W;
-        const sy=startPoint.y*H;
-
-        if(
-            Math.hypot(
-                hit.point.x*W-sx,
-                hit.point.y*H-sy
-            )>85
-        ){
-
-            showTemporaryMessage(
-                "출발점 근처에서 시작하세요"
-            );
-
-            return false;
-        }
-
-        routeRoads.push(road);
-        visitedRoads.add(road.id);
-
-        rebuildRoute();
-
-        return true;
-    }
-
-
-    const previous=
-        routeRoads[
-            routeRoads.length-1
-        ];
-
-
-    /*
-       같은 도로라면 계속 이동 가능.
-       하지만 이미 route에 있으므로
-       새 도로로 추가하지 않는다.
-    */
-
-    if(
-        road.id===previous.id
-    ){
-
-        return true;
-    }
-
-
-    /*
-       반드시 교차로에서만
-       다른 도로로 이동 가능.
-    */
-
-    if(
-        !roadsConnected(
-            previous,
-            road
-        )
-    ){
-
-        showTemporaryMessage(
-            "교차로에서 다른 도로로 이동하세요"
-        );
-
-        return false;
-    }
-
-
-    /*
-       이미 방문한 도로면 막는다.
-    */
-
-    if(
-        visitedRoads.has(road.id)
-    ){
-
-        showTemporaryMessage(
-            "이미 지나간 도로입니다"
-        );
-
-        return false;
-    }
-
-
-    /*
-       새 도로 추가
-    */
-
-    routeRoads.push(road);
-
-    visitedRoads.add(road.id);
-
-    rebuildRoute();
-
-    checkDestinationsOnRoute();
-
-    updateAll();
-    draw();
-
-    return true;
-}
-
 
 /* =====================================================
    POINTER DOWN
@@ -1805,67 +1629,58 @@ function pointerDown(e){
     )
         return;
 
-    const rect=
-        canvas.getBoundingClientRect();
+    const rect=canvas.getBoundingClientRect();
 
-    const x=
-        e.clientX-
-        rect.left;
+    const x=e.clientX-rect.left;
+    const y=e.clientY-rect.top;
 
-    const y=
-        e.clientY-
-        rect.top;
-
-    const hit=
-        findRoad(x,y);
+    const hit=findRoad(x,y);
 
     if(!hit)
         return;
 
+    if(routeRoads.length===0){
+
+        if(beginFirstRoad(hit)){
+            drawing=true;
+            canvas.setPointerCapture?.(e.pointerId);
+            draw();
+        }
+
+        return;
+    }
 
     /*
-       이미 경로가 있다면
-       현재 경로의 마지막 도로에서
-       계속 이어야 한다.
+       드래그를 다시 시작할 때는 반드시
+       현재 경로의 끝에서 시작해야 한다.
     */
-
-    if(routeRoads.length>0){
-
-        const last=
-            routeRoads[
-                routeRoads.length-1
-            ];
-
-        if(
-            hit.road.id!==last.id &&
-            !roadsConnected(
-                last,
-                hit.road
-            )
-        ){
-
-            showTemporaryMessage(
-                "현재 경로의 끝에서 이어가세요"
-            );
-
-            return;
-        }
-    }
-
+    const end=route[route.length-1];
 
     if(
-        tryAddRoad(hit)
+        Math.hypot(
+            hit.x-end.x*W,
+            hit.y-end.y*H
+        )>90
     ){
-
-        drawing=true;
-
-        checkDestinationsOnRoute();
-
-        updateAll();
-        draw();
+        showTemporaryMessage(
+            "현재 경로의 끝에서 이어가세요"
+        );
+        return;
     }
-}
 
+    drawing=true;
+    lastPointer={x,y};
+    canvas.setPointerCapture?.(e.pointerId);
+
+    if(hit.road.id===activeRoadId)
+        continueOnCurrentRoad(hit);
+    else
+        switchToNextRoad(hit);
+
+    checkDestinationsOnRoute();
+    updateAll();
+    draw();
+}
 
 /* =====================================================
    POINTER MOVE
@@ -1883,53 +1698,35 @@ function pointerMove(e){
     )
         return;
 
-    const rect=
-        canvas.getBoundingClientRect();
+    const rect=canvas.getBoundingClientRect();
 
-    const x=
-        e.clientX-
-        rect.left;
+    const x=e.clientX-rect.left;
+    const y=e.clientY-rect.top;
 
-    const y=
-        e.clientY-
-        rect.top;
+    lastPointer={x,y};
 
-    const hit=
-        findRoad(x,y);
+    const hit=findRoad(x,y);
 
     if(!hit)
         return;
 
+    if(hit.road.id===activeRoadId){
 
-    /*
-       현재 도로 안에서는 아무 작업도 하지 않는다.
-       이것이 기존 랙의 큰 원인을 제거한다.
-    */
-
-    if(
-        routeRoads.length>0 &&
-        hit.road.id===
-        routeRoads[
-            routeRoads.length-1
-        ].id
-    ){
+        if(continueOnCurrentRoad(hit)){
+            checkDestinationsOnRoute();
+            updateAll();
+            draw();
+        }
 
         return;
     }
 
-
-    /*
-       새 도로로 이동
-    */
-
-    tryAddRoad(hit);
-
-    checkDestinationsOnRoute();
-
-    updateAll();
-    draw();
+    if(switchToNextRoad(hit)){
+        checkDestinationsOnRoute();
+        updateAll();
+        draw();
+    }
 }
-
 
 /* =====================================================
    POINTER UP
@@ -1940,15 +1737,16 @@ function pointerUp(e){
     if(e)
         e.preventDefault();
 
-    /*
-       손가락을 떼어도
-       경로는 절대 초기화하지 않는다.
-    */
+    if(e?.pointerId!==undefined){
+        try{
+            canvas.releasePointerCapture?.(e.pointerId);
+        }catch(_){}
+    }
 
     drawing=false;
+    lastPointer=null;
 
     updateDeliverButton();
-
     draw();
 }
 
@@ -2021,6 +1819,9 @@ function clearRoute(){
     deliveredCargo.clear();
 
     drawing=false;
+    activeRoadId=null;
+    activeRoadDirection=0;
+    lastPointer=null;
 
     modeMessage.textContent=
         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
@@ -3305,4 +3106,4 @@ resize();
 </script>
 
 </body>
-      </html>
+</html>

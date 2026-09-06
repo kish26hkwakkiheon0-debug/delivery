@@ -12,27 +12,346 @@
 <title>CYBER DELIVERY</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #070910;
-    font-family: Arial, sans-serif;
-    color: white;
-    touch-action: none;
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+
+    background:#070910;
+    color:#fff;
+
+    font-family:Arial,sans-serif;
+
+    touch-action:none;
 }
 
-button {
-    font-family: inherit;
-    -webkit-user-select: none;
-    user-select: none;
+button{
+    font-family:inherit;
+}
+
+
+/* =====================================================
+   COMMON
+===================================================== */
+
+.screen{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    display:none;
+}
+
+.screen.active{
+    display:flex;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+#titleScreen{
+    background:
+        radial-gradient(
+            circle at center,
+            #151b2b 0%,
+            #080a11 55%,
+            #05060a 100%
+        );
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:25px;
+}
+
+.logo-small{
+    color:#63f5ff;
+    font-size:11px;
+    letter-spacing:5px;
+
+    margin-bottom:15px;
+}
+
+.logo{
+    font-size:38px;
+    font-weight:900;
+
+    letter-spacing:4px;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 8px #63f5ff,
+        0 0 25px rgba(99,245,255,.5);
+}
+
+.logo-sub{
+    color:#ff3c91;
+
+    font-size:12px;
+
+    letter-spacing:5px;
+
+    margin-top:10px;
+}
+
+.title-city{
+    width:100%;
+    max-width:360px;
+
+    height:120px;
+
+    margin:35px 0;
+
+    border-top:1px solid #263044;
+    border-bottom:1px solid #263044;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.title-city::before,
+.title-city::after{
+    content:"";
+
+    position:absolute;
+
+    background:#63f5ff;
+
+    opacity:.35;
+}
+
+.title-city::before{
+    width:100%;
+    height:1px;
+
+    top:35px;
+}
+
+.title-city::after{
+    width:1px;
+    height:100%;
+
+    left:55%;
+}
+
+.start-button{
+    width:100%;
+    max-width:360px;
+
+    padding:17px;
+
+    background:#101722;
+
+    border:2px solid #63f5ff;
+
+    color:#63f5ff;
+
+    font-size:15px;
+    font-weight:bold;
+
+    letter-spacing:2px;
+}
+
+.version{
+    margin-top:15px;
+
+    color:#4d5564;
+
+    font-size:9px;
+}
+
+
+/* =====================================================
+   CARGO SELECT
+===================================================== */
+
+#cargoScreen{
+    background:#080a11;
+
+    flex-direction:column;
+
+    padding:18px;
+
+    overflow:hidden;
+}
+
+.cargo-header{
+    flex-shrink:0;
+
+    padding:5px 0 15px;
+
+    border-bottom:1px solid #292f3b;
+}
+
+.cargo-header h1{
+    margin:0;
+
+    color:#63f5ff;
+
+    font-size:21px;
+
+    letter-spacing:2px;
+}
+
+.cargo-header p{
+    margin:7px 0 0;
+
+    color:#777f8e;
+
+    font-size:11px;
+}
+
+.cargo-grid{
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:15px 0;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+    gap:9px;
+
+    touch-action:pan-y;
+}
+
+.cargo-card{
+    position:relative;
+
+    min-height:130px;
+
+    padding:13px;
+
+    background:#10141e;
+
+    border:1px solid #303746;
+
+    transition:.15s;
+}
+
+.cargo-card.selected{
+    border-color:#63f5ff;
+
+    background:#101c25;
+
+    box-shadow:
+        inset 0 0 20px
+        rgba(99,245,255,.08);
+}
+
+.cargo-icon{
+    font-size:28px;
+
+    margin-bottom:8px;
+}
+
+.cargo-name{
+    color:#ddd;
+
+    font-size:11px;
+    font-weight:bold;
+}
+
+.cargo-destination{
+    margin-top:6px;
+
+    color:#777f8e;
+
+    font-size:9px;
+}
+
+.cargo-reward{
+    margin-top:9px;
+
+    color:#63f5ff;
+
+    font-size:10px;
+}
+
+.check{
+    position:absolute;
+
+    top:8px;
+    right:8px;
+
+    width:19px;
+    height:19px;
+
+    border:1px solid #454d5d;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    color:transparent;
+
+    font-size:11px;
+}
+
+.cargo-card.selected .check{
+    background:#63f5ff;
+    color:#071016;
+
+    border-color:#63f5ff;
+}
+
+.cargo-footer{
+    flex-shrink:0;
+
+    border-top:1px solid #292f3b;
+
+    padding-top:12px;
+}
+
+.selected-count{
+    color:#777f8e;
+
+    text-align:center;
+
+    font-size:10px;
+
+    margin-bottom:9px;
+}
+
+.cargo-start{
+    width:100%;
+
+    padding:14px;
+
+    background:#101722;
+
+    border:2px solid #63f5ff;
+
+    color:#63f5ff;
+
+    font-weight:bold;
+}
+
+.cargo-start:disabled{
+    border-color:#2d3340;
+    color:#555b67;
 }
 
 
@@ -40,91 +359,87 @@ button {
    GAME
 ===================================================== */
 
-#game {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+#gameScreen{
+    background:#070910;
+}
+
+#gameCanvas{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    image-rendering:pixelated;
 }
 
 
 /* =====================================================
-   CANVAS
+   HUD
 ===================================================== */
 
-#canvas {
-    position: absolute;
-    inset: 0;
+.hud{
+    position:absolute;
 
-    width: 100%;
-    height: 100%;
+    top:0;
+    left:0;
+    right:0;
 
-    image-rendering: pixelated;
+    padding:8px;
+
+    pointer-events:none;
+
+    z-index:10;
+}
+
+.hud-inner{
+    background:rgba(5,7,14,.94);
+
+    border:1px solid #303847;
+
+    padding:9px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    font-size:10px;
+}
+
+.hud-item span{
+    color:#63f5ff;
+}
+
+.hud-item.damage span{
+    color:#ff648d;
 }
 
 
 /* =====================================================
-   TOP HUD
+   MESSAGE
 ===================================================== */
 
-.hud {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+.mode-message{
+    position:absolute;
 
-    padding: 8px;
+    top:54px;
 
-    pointer-events: none;
-    z-index: 10;
-}
+    left:10px;
+    right:10px;
 
-.hud-inner {
-    background: rgba(5, 7, 14, 0.94);
+    text-align:center;
 
-    border: 1px solid #303847;
+    padding:7px;
 
-    padding: 9px;
+    background:rgba(5,7,14,.82);
 
-    display: flex;
-    justify-content: space-between;
+    color:#aeb4c0;
 
-    font-size: 11px;
-}
+    font-size:10px;
 
-.hud-item span {
-    color: #63f5ff;
-}
+    pointer-events:none;
 
-.hud-item.damage span {
-    color: #ff648d;
-}
-
-
-/* =====================================================
-   MODE MESSAGE
-===================================================== */
-
-.mode-message {
-    position: absolute;
-
-    top: 55px;
-    left: 10px;
-    right: 10px;
-
-    text-align: center;
-
-    padding: 7px;
-
-    background: rgba(5, 7, 14, 0.82);
-
-    color: #aaa;
-
-    font-size: 11px;
-
-    pointer-events: none;
-
-    z-index: 10;
+    z-index:10;
 }
 
 
@@ -132,202 +447,122 @@ button {
    DELIVERY STATUS
 ===================================================== */
 
-.delivery-status {
-    position: absolute;
+.delivery-status{
+    display:none;
 
-    top: 84px;
-    left: 50%;
+    position:absolute;
 
-    transform: translateX(-50%);
+    top:83px;
+    left:50%;
 
-    display: none;
+    transform:translateX(-50%);
 
-    padding: 7px 14px;
+    background:rgba(5,7,14,.94);
 
-    background: rgba(5, 7, 14, 0.92);
+    border:1px solid #63f5ff;
 
-    border: 1px solid #63f5ff;
+    color:#63f5ff;
 
-    color: #63f5ff;
+    padding:7px 13px;
 
-    font-size: 11px;
+    font-size:10px;
 
-    white-space: nowrap;
+    white-space:nowrap;
 
-    z-index: 10;
+    z-index:10;
 
-    pointer-events: none;
+    pointer-events:none;
 }
 
 
 /* =====================================================
-   CARGO PANEL
+   CARGO HUD
 ===================================================== */
 
-.cargo-panel {
-    position: absolute;
+.cargo-hud{
+    position:absolute;
 
-    left: 10px;
-    top: 110px;
+    top:107px;
+    left:9px;
 
-    width: 145px;
+    width:150px;
 
-    background: rgba(5, 7, 14, 0.88);
+    background:rgba(5,7,14,.86);
 
-    border: 1px solid #303847;
+    border:1px solid #303847;
 
-    padding: 8px;
+    padding:8px;
 
-    z-index: 8;
+    z-index:8;
 
-    pointer-events: none;
+    pointer-events:none;
 }
 
-.cargo-title {
-    color: #63f5ff;
-    font-size: 10px;
-    margin-bottom: 6px;
+.cargo-hud-title{
+    color:#63f5ff;
+
+    font-size:9px;
+
+    margin-bottom:5px;
 }
 
-.cargo-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.cargo-hud-item{
+    color:#888f9d;
 
-    font-size: 9px;
+    font-size:8px;
 
-    margin: 4px 0;
-
-    color: #aaa;
+    margin:4px 0;
 }
 
-.cargo-item.done {
-    color: #5cff9a;
+.cargo-hud-item.delivered{
+    color:#5cff9a;
 }
 
 
 /* =====================================================
-   BOTTOM CONTROLS
+   CONTROLS
 ===================================================== */
 
-.controls {
-    position: absolute;
+.controls{
+    position:absolute;
 
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+    left:10px;
+    right:10px;
+    bottom:10px;
 
-    display: flex;
-    gap: 8px;
+    display:flex;
 
-    z-index: 20;
+    gap:8px;
+
+    z-index:20;
 }
 
-.control {
-    flex: 1;
+.control{
+    flex:1;
 
-    padding: 14px 5px;
+    padding:14px 5px;
 
-    background: rgba(10, 13, 21, 0.96);
+    background:rgba(10,13,21,.96);
 
-    border: 1px solid #3a4252;
+    border:1px solid #3a4252;
 
-    color: #bbb;
+    color:#bbb;
 
-    font-weight: bold;
-    font-size: 13px;
+    font-size:12px;
+
+    font-weight:bold;
 }
 
-.control.deliver {
-    border-color: #63f5ff;
-    color: #63f5ff;
+.control.deliver{
+    color:#63f5ff;
+
+    border-color:#63f5ff;
 }
 
-.control.deliver:disabled {
-    border-color: #292e38;
-    color: #555;
-}
+.control:disabled{
+    color:#555;
 
-
-/* =====================================================
-   RESULT
-===================================================== */
-
-#result {
-    display: none;
-
-    position: absolute;
-
-    inset: 0;
-
-    background: #080910;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    z-index: 50;
-}
-
-.result-box {
-    width: 100%;
-    max-width: 400px;
-
-    background: #11141e;
-
-    border: 2px solid #63f5ff;
-
-    padding: 22px;
-}
-
-.result-box h1 {
-    text-align: center;
-
-    color: #63f5ff;
-
-    font-size: 21px;
-}
-
-.grade {
-    text-align: center;
-
-    font-size: 65px;
-
-    color: #ffd75a;
-
-    margin: 12px 0 20px;
-}
-
-.result-row {
-    display: flex;
-    justify-content: space-between;
-
-    padding: 11px 0;
-
-    border-bottom: 1px solid #292f3a;
-
-    font-size: 13px;
-}
-
-.result-row strong {
-    color: #63f5ff;
-}
-
-.restart {
-    width: 100%;
-
-    margin-top: 20px;
-
-    padding: 15px;
-
-    background: #111722;
-
-    border: 2px solid #63f5ff;
-
-    color: #63f5ff;
-
-    font-weight: bold;
+    border-color:#292e38;
 }
 
 
@@ -335,54 +570,132 @@ button {
    EVENT
 ===================================================== */
 
-#event {
-    display: none;
+#event{
+    display:none;
 
-    position: absolute;
+    position:absolute;
 
-    left: 50%;
-    top: 50%;
+    left:50%;
+    top:50%;
 
-    transform: translate(-50%, -50%);
+    transform:translate(-50%,-50%);
 
-    width: min(88%, 360px);
+    width:min(88%,360px);
 
-    background: #11141e;
+    padding:20px;
 
-    border: 2px solid #ffcf55;
+    background:#11141e;
 
-    padding: 20px;
+    border:2px solid #ffcf55;
 
-    text-align: center;
+    text-align:center;
 
-    z-index: 40;
+    z-index:40;
 }
 
-#event h2 {
-    color: #ffcf55;
+#event h2{
+    color:#ffcf55;
 
-    font-size: 18px;
+    font-size:17px;
 }
 
-#event p {
-    color: #aaa;
+#event p{
+    color:#aaa;
 
-    line-height: 1.5;
+    font-size:11px;
 
-    font-size: 12px;
+    line-height:1.6;
 }
 
-.event-button {
-    width: 100%;
+.event-button{
+    width:100%;
 
-    padding: 12px;
+    padding:12px;
 
-    background: #181c27;
+    background:#181c27;
 
-    border: 1px solid #ffcf55;
+    border:1px solid #ffcf55;
 
-    color: #ffcf55;
+    color:#ffcf55;
 }
+
+
+/* =====================================================
+   RESULT
+===================================================== */
+
+#resultScreen{
+    background:#080910;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+}
+
+.result-box{
+    width:100%;
+    max-width:400px;
+
+    background:#11141e;
+
+    border:2px solid #63f5ff;
+
+    padding:21px;
+}
+
+.result-box h1{
+    margin:0;
+
+    text-align:center;
+
+    color:#63f5ff;
+
+    font-size:20px;
+}
+
+.grade{
+    text-align:center;
+
+    font-size:62px;
+
+    color:#ffd75a;
+
+    margin:13px 0 18px;
+}
+
+.result-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:10px 0;
+
+    border-bottom:1px solid #292f3a;
+
+    font-size:12px;
+}
+
+.result-row strong{
+    color:#63f5ff;
+}
+
+.restart{
+    width:100%;
+
+    margin-top:19px;
+
+    padding:14px;
+
+    background:#111722;
+
+    border:2px solid #63f5ff;
+
+    color:#63f5ff;
+
+    font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -390,19 +703,98 @@ button {
 <body>
 
 
-<div id="game">
+<!-- =====================================================
+     TITLE
+===================================================== -->
+
+<section id="titleScreen"
+         class="screen active">
+
+    <div class="logo-small">
+        NIGHT CITY LOGISTICS
+    </div>
+
+    <div class="logo">
+        CYBER<br>DELIVERY
+    </div>
+
+    <div class="logo-sub">
+        ROUTE • RISK • REWARD
+    </div>
+
+    <div class="title-city"></div>
+
+    <button class="start-button"
+            onclick="showCargoScreen()">
+
+        START DELIVERY
+
+    </button>
+
+    <div class="version">
+        MOBILE PROTOTYPE v0.2
+    </div>
+
+</section>
 
 
-    <!-- =================================================
-         CANVAS
-    ================================================= -->
+<!-- =====================================================
+     CARGO SELECT
+===================================================== -->
 
-    <canvas id="canvas"></canvas>
+<section id="cargoScreen"
+         class="screen">
+
+    <div class="cargo-header">
+
+        <h1>
+            SELECT CARGO
+        </h1>
+
+        <p>
+            배달할 물품을 선택하세요
+        </p>
+
+    </div>
 
 
-    <!-- =================================================
-         HUD
-    ================================================= -->
+    <div class="cargo-grid"
+         id="cargoGrid">
+    </div>
+
+
+    <div class="cargo-footer">
+
+        <div class="selected-count"
+             id="selectedCount">
+
+            선택된 물품: 0개
+
+        </div>
+
+        <button class="cargo-start"
+                id="cargoStart"
+                onclick="startRoutePlanning()"
+                disabled>
+
+            BEGIN ROUTE PLANNING
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<section id="gameScreen"
+         class="screen">
+
+    <canvas id="gameCanvas"></canvas>
+
 
     <div class="hud">
 
@@ -410,17 +802,23 @@ button {
 
             <div class="hud-item">
                 DIST
-                <span id="distance">0m</span>
+                <span id="distance">
+                    0m
+                </span>
             </div>
 
             <div class="hud-item">
                 CARGO
-                <span id="cargoCount">0/0</span>
+                <span id="cargoCount">
+                    0/0
+                </span>
             </div>
 
             <div class="hud-item damage">
                 DAMAGE
-                <span id="damage">0%</span>
+                <span id="damage">
+                    0%
+                </span>
             </div>
 
         </div>
@@ -428,21 +826,14 @@ button {
     </div>
 
 
-    <!-- =================================================
-         MESSAGE
-    ================================================= -->
-
-    <div class="mode-message" id="modeMessage">
+    <div class="mode-message"
+         id="modeMessage">
 
         출발점에서 손가락으로 도로를 따라
-        배달 경로를 그리세요
+        경로를 그리세요
 
     </div>
 
-
-    <!-- =================================================
-         DELIVERY STATUS
-    ================================================= -->
 
     <div class="delivery-status"
          id="deliveryStatus">
@@ -452,34 +843,15 @@ button {
     </div>
 
 
-    <!-- =================================================
-         CARGO
-    ================================================= -->
+    <div class="cargo-hud"
+         id="cargoHud">
 
-    <div class="cargo-panel">
-
-        <div class="cargo-title">
-            TODAY'S CARGO
-        </div>
-
-        <div class="cargo-item" id="cargo-ramen">
-            🍜 NEON RAMEN
-        </div>
-
-        <div class="cargo-item" id="cargo-medicine">
-            💊 MEDICAL CHIP
-        </div>
-
-        <div class="cargo-item" id="cargo-component">
-            🔧 CYBER COMPONENT
+        <div class="cargo-hud-title">
+            DELIVERY LIST
         </div>
 
     </div>
 
-
-    <!-- =================================================
-         CONTROLS
-    ================================================= -->
 
     <div class="controls">
 
@@ -503,10 +875,6 @@ button {
     </div>
 
 
-    <!-- =================================================
-         EVENT
-    ================================================= -->
-
     <div id="event">
 
         <h2 id="eventTitle">
@@ -524,162 +892,79 @@ button {
 
     </div>
 
+</section>
 
-    <!-- =================================================
-         RESULT
-    ================================================= -->
 
-    <div id="result">
+<!-- =====================================================
+     RESULT
+===================================================== -->
 
-        <div class="result-box">
+<section id="resultScreen"
+         class="screen">
 
-            <h1>
-                DELIVERY COMPLETE
-            </h1>
+    <div class="result-box">
 
-            <div class="grade"
-                 id="grade">
+        <h1>
+            DELIVERY COMPLETE
+        </h1>
 
-                A
+        <div class="grade"
+             id="grade">
 
-            </div>
-
-            <div class="result-row">
-
-                <span>
-                    이동거리
-                </span>
-
-                <strong id="resultDistance">
-                    0m
-                </strong>
-
-            </div>
-
-            <div class="result-row">
-
-                <span>
-                    배송시간
-                </span>
-
-                <strong id="resultTime">
-                    0s
-                </strong>
-
-            </div>
-
-            <div class="result-row">
-
-                <span>
-                    배송품 손상
-                </span>
-
-                <strong id="resultDamage">
-                    0%
-                </strong>
-
-            </div>
-
-            <div class="result-row">
-
-                <span>
-                    경로 효율
-                </span>
-
-                <strong id="resultEfficiency">
-                    0%
-                </strong>
-
-            </div>
-
-            <div class="result-row">
-
-                <span>
-                    보상
-                </span>
-
-                <strong id="resultReward">
-                    ¥0
-                </strong>
-
-            </div>
-
-            <button class="restart"
-                    onclick="location.reload()">
-
-                NEXT DELIVERY
-
-            </button>
+            A
 
         </div>
 
+        <div class="result-row">
+            <span>이동거리</span>
+            <strong id="resultDistance">0m</strong>
+        </div>
+
+        <div class="result-row">
+            <span>배송시간</span>
+            <strong id="resultTime">0s</strong>
+        </div>
+
+        <div class="result-row">
+            <span>배송품 손상</span>
+            <strong id="resultDamage">0%</strong>
+        </div>
+
+        <div class="result-row">
+            <span>경로 효율</span>
+            <strong id="resultEfficiency">0%</strong>
+        </div>
+
+        <div class="result-row">
+            <span>보상</span>
+            <strong id="resultReward">¥0</strong>
+        </div>
+
+        <button class="restart"
+                onclick="location.reload()">
+
+            NEXT DELIVERY
+
+        </button>
+
     </div>
 
-</div>
+</section>
 
 
 <script>
 
 /* =====================================================
-   CANVAS
+   DATA
 ===================================================== */
 
-const canvas =
-    document.getElementById("canvas");
-
-const ctx =
-    canvas.getContext("2d");
-
-let W = 0;
-let H = 0;
-
-
-function resize() {
-
-    const dpr =
-        Math.min(
-            window.devicePixelRatio || 1,
-            2
-        );
-
-    W = window.innerWidth;
-    H = window.innerHeight;
-
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-
-    canvas.style.width = W + "px";
-    canvas.style.height = H + "px";
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
-    draw();
-}
-
-
-window.addEventListener(
-    "resize",
-    resize
-);
-
-
-/* =====================================================
-   CARGO
-===================================================== */
-
-const cargo = [
+const cargoData = [
 
     {
         id:"ramen",
+        icon:"🍜",
         name:"NEON RAMEN",
-        destination:"north",
+        destination:"Noodle District",
         x:.80,
         y:.20,
         damageRate:.7,
@@ -688,8 +973,9 @@ const cargo = [
 
     {
         id:"medicine",
+        icon:"💊",
         name:"MEDICAL CHIP",
-        destination:"east",
+        destination:"Medical Sector",
         x:.80,
         y:.80,
         damageRate:1.4,
@@ -698,28 +984,196 @@ const cargo = [
 
     {
         id:"component",
+        icon:"🔧",
         name:"CYBER COMPONENT",
-        destination:"south",
+        destination:"Industrial Zone",
         x:.20,
         y:.80,
         damageRate:.35,
         reward:1500
+    },
+
+    {
+        id:"data",
+        icon:"💾",
+        name:"ENCRYPTED DATA",
+        destination:"Data District",
+        x:.20,
+        y:.20,
+        damageRate:.25,
+        reward:3000
+    },
+
+    {
+        id:"bio",
+        icon:"🧬",
+        name:"BIO SAMPLE",
+        destination:"Bio Lab",
+        x:.50,
+        y:.80,
+        damageRate:1.8,
+        reward:2800
+    },
+
+    {
+        id:"luxury",
+        icon:"💎",
+        name:"LUXURY CHIP",
+        destination:"Corporate Tower",
+        x:.50,
+        y:.20,
+        damageRate:1.5,
+        reward:5000
     }
 
 ];
+
+
+let selectedCargo=[];
+
+
+/* =====================================================
+   SCREEN CONTROL
+===================================================== */
+
+function showScreen(id){
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen=>{
+            screen.classList.remove("active");
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+}
+
+
+/* =====================================================
+   CARGO SCREEN
+===================================================== */
+
+function showCargoScreen(){
+
+    showScreen("cargoScreen");
+
+    renderCargo();
+}
+
+
+function renderCargo(){
+
+    const grid =
+        document.getElementById(
+            "cargoGrid"
+        );
+
+    grid.innerHTML="";
+
+
+    cargoData.forEach(item=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className="cargo-card";
+
+
+        if(
+            selectedCargo.includes(item.id)
+        ){
+
+            card.classList.add(
+                "selected"
+            );
+        }
+
+
+        card.innerHTML=`
+
+            <div class="check">✓</div>
+
+            <div class="cargo-icon">
+                ${item.icon}
+            </div>
+
+            <div class="cargo-name">
+                ${item.name}
+            </div>
+
+            <div class="cargo-destination">
+                → ${item.destination}
+            </div>
+
+            <div class="cargo-reward">
+                ¥${item.reward.toLocaleString()}
+            </div>
+
+        `;
+
+
+        card.addEventListener(
+            "click",
+            ()=>toggleCargo(item.id)
+        );
+
+
+        grid.appendChild(card);
+
+    });
+
+
+    updateCargoSelection();
+}
+
+
+function toggleCargo(id){
+
+    const index =
+        selectedCargo.indexOf(id);
+
+
+    if(index>=0){
+
+        selectedCargo.splice(
+            index,
+            1
+        );
+
+    }else{
+
+        selectedCargo.push(id);
+
+    }
+
+
+    renderCargo();
+}
+
+
+function updateCargoSelection(){
+
+    document.getElementById(
+        "selectedCount"
+    ).textContent =
+        "선택된 물품: "+
+        selectedCargo.length+
+        "개";
+
+
+    document.getElementById(
+        "cargoStart"
+    ).disabled =
+        selectedCargo.length===0;
+}
 
 
 /* =====================================================
    MAP
 ===================================================== */
 
-/*
-    도시의 도로.
-
-    숫자는 화면 크기에 대한 비율이다.
-*/
-
-const roads = [
+const roads=[
 
     [
         [.08,.20],
@@ -778,150 +1232,265 @@ const roads = [
 ];
 
 
-/* =====================================================
-   GAME STATE
-===================================================== */
-
-let route = [];
-
-let routeDistance = 0;
-
-let drawing = false;
-
-let planning = true;
-
-let delivering = false;
-
-let deliveryIndex = 0;
-
-let deliveryStart = 0;
-
-let deliveryElapsed = 0;
-
-let damage = 0;
-
-let deliveredCargo = new Set();
-
-let triggeredEvents = new Set();
-
-
-const start = {
+const startPoint={
     x:.08,
     y:.50
 };
 
 
 /* =====================================================
-   INITIALIZE
+   GAME STATE
 ===================================================== */
 
-function init() {
+let route=[];
 
-    resize();
+let routeDistance=0;
+
+let drawing=false;
+
+let planning=false;
+
+let delivering=false;
+
+let deliveryProgress=0;
+
+let deliveryStart=0;
+
+let deliveryElapsed=0;
+
+let damage=0;
+
+let deliveredCargo=new Set();
+
+let visitedSegments=new Set();
+
+let triggeredEvents=new Set();
+
+let animationId=null;
+
+
+/* =====================================================
+   START ROUTE PLANNING
+===================================================== */
+
+function startRoutePlanning(){
+
+    showScreen("gameScreen");
+
+
+    planning=true;
+
+    delivering=false;
+
+    route=[];
+
+    routeDistance=0;
+
+    damage=0;
+
+    deliveredCargo.clear();
+
+    visitedSegments.clear();
+
+    triggeredEvents.clear();
+
+
+    document.getElementById(
+        "modeMessage"
+    ).textContent =
+        "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
+
+
+    document.getElementById(
+        "deliveryStatus"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "clearButton"
+    ).disabled=false;
+
+
+    updateCargoHud();
 
     updateHUD();
+
+    updateDeliverButton();
+
+    resize();
 
     draw();
 }
 
-init();
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+const canvas =
+    document.getElementById(
+        "gameCanvas"
+    );
+
+const ctx =
+    canvas.getContext("2d");
+
+
+let W=0;
+let H=0;
+
+
+function resize(){
+
+    const dpr =
+        Math.min(
+            window.devicePixelRatio||1,
+            2
+        );
+
+
+    W=window.innerWidth;
+
+    H=window.innerHeight;
+
+
+    canvas.width=W*dpr;
+    canvas.height=H*dpr;
+
+    canvas.style.width=W+"px";
+    canvas.style.height=H+"px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    draw();
+}
+
+
+window.addEventListener(
+    "resize",
+    resize
+);
 
 
 /* =====================================================
-   FIND NEAREST ROAD
+   ROAD GEOMETRY
 ===================================================== */
 
-function nearestRoad(x,y) {
+/*
+    각 도로는 여러 개의
+    작은 SEGMENT로 나누어진다.
 
-    let best = null;
+    예:
 
-    let bestDistance = Infinity;
+    A ---- B ---- C
+
+    A-B를 지나갔다면
+    A-B는 다시 갈 수 없다.
+
+    하지만
+
+       |
+       |
+    ---+---
+
+    수직으로 교차하는 것은
+    서로 다른 segment이므로 가능하다.
+*/
+
+
+function roadPoint(x,y){
+
+    let best=null;
+
+    let bestDistance=Infinity;
+
+    let bestRoad=-1;
+
+    let bestSegment=-1;
 
 
     for(
         let r=0;
         r<roads.length;
         r++
-    ) {
+    ){
 
-        const path =
-            roads[r];
+        const road=roads[r];
 
 
         for(
-            let i=0;
-            i<path.length-1;
-            i++
-        ) {
+            let s=0;
+            s<road.length-1;
+            s++
+        ){
 
-            const a = {
-
-                x:path[i][0]*W,
-                y:path[i][1]*H
-
+            const a={
+                x:road[s][0]*W,
+                y:road[s][1]*H
             };
 
 
-            const b = {
-
-                x:path[i+1][0]*W,
-                y:path[i+1][1]*H
-
+            const b={
+                x:road[s+1][0]*W,
+                y:road[s+1][1]*H
             };
 
 
-            const dx =
-                b.x-a.x;
-
-            const dy =
-                b.y-a.y;
+            const dx=b.x-a.x;
+            const dy=b.y-a.y;
 
 
-            const lengthSquared =
+            const len2=
                 dx*dx+dy*dy;
 
 
-            let t =
+            let t=
                 (
-                    (x-a.x)*dx +
+                    (x-a.x)*dx+
                     (y-a.y)*dy
-                ) /
-                lengthSquared;
+                )/len2;
 
 
-            t =
-                Math.max(
-                    0,
-                    Math.min(1,t)
-                );
+            t=Math.max(
+                0,
+                Math.min(1,t)
+            );
 
 
-            const px =
+            const px=
                 a.x+dx*t;
 
-            const py =
+            const py=
                 a.y+dy*t;
 
 
-            const distance =
+            const d=
                 Math.hypot(
                     x-px,
                     y-py
                 );
 
 
-            if(
-                distance <
-                bestDistance
-            ) {
+            if(d<bestDistance){
 
-                bestDistance =
-                    distance;
+                bestDistance=d;
 
-                best = {
+                best={
                     x:px/W,
                     y:py/H
                 };
+
+                bestRoad=r;
+                bestSegment=s;
             }
         }
     }
@@ -929,54 +1498,52 @@ function nearestRoad(x,y) {
 
     return {
         point:best,
-        distance:bestDistance
+        distance:bestDistance,
+        road:bestRoad,
+        segment:bestSegment
     };
 }
 
 
 /* =====================================================
-   POINTER POSITION
+   SEGMENT KEY
 ===================================================== */
 
-function pointerPosition(e) {
+function segmentKey(road,segment){
 
-    const rect =
+    /*
+       방향에 상관없이
+       같은 도로를 같은 것으로 취급한다.
+    */
+
+    return road+"_"+segment;
+}
+
+
+/* =====================================================
+   POINTER
+===================================================== */
+
+function pointerPosition(e){
+
+    const rect=
         canvas.getBoundingClientRect();
 
 
-    let x;
-    let y;
-
-
-    if(e.touches) {
-
-        x =
-            e.touches[0].clientX;
-
-        y =
-            e.touches[0].clientY;
-
-    } else {
-
-        x=e.clientX;
-        y=e.clientY;
-    }
+    const touch=
+        e.touches
+        ? e.touches[0]
+        : e;
 
 
     return {
-
-        x:x-rect.left,
-        y:y-rect.top
-
+        x:touch.clientX-rect.left,
+        y:touch.clientY-rect.top
     };
 }
 
 
-/* =====================================================
-   START ROUTE
-===================================================== */
-
-function pointerDown(e) {
+function pointerDown(e){
 
     e.preventDefault();
 
@@ -985,28 +1552,23 @@ function pointerDown(e) {
         return;
 
 
-    const p =
+    const p=
         pointerPosition(e);
 
 
-    const sx =
-        start.x*W;
+    const sx=
+        startPoint.x*W;
 
-    const sy =
-        start.y*H;
+    const sy=
+        startPoint.y*H;
 
-
-    /*
-       반드시 출발점 근처에서
-       경로를 시작해야 한다.
-    */
 
     if(
         Math.hypot(
             p.x-sx,
             p.y-sy
-        ) > 50
-    ) {
+        )>48
+    ){
 
         return;
     }
@@ -1014,29 +1576,29 @@ function pointerDown(e) {
 
     drawing=true;
 
+
     route=[{
-        x:start.x,
-        y:start.y
+        x:startPoint.x,
+        y:startPoint.y
     }];
 
 
     routeDistance=0;
 
+    visitedSegments.clear();
+
     deliveredCargo.clear();
 
-    updateCargoUI();
 
     updateHUD();
+
+    updateCargoHud();
 
     draw();
 }
 
 
-/* =====================================================
-   DRAW ROUTE
-===================================================== */
-
-function pointerMove(e) {
+function pointerMove(e){
 
     e.preventDefault();
 
@@ -1044,77 +1606,135 @@ function pointerMove(e) {
     if(
         !drawing ||
         !planning
-    ) {
-
+    )
         return;
-    }
 
 
-    const p =
+    const p=
         pointerPosition(e);
 
 
-    const road =
-        nearestRoad(
+    const road=
+        roadPoint(
             p.x,
             p.y
         );
 
 
     /*
-       손가락이 도로에서
-       너무 멀리 떨어지면 무시
+       도로에서 너무 멀면
+       경로를 추가하지 않는다.
     */
 
     if(
-        road.distance > 38
-    ) {
+        !road.point ||
+        road.distance>35
+    ){
 
         return;
     }
 
 
-    const point =
-        road.point;
-
-
-    const last =
+    const last=
         route[
             route.length-1
         ];
 
 
-    const distance =
+    const dx=
+        (road.point.x-last.x)*W;
+
+    const dy=
+        (road.point.y-last.y)*H;
+
+
+    const distance=
         Math.hypot(
-            (point.x-last.x)*W,
-            (point.y-last.y)*H
+            dx,
+            dy
+        );
+
+
+    if(distance<4)
+        return;
+
+
+    /*
+       =================================================
+       이미 지나간 도로인지 검사
+       =================================================
+    */
+
+    const key=
+        segmentKey(
+            road.road,
+            road.segment
         );
 
 
     /*
-       너무 짧은 이동은
-       점을 추가하지 않는다.
+       같은 segment를 다시 지나가려고 하면
+       해당 움직임을 거부한다.
+
+       따라서:
+
+       ------>
+       <------
+
+       같은 도로를 되돌아가는 것도 불가능.
     */
 
-    if(distance < 3)
+    if(
+        visitedSegments.has(key)
+    ){
+
+        drawing=false;
+
+        document.getElementById(
+            "modeMessage"
+        ).textContent =
+            "⚠ 이미 지나간 도로입니다! 다른 길로 이동하세요";
+
+        setTimeout(()=>{
+
+            if(planning){
+
+                document.getElementById(
+                    "modeMessage"
+                ).textContent =
+                    "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
+            }
+
+        },1400);
+
+
         return;
-
-
-    route.push(point);
-
-    routeDistance += distance;
+    }
 
 
     /*
-       목적지 도달 여부
+       현재 segment 기록
     */
 
-    checkPlanningDestinations(
-        point
+    visitedSegments.add(key);
+
+
+    route.push(
+        road.point
+    );
+
+
+    routeDistance+=distance;
+
+
+    checkDestination(
+        road.point
     );
 
 
     updateHUD();
+
+    updateCargoHud();
 
     updateDeliverButton();
 
@@ -1122,14 +1742,11 @@ function pointerMove(e) {
 }
 
 
-/* =====================================================
-   STOP DRAWING
-===================================================== */
-
-function pointerUp(e) {
+function pointerUp(e){
 
     if(e)
         e.preventDefault();
+
 
     drawing=false;
 
@@ -1138,6 +1755,10 @@ function pointerUp(e) {
     draw();
 }
 
+
+/* =====================================================
+   EVENTS
+===================================================== */
 
 canvas.addEventListener(
     "touchstart",
@@ -1157,7 +1778,6 @@ canvas.addEventListener(
     {passive:false}
 );
 
-
 canvas.addEventListener(
     "mousedown",
     pointerDown
@@ -1175,73 +1795,54 @@ canvas.addEventListener(
 
 
 /* =====================================================
-   DESTINATION CHECK
+   DESTINATIONS
 ===================================================== */
 
-function checkPlanningDestinations(point) {
+function checkDestination(point){
 
-    cargo.forEach(item => {
+    cargoData.forEach(item=>{
+
+        if(
+            !selectedCargo.includes(
+                item.id
+            )
+        )
+            return;
+
 
         if(
             deliveredCargo.has(
                 item.id
             )
-        ) {
-
+        )
             return;
-        }
 
 
-        const distance =
+        const d=
             Math.hypot(
                 point.x-item.x,
                 point.y-item.y
             );
 
 
-        if(distance < .045) {
+        if(d<.055){
 
             deliveredCargo.add(
                 item.id
             );
 
-            updateCargoUI();
+            updateCargoHud();
         }
 
     });
-
 }
 
 
 /* =====================================================
-   DELIVERY BUTTON
+   CLEAR
 ===================================================== */
 
-function updateDeliverButton() {
-
-    const button =
-        document.getElementById(
-            "deliverButton"
-        );
-
-
-    const allVisited =
-        deliveredCargo.size ===
-        cargo.length;
-
-
-    button.disabled =
-        !allVisited ||
-        route.length < 2 ||
-        delivering;
-}
-
-
-/* =====================================================
-   CLEAR ROUTE
-===================================================== */
-
-function clearRoute() {
+function clearRoute(){
 
     if(!planning)
         return;
@@ -1253,13 +1854,46 @@ function clearRoute() {
 
     deliveredCargo.clear();
 
-    updateCargoUI();
+    visitedSegments.clear();
 
-    updateDeliverButton();
+
+    document.getElementById(
+        "modeMessage"
+    ).textContent =
+        "출발점에서 손가락으로 도로를 따라 경로를 그리세요";
+
 
     updateHUD();
 
+    updateCargoHud();
+
+    updateDeliverButton();
+
     draw();
+}
+
+
+/* =====================================================
+   DELIVER BUTTON
+===================================================== */
+
+function updateDeliverButton(){
+
+    const button=
+        document.getElementById(
+            "deliverButton"
+        );
+
+
+    const complete=
+        deliveredCargo.size===
+        selectedCargo.length;
+
+
+    button.disabled=
+        !complete ||
+        route.length<2 ||
+        delivering;
 }
 
 
@@ -1267,31 +1901,32 @@ function clearRoute() {
    START DELIVERY
 ===================================================== */
 
-function startDelivery() {
+function startDelivery(){
 
-    if(!planning)
+    if(
+        !planning ||
+        delivering
+    )
         return;
 
 
     if(
-        deliveredCargo.size !==
-        cargo.length
-    ) {
-
+        deliveredCargo.size!==
+        selectedCargo.length
+    )
         return;
-    }
 
 
     planning=false;
 
     delivering=true;
 
-    deliveryIndex=0;
+    damage=0;
+
+    deliveryProgress=0;
 
     deliveryStart=
         performance.now();
-
-    damage=0;
 
 
     document.getElementById(
@@ -1307,12 +1942,12 @@ function startDelivery() {
     document.getElementById(
         "modeMessage"
     ).textContent =
-        "계획한 경로를 따라 자동으로 배달합니다";
+        "계획한 경로를 따라 배송 중";
 
 
     /*
-       팝업 대신
-       상단의 작은 상태 표시만 사용
+       기존처럼 화면 중앙을 가리는
+       팝업이 아니라 작은 상태바.
     */
 
     document.getElementById(
@@ -1320,61 +1955,57 @@ function startDelivery() {
     ).style.display="block";
 
 
-    /*
-       실제 배송 시작 전
-       배송 완료 표시를 초기화
-    */
-
     deliveredCargo.clear();
 
-    updateCargoUI();
+    updateCargoHud();
 
 
-    requestAnimationFrame(
-        deliveryLoop
-    );
+    animationId=
+        requestAnimationFrame(
+            deliveryLoop
+        );
 }
 
 
 /* =====================================================
-   DELIVERY LOOP
+   DELIVERY
 ===================================================== */
 
-function deliveryLoop(now) {
+function deliveryLoop(now){
 
     if(!delivering)
         return;
 
 
-    deliveryElapsed =
+    deliveryElapsed=
         (now-deliveryStart)/1000;
 
 
     /*
-       route의 한 점씩 따라간다.
+       이전보다 상당히 빠르게.
 
-       실제 게임에서는 이 값을 더 부드럽게
-       보간(interpolation)할 수 있다.
+       약 430px/sec.
     */
 
-    const speed =
-        150;
+    const speed=430;
 
 
-    const moveAmount =
-        speed *
-        0.016;
+    const frameDistance=
+        speed/60;
 
 
-    deliveryIndex +=
-        moveAmount /
-        10;
+    const progressStep=
+        frameDistance/10;
+
+
+    deliveryProgress+=
+        progressStep;
 
 
     if(
-        deliveryIndex >=
+        deliveryProgress>=
         route.length-1
-    ) {
+    ){
 
         finishDelivery();
 
@@ -1382,171 +2013,136 @@ function deliveryLoop(now) {
     }
 
 
-    const current =
-        route[
-            Math.floor(
-                deliveryIndex
-            )
-        ];
-
-
     /*
-       배송 중 손상 계산
+       손상
     */
 
-    const sensitivity =
-        getAverageDamageRate();
+    const rate=
+        getDamageRate();
 
 
     damage +=
-        moveAmount *
-        .003 *
-        sensitivity;
+        frameDistance*
+        .0025*
+        rate;
+
+
+    damage=
+        Math.min(
+            100,
+            damage
+        );
 
 
     /*
-       이벤트 확인
+       이벤트
     */
 
-    checkDeliveryEvent(
-        current
-    );
+    checkEvent();
 
 
-    drawDelivery(
-        deliveryIndex
-    );
-
+    drawDelivery();
 
     updateHUD();
 
 
-    requestAnimationFrame(
-        deliveryLoop
-    );
+    animationId=
+        requestAnimationFrame(
+            deliveryLoop
+        );
 }
 
 
 /* =====================================================
-   AVERAGE DAMAGE
+   DAMAGE
 ===================================================== */
 
-function getAverageDamageRate() {
+function getDamageRate(){
 
     let total=0;
 
+    let count=0;
 
-    cargo.forEach(item => {
 
-        total +=
-            item.damageRate;
+    selectedCargo.forEach(id=>{
 
+        const item=
+            cargoData.find(
+                x=>x.id===id
+            );
+
+
+        if(item){
+
+            total+=item.damageRate;
+
+            count++;
+        }
     });
 
 
-    return total /
-        cargo.length;
+    return count
+        ? total/count
+        : 1;
 }
 
 
 /* =====================================================
-   DELIVERY EVENT
+   DELIVERY DRAW
 ===================================================== */
 
-function checkDeliveryEvent(point) {
-
-    const eventX=.50;
-    const eventY=.50;
-
-
-    if(
-        triggeredEvents.has(
-            "center"
-        )
-    ) {
-
-        return;
-    }
-
-
-    const distance =
-        Math.hypot(
-            point.x-eventX,
-            point.y-eventY
-        );
-
-
-    if(distance < .035) {
-
-        triggeredEvents.add(
-            "center"
-        );
-
-
-        damage += 6;
-
-
-        showEvent(
-            "⚡ ELECTROMAGNETIC STORM",
-            "강한 전자기파가 도시를 통과했습니다.<br><br>" +
-            "배송품 일부가 영향을 받았습니다."
-        );
-    }
-}
-
-
-/* =====================================================
-   DRAW DELIVERY
-===================================================== */
-
-function drawDelivery(index) {
+function drawDelivery(){
 
     draw();
 
 
-    const i =
-        Math.floor(index);
+    const index=
+        Math.floor(
+            deliveryProgress
+        );
 
 
-    const next =
+    const next=
         Math.min(
-            i+1,
+            index+1,
             route.length-1
         );
 
 
-    const a =
-        route[i];
+    const t=
+        deliveryProgress-index;
 
-    const b =
+
+    const a=
+        route[index];
+
+    const b=
         route[next];
 
 
-    const t =
-        index-i;
-
-
-    const x =
+    const x=
         a.x+
         (b.x-a.x)*t;
 
 
-    const y =
+    const y=
         a.y+
         (b.y-a.y)*t;
 
 
     /*
-       배달원
+       배달 차량
     */
 
     ctx.save();
 
 
-    ctx.fillStyle="#ff3c91";
-
     ctx.shadowColor="#ff3c91";
-    ctx.shadowBlur=16;
+
+    ctx.shadowBlur=20;
+
+
+    ctx.fillStyle="#ff3c91";
 
 
     ctx.beginPath();
@@ -1554,7 +2150,7 @@ function drawDelivery(index) {
     ctx.arc(
         x*W,
         y*H,
-        9,
+        10,
         0,
         Math.PI*2
     );
@@ -1565,17 +2161,14 @@ function drawDelivery(index) {
     ctx.shadowBlur=0;
 
 
-    /*
-       헤드라이트
-    */
+    ctx.fillStyle="#fff";
 
-    ctx.fillStyle="#ffffff";
 
     ctx.beginPath();
 
     ctx.arc(
         x*W+5,
-        y*H-3,
+        y*H-4,
         3,
         0,
         Math.PI*2
@@ -1589,13 +2182,63 @@ function drawDelivery(index) {
 
 
 /* =====================================================
-   EVENT UI
+   EVENT
 ===================================================== */
 
-function showEvent(
-    title,
-    text
-) {
+function checkEvent(){
+
+    const center={
+        x:.50,
+        y:.50
+    };
+
+
+    if(
+        triggeredEvents.has("center")
+    )
+        return;
+
+
+    const index=
+        Math.floor(
+            deliveryProgress
+        );
+
+
+    if(!route[index])
+        return;
+
+
+    const p=
+        route[index];
+
+
+    if(
+        Math.hypot(
+            p.x-center.x,
+            p.y-center.y
+        )<.04
+    ){
+
+        triggeredEvents.add(
+            "center"
+        );
+
+
+        damage+=5;
+
+
+        showEvent(
+            "⚡ ELECTROMAGNETIC STORM",
+            "도시 중앙을 지나던 중 강한<br>" +
+            "전자기 폭풍이 발생했습니다.<br><br>" +
+            "배송품 손상도 +5%"
+        );
+    }
+}
+
+
+function showEvent(title,text){
 
     document.getElementById(
         "eventTitle"
@@ -1613,7 +2256,7 @@ function showEvent(
 }
 
 
-function closeEvent() {
+function closeEvent(){
 
     document.getElementById(
         "event"
@@ -1625,7 +2268,7 @@ function closeEvent() {
    FINISH
 ===================================================== */
 
-function finishDelivery() {
+function finishDelivery(){
 
     delivering=false;
 
@@ -1635,68 +2278,60 @@ function finishDelivery() {
     ).style.display="none";
 
 
-    damage =
+    damage=
         Math.min(
             100,
             damage
         );
 
 
-    /*
-       경로 효율.
-
-       테스트용 기준거리.
-    */
-
-    const idealDistance=850;
+    const ideal=
+        getIdealDistance();
 
 
-    const efficiency =
+    const efficiency=
         Math.max(
             0,
             Math.min(
                 100,
-                100 -
+                100-
                 Math.max(
                     0,
-                    routeDistance-
-                    idealDistance
+                    routeDistance-ideal
                 )/8
             )
         );
 
 
-    /*
-       기본 보상
-    */
-
     let reward=0;
 
 
-    cargo.forEach(item => {
+    selectedCargo.forEach(id=>{
 
-        reward +=
-            item.reward;
+        const item=
+            cargoData.find(
+                x=>x.id===id
+            );
+
+
+        if(item)
+            reward+=item.reward;
 
     });
 
 
-    reward *=
+    reward*=
         Math.max(
             .2,
             1-damage/100
         );
 
 
-    reward *=
+    reward*=
         efficiency/100;
 
 
-    /*
-       점수
-    */
-
-    const score =
+    const score=
         efficiency*.55+
         (100-damage)*.45;
 
@@ -1706,24 +2341,17 @@ function finishDelivery() {
 
     if(score>=92)
         grade="S";
-
     else if(score>=82)
         grade="A";
-
     else if(score>=68)
         grade="B";
-
     else if(score>=52)
         grade="C";
 
 
-    /*
-       결과
-    */
-
     document.getElementById(
         "resultDistance"
-    ).textContent =
+    ).textContent=
         Math.round(
             routeDistance
         )+"m";
@@ -1731,19 +2359,19 @@ function finishDelivery() {
 
     document.getElementById(
         "resultTime"
-    ).textContent =
+    ).textContent=
         deliveryElapsed.toFixed(1)+"s";
 
 
     document.getElementById(
         "resultDamage"
-    ).textContent =
+    ).textContent=
         damage.toFixed(1)+"%";
 
 
     document.getElementById(
         "resultEfficiency"
-    ).textContent =
+    ).textContent=
         Math.round(
             efficiency
         )+"%";
@@ -1751,7 +2379,7 @@ function finishDelivery() {
 
     document.getElementById(
         "resultReward"
-    ).textContent =
+    ).textContent=
         "¥ "+
         Math.round(
             reward
@@ -1763,9 +2391,28 @@ function finishDelivery() {
     ).textContent=grade;
 
 
-    document.getElementById(
-        "result"
-    ).style.display="flex";
+    showScreen(
+        "resultScreen"
+    );
+}
+
+
+/* =====================================================
+   IDEAL DISTANCE
+===================================================== */
+
+function getIdealDistance(){
+
+    /*
+       간단한 기준값.
+
+       나중에는 실제 그래프 탐색
+       알고리즘으로 최단거리를 계산하도록
+       바꿀 수 있다.
+    */
+
+    return 750+
+        selectedCargo.length*90;
 }
 
 
@@ -1773,11 +2420,11 @@ function finishDelivery() {
    HUD
 ===================================================== */
 
-function updateHUD() {
+function updateHUD(){
 
     document.getElementById(
         "distance"
-    ).textContent =
+    ).textContent=
         Math.round(
             routeDistance
         )+"m";
@@ -1785,49 +2432,79 @@ function updateHUD() {
 
     document.getElementById(
         "cargoCount"
-    ).textContent =
+    ).textContent=
         deliveredCargo.size+
         "/"+
-        cargo.length;
+        selectedCargo.length;
 
 
     document.getElementById(
         "damage"
-    ).textContent =
+    ).textContent=
         damage.toFixed(1)+"%";
 }
 
 
 /* =====================================================
-   CARGO UI
+   CARGO HUD
 ===================================================== */
 
-function updateCargoUI() {
+function updateCargoHud(){
 
-    cargo.forEach(item => {
+    const hud=
+        document.getElementById(
+            "cargoHud"
+        );
 
-        const element =
-            document.getElementById(
-                "cargo-"+item.id
+
+    hud.innerHTML=
+        `<div class="cargo-hud-title">
+            DELIVERY LIST
+        </div>`;
+
+
+    selectedCargo.forEach(id=>{
+
+        const item=
+            cargoData.find(
+                x=>x.id===id
             );
+
+
+        if(!item)
+            return;
+
+
+        const div=
+            document.createElement("div");
+
+
+        div.className=
+            "cargo-hud-item";
 
 
         if(
             deliveredCargo.has(
-                item.id
+                id
             )
-        ) {
+        ){
 
-            element.classList.add(
-                "done"
-            );
-
-        } else {
-
-            element.classList.remove(
-                "done"
+            div.classList.add(
+                "delivered"
             );
         }
+
+
+        div.textContent=
+            (
+                deliveredCargo.has(id)
+                ? "✓ "
+                : "○ "
+            )+
+            item.name;
+
+
+        hud.appendChild(div);
 
     });
 }
@@ -1837,7 +2514,11 @@ function updateCargoUI() {
    DRAW MAP
 ===================================================== */
 
-function draw() {
+function draw(){
+
+    if(!W || !H)
+        return;
+
 
     ctx.clearRect(
         0,
@@ -1848,7 +2529,7 @@ function draw() {
 
 
     /*
-       배경
+       BACKGROUND
     */
 
     ctx.fillStyle="#070910";
@@ -1862,45 +2543,45 @@ function draw() {
 
 
     /*
-       도시 블록
+       CITY BLOCKS
     */
 
     for(
         let x=0;
         x<W;
         x+=42
-    ) {
+    ){
 
         for(
             let y=0;
             y<H;
             y+=42
-        ) {
+        ){
 
-            const nearRoadX =
+            const roadX=
                 Math.min(
                     Math.abs(x/W-.2),
                     Math.abs(x/W-.5),
                     Math.abs(x/W-.8)
-                ) < .07;
+                )<.07;
 
 
-            const nearRoadY =
+            const roadY=
                 Math.min(
                     Math.abs(y/H-.2),
                     Math.abs(y/H-.5),
                     Math.abs(y/H-.8)
-                ) < .07;
+                )<.07;
 
 
             if(
-                nearRoadX ||
-                nearRoadY
+                roadX ||
+                roadY
             )
                 continue;
 
 
-            ctx.fillStyle =
+            ctx.fillStyle=
                 ((x+y)/42)%2===0
                 ? "#111521"
                 : "#0d111a";
@@ -1917,62 +2598,83 @@ function draw() {
 
 
     /*
-       도로
+       ROAD
     */
 
-    roads.forEach(path => {
+    roads.forEach(path=>{
 
         ctx.beginPath();
 
 
         path.forEach(
-            (point,index) => {
+            (point,index)=>{
 
-                const x =
+                const x=
                     point[0]*W;
 
-                const y =
+                const y=
                     point[1]*H;
 
 
                 if(index===0)
                     ctx.moveTo(x,y);
-
                 else
                     ctx.lineTo(x,y);
             }
         );
 
 
-        ctx.lineWidth=32;
+        ctx.lineWidth=31;
 
-        ctx.strokeStyle=
-            "#252a36";
+        ctx.strokeStyle="#252a36";
 
         ctx.stroke();
 
 
         ctx.lineWidth=2;
 
-        ctx.strokeStyle=
-            "#454b5a";
+        ctx.strokeStyle="#4a5060";
 
         ctx.stroke();
+
+
+        /*
+           도로 중앙선
+        */
+
+        ctx.setLineDash(
+            [8,9]
+        );
+
+        ctx.lineWidth=1;
+
+        ctx.strokeStyle=
+            "rgba(130,140,155,.35)";
+
+        ctx.stroke();
+
+
+        ctx.setLineDash([]);
     });
 
 
     /*
-       이벤트 위치
+       CENTER EVENT
     */
 
     ctx.fillStyle="#ffcf55";
 
+    ctx.shadowColor="#ffcf55";
+
+    ctx.shadowBlur=10;
+
+
     ctx.beginPath();
 
     ctx.arc(
-        W*.50,
-        H*.50,
-        8,
+        W*.5,
+        H*.5,
+        7,
         0,
         Math.PI*2
     );
@@ -1980,101 +2682,66 @@ function draw() {
     ctx.fill();
 
 
-    /*
-       ★ 핵심 ★
-
-       플레이어가 계획한 경로를
-       항상 그린다.
-    */
-
-    if(route.length>1) {
-
-        ctx.save();
-
-
-        ctx.beginPath();
-
-
-        route.forEach(
-            (point,index) => {
-
-                const x =
-                    point.x*W;
-
-                const y =
-                    point.y*H;
-
-
-                if(index===0)
-                    ctx.moveTo(x,y);
-
-                else
-                    ctx.lineTo(x,y);
-            }
-        );
-
-
-        /*
-           바깥쪽 빛
-        */
-
-        ctx.lineWidth=9;
-
-        ctx.strokeStyle=
-            "rgba(99,245,255,.18)";
-
-        ctx.stroke();
-
-
-        /*
-           실제 경로 선
-        */
-
-        ctx.lineWidth=5;
-
-        ctx.strokeStyle=
-            delivering
-            ? "#ff3c91"
-            : "#63f5ff";
-
-
-        ctx.shadowColor=
-            delivering
-            ? "#ff3c91"
-            : "#63f5ff";
-
-
-        ctx.shadowBlur=10;
-
-        ctx.stroke();
-
-
-        ctx.shadowBlur=0;
-
-        ctx.restore();
-    }
+    ctx.shadowBlur=0;
 
 
     /*
-       배송지
+       DESTINATIONS
     */
 
-    cargo.forEach(item => {
+    cargoData.forEach(item=>{
 
-        const x =
+        if(
+            !selectedCargo.includes(
+                item.id
+            )
+        )
+            return;
+
+
+        const x=
             item.x*W;
 
-        const y =
+        const y=
             item.y*H;
 
 
-        const done =
+        const done=
             deliveredCargo.has(
                 item.id
             );
 
 
-        ctx.fillStyle =
+        /*
+           외곽 원
+        */
+
+        ctx.strokeStyle=
+            done
+            ? "#5cff9a"
+            : "#ffcf55";
+
+        ctx.lineWidth=2;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            17,
+            0,
+            Math.PI*2
+        );
+
+        ctx.stroke();
+
+
+        /*
+           내부
+        */
+
+        ctx.fillStyle=
             done
             ? "#5cff9a"
             : "#ffcf55";
@@ -2085,7 +2752,7 @@ function draw() {
         ctx.arc(
             x,
             y,
-            13,
+            10,
             0,
             Math.PI*2
         );
@@ -2104,24 +2771,110 @@ function draw() {
 
 
         ctx.fillText(
-            done ? "✓" : "!",
+            done
+            ? "✓"
+            : "!",
             x,
             y
         );
+
     });
 
 
     /*
-       출발점
+       ROUTE LINE
     */
 
+    if(route.length>1){
+
+        ctx.save();
+
+
+        ctx.beginPath();
+
+
+        route.forEach(
+            (point,index)=>{
+
+                const x=
+                    point.x*W;
+
+                const y=
+                    point.y*H;
+
+
+                if(index===0)
+                    ctx.moveTo(x,y);
+                else
+                    ctx.lineTo(x,y);
+            }
+        );
+
+
+        /*
+           GLOW
+        */
+
+        ctx.lineWidth=10;
+
+        ctx.strokeStyle=
+            delivering
+            ? "rgba(255,60,145,.18)"
+            : "rgba(99,245,255,.20)";
+
+        ctx.stroke();
+
+
+        /*
+           MAIN LINE
+        */
+
+        ctx.lineWidth=5;
+
+        ctx.strokeStyle=
+            delivering
+            ? "#ff3c91"
+            : "#63f5ff";
+
+        ctx.shadowColor=
+            delivering
+            ? "#ff3c91"
+            : "#63f5ff";
+
+        ctx.shadowBlur=10;
+
+        ctx.stroke();
+
+
+        ctx.shadowBlur=0;
+
+        ctx.restore();
+    }
+
+
+    /*
+       START
+    */
+
+    const sx=
+        startPoint.x*W;
+
+    const sy=
+        startPoint.y*H;
+
+
     ctx.fillStyle="#63f5ff";
+
+    ctx.shadowColor="#63f5ff";
+
+    ctx.shadowBlur=12;
+
 
     ctx.beginPath();
 
     ctx.arc(
-        start.x*W,
-        start.y*H,
+        sx,
+        sy,
         12,
         0,
         Math.PI*2
@@ -2130,7 +2883,10 @@ function draw() {
     ctx.fill();
 
 
-    ctx.fillStyle="#080910";
+    ctx.shadowBlur=0;
+
+
+    ctx.fillStyle="#071016";
 
     ctx.font=
         "bold 10px Arial";
@@ -2141,20 +2897,19 @@ function draw() {
 
     ctx.fillText(
         "S",
-        start.x*W,
-        start.y*H
+        sx,
+        sy
     );
 
 
     /*
-       계획 단계에서는
-       현재 출발점을 다시 표시
+       시작점 안내 링
     */
 
     if(
         planning &&
         route.length===0
-    ) {
+    ){
 
         ctx.strokeStyle=
             "rgba(99,245,255,.35)";
@@ -2164,8 +2919,8 @@ function draw() {
         ctx.beginPath();
 
         ctx.arc(
-            start.x*W,
-            start.y*H,
+            sx,
+            sy,
             23,
             0,
             Math.PI*2

@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>CYBER DELIVERY</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #080910;
+    color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    touch-action: none;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+#titleScreen {
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background:
+        linear-gradient(rgba(8,9,16,.8), rgba(8,9,16,.95)),
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 3px,
+            rgba(255,255,255,.025) 4px
+        );
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: clamp(38px, 12vw, 72px);
+    letter-spacing: 5px;
+    color: #63f5ff;
+    text-shadow:
+        4px 4px 0 #ff3c91,
+        0 0 20px rgba(99,245,255,.6);
+}
+
+.logo p {
+    margin-top: 12px;
+    color: #aaa;
+    letter-spacing: 4px;
+    font-size: 12px;
+}
+
+.mainButton {
+    width: min(90vw, 360px);
+    padding: 18px;
+    border: 2px solid #63f5ff;
+    background: #10151f;
+    color: #63f5ff;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.mainButton:active {
+    background: #63f5ff;
+    color: #080910;
+}
+
+/* =========================
+   DELIVERY SELECT
+========================= */
+
+#selectScreen {
+    padding: 18px;
+    overflow-y: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.header h2 {
+    margin: 0;
+    color: #63f5ff;
+    font-size: 20px;
+}
+
+.money {
+    color: #ffd75a;
+}
+
+.packageList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.package {
+    border: 2px solid #282d3b;
+    background: #10131d;
+    padding: 15px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.package.selected {
+    border-color: #63f5ff;
+    box-shadow: 0 0 12px rgba(99,245,255,.25);
+}
+
+.packageIcon {
+    font-size: 32px;
+    width: 48px;
+    text-align: center;
+}
+
+.packageInfo {
+    flex: 1;
+}
+
+.packageInfo h3 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.packageInfo p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: #999;
+}
+
+.selectButton {
+    padding: 9px 12px;
+    border: 1px solid #555;
+    background: #181c27;
+    cursor: pointer;
+}
+
+.package.selected .selectButton {
+    border-color: #63f5ff;
+    color: #63f5ff;
+}
+
+#startDelivery {
+    margin-top: auto;
+}
+
+/* =========================
+   GAME
+========================= */
+
+#gameScreen {
+    position: relative;
+    background: #080910;
+}
+
+#gameCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+.gameHUD {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    pointer-events: none;
+}
+
+.hudBox {
+    background: rgba(8,9,16,.88);
+    border: 1px solid #313747;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.hudBox span {
+    color: #63f5ff;
+}
+
+.damage {
+    color: #ff668f !important;
+}
+
+.helpText {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    background: rgba(8,9,16,.75);
+    padding: 7px;
+    pointer-events: none;
+}
+
+/* =========================
+   EVENT
+========================= */
+
+#eventOverlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    background: rgba(0,0,0,.72);
+}
+
+.eventBox {
+    width: 100%;
+    max-width: 380px;
+    background: #10131d;
+    border: 2px solid #ffcf55;
+    padding: 22px;
+    text-align: center;
+}
+
+.eventBox h2 {
+    color: #ffcf55;
+    margin-top: 0;
+}
+
+.eventBox p {
+    color: #bbb;
+    line-height: 1.6;
+}
+
+.eventButton {
+    width: 100%;
+    padding: 14px;
+    background: #191d29;
+    border: 1px solid #ffcf55;
+    color: #ffcf55;
+}
+
+/* =========================
+   RESULT
+========================= */
+
+#resultScreen {
+    padding: 25px;
+    justify-content: center;
+}
+
+.resultBox {
+    width: 100%;
+    max-width: 420px;
+    margin: auto;
+    border: 2px solid #63f5ff;
+    background: #10131d;
+    padding: 24px;
+}
+
+.resultBox h2 {
+    text-align: center;
+    color: #63f5ff;
+    margin-top: 0;
+}
+
+.resultRow {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #292e3a;
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+.resultRow strong {
+    color: #63f5ff;
+}
+
+.grade {
+    text-align: center;
+    font-size: 55px;
+    color: #ffd75a;
+    margin: 20px 0;
+}
+
+.small {
+    text-align: center;
+    color: #777;
+    font-size: 11px;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     TITLE
+========================= -->
+
+<section id="titleScreen" class="screen active">
+    <div class="logo">
+        <h1>CYBER<br>DELIVERY</h1>
+        <p>THE CITY NEVER WAITS</p>
+    </div>
+
+    <button class="mainButton" onclick="showScreen('selectScreen')">
+        START DELIVERY
+    </button>
+</section>
+
+
+<!-- =========================
+     PACKAGE SELECT
+========================= -->
+
+<section id="selectScreen" class="screen">
+
+    <div class="header">
+        <h2>SELECT CARGO</h2>
+        <div class="money">¥ 12,500</div>
+    </div>
+
+    <p style="color:#888;font-size:12px;">
+        배달할 물품을 선택하세요.
+        여러 개를 선택하면 모든 목적지를 방문해야 합니다.
+    </p>
+
+    <div class="packageList">
+
+        <div class="package" data-id="food">
+            <div class="packageIcon">🍜</div>
+
+            <div class="packageInfo">
+                <h3>NEON RAMEN</h3>
+                <p>목적지: NORTH DISTRICT</p>
+                <p>시간 중요도: ★★★★★</p>
+                <p>손상 내성: ★★★★☆</p>
+            </div>
+
+            <button class="selectButton"
+                    onclick="togglePackage(this)">
+                SELECT
+            </button>
+        </div>
+
+
+        <div class="package" data-id="medicine">
+            <div class="packageIcon">💊</div>
+
+            <div class="packageInfo">
+                <h3>MEDICAL CHIP</h3>
+                <p>목적지: EAST DISTRICT</p>
+                <p>시간 중요도: ★★★☆☆</p>
+                <p>손상 내성: ★★☆☆☆</p>
+            </div>
+
+            <button class="selectButton"
+                    onclick="togglePackage(this)">
+                SELECT
+            </button>
+        </div>
+
+
+        <div class="package" data-id="component">
+            <div class="packageIcon">🔧</div>
+
+            <div class="packageInfo">
+                <h3>CYBER COMPONENT</h3>
+                <p>목적지: SOUTH DISTRICT</p>
+                <p>시간 중요도: ★★☆☆☆</p>
+                <p>손상 내성: ★★★★★</p>
+            </div>
+
+            <button class="selectButton"
+                    onclick="togglePackage(this)">
+                SELECT
+            </button>
+        </div>
+
+    </div>
+
+    <button id="startDelivery"
+            class="mainButton"
+            onclick="startGame()">
+        BEGIN ROUTE
+    </button>
+
+</section>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<section id="gameScreen" class="screen">
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="gameHUD">
+        <div class="hudBox">
+            <div>TIME <span id="timeDisplay">0.0s</span></div>
+            <div>DIST <span id="distanceDisplay">0m</span></div>
+            <div>DAMAGE <span id="damageDisplay" class="damage">0%</span></div>
+        </div>
+    </div>
+
+    <div class="helpText">
+        손가락으로 도로를 따라 이동하세요 · 노란색 지점이 배달 장소입니다
+    </div>
+
+    <div id="eventOverlay">
+        <div class="eventBox">
+            <h2 id="eventTitle">EVENT</h2>
+            <p id="eventDescription"></p>
+            <button class="eventButton" onclick="closeEvent()">
+                CONTINUE
+            </button>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+
+<section id="resultScreen" class="screen">
+
+    <div class="resultBox">
+
+        <h2>DELIVERY COMPLETE</h2>
+
+        <div class="grade" id="grade">A</div>
+
+        <div class="resultRow">
+            <span>총 이동거리</span>
+            <strong id="resultDistance">0m</strong>
+        </div>
+
+        <div class="resultRow">
+            <span>소요 시간</span>
+            <strong id="resultTime">0s</strong>
+        </div>
+
+        <div class="resultRow">
+            <span>배송품 손상</span>
+            <strong id="resultDamage">0%</strong>
+        </div>
+
+        <div class="resultRow">
+            <span>경로 효율</span>
+            <strong id="resultEfficiency">100%</strong>
+        </div>
+
+        <div class="resultRow">
+            <span>보상</span>
+            <strong id="resultMoney">¥ 0</strong>
+        </div>
+
+        <button class="mainButton"
+                style="width:100%;margin-top:20px;"
+                onclick="location.reload()">
+            NEXT DELIVERY
+        </button>
+
+        <p class="small">
+            PROTOTYPE BUILD 0.1
+        </p>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =====================================================
+   SCREEN
+===================================================== */
+
+function showScreen(id) {
+    document.querySelectorAll(".screen")
+        .forEach(s => s.classList.remove("active"));
+
+    document.getElementById(id)
+        .classList.add("active");
+}
+
+
+/* =====================================================
+   PACKAGE
+===================================================== */
+
+const selectedPackages = new Set();
+
+function togglePackage(button) {
+
+    const packageElement = button.parentElement;
+    const id = packageElement.dataset.id;
+
+    if (selectedPackages.has(id)) {
+
+        selectedPackages.delete(id);
+        packageElement.classList.remove("selected");
+        button.textContent = "SELECT";
+
+    } else {
+
+        selectedPackages.add(id);
+        packageElement.classList.add("selected");
+        button.textContent = "SELECTED";
+
+    }
+}
+
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let W = 0;
+let H = 0;
+
+function resizeCanvas() {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    W = window.innerWidth;
+    H = window.innerHeight;
+
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+let roads = [];
+
+let destinations = [];
+
+let player = {
+    x: 0,
+    y: 0
+};
+
+let drawing = false;
+
+let traveledDistance = 0;
+
+let damage = 0;
+
+let startTime = 0;
+
+let elapsed = 0;
+
+let delivered = new Set();
+
+let eventTriggered = false;
+
+
+/* =====================================================
+   CREATE MAP
+===================================================== */
+
+function createMap() {
+
+    roads = [
+        [[0.08,0.20],[0.35,0.20],[0.65,0.20],[0.92,0.20]],
+
+        [[0.08,0.50],[0.35,0.50],[0.65,0.50],[0.92,0.50]],
+
+        [[0.08,0.80],[0.35,0.80],[0.65,0.80],[0.92,0.80]],
+
+        [[0.20,0.08],[0.20,0.20],[0.20,0.50],[0.20,0.80],[0.20,0.92]],
+
+        [[0.50,0.08],[0.50,0.20],[0.50,0.50],[0.50,0.80],[0.50,0.92]],
+
+        [[0.80,0.08],[0.80,0.20],[0.80,0.50],[0.80,0.80],[0.80,0.92]]
+    ];
+
+    destinations = [];
+
+    if (selectedPackages.has("food")) {
+        destinations.push({
+            x:0.80,
+            y:0.20,
+            name:"NORTH",
+            package:"food"
+        });
+    }
+
+    if (selectedPackages.has("medicine")) {
+        destinations.push({
+            x:0.80,
+            y:0.80,
+            name:"EAST",
+            package:"medicine"
+        });
+    }
+
+    if (selectedPackages.has("component")) {
+        destinations.push({
+            x:0.20,
+            y:0.80,
+            name:"SOUTH",
+            package:"component"
+        });
+    }
+
+    player.x = 0.08;
+    player.y = 0.50;
+
+    delivered.clear();
+}
+
+
+/* =====================================================
+   DRAW MAP
+===================================================== */
+
+function drawMap() {
+
+    ctx.clearRect(0,0,W,H);
+
+    /* background */
+
+    ctx.fillStyle = "#080910";
+    ctx.fillRect(0,0,W,H);
+
+
+    /* city blocks */
+
+    for (let x = 0; x < W; x += 40) {
+
+        for (let y = 0; y < H; y += 40) {
+
+            if (
+                Math.abs((x/W)-0.2) < .08 ||
+                Math.abs((x/W)-0.5) < .08 ||
+                Math.abs((x/W)-0.8) < .08
+            ) continue;
+
+            if (
+                Math.abs((y/H)-0.2) < .08 ||
+                Math.abs((y/H)-0.5) < .08 ||
+                Math.abs((y/H)-0.8) < .08
+            ) continue;
+
+            ctx.fillStyle =
+                ((x+y)/40 % 2 === 0)
+                ? "#111521"
+                : "#0e121d";
+
+            ctx.fillRect(x+2,y+2,34,34);
+        }
+    }
+
+
+    /* roads */
+
+    roads.forEach(path => {
+
+        ctx.beginPath();
+
+        path.forEach((point,i) => {
+
+            const x = point[0] * W;
+            const y = point[1] * H;
+
+            if (i === 0)
+                ctx.moveTo(x,y);
+            else
+                ctx.lineTo(x,y);
+        });
+
+        ctx.lineWidth = 30;
+        ctx.strokeStyle = "#252a36";
+        ctx.stroke();
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#3c4352";
+        ctx.stroke();
+
+    });
+
+
+    /* event roads */
+
+    ctx.fillStyle = "#ffcc55";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        W*0.50,
+        H*0.50,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /* destinations */
+
+    destinations.forEach((d,index) => {
+
+        const x = d.x * W;
+        const y = d.y * H;
+
+        if (delivered.has(d.package)) {
+
+            ctx.fillStyle = "#5cff9a";
+
+        } else {
+
+            ctx.fillStyle = "#ffcc55";
+        }
+
+        ctx.beginPath();
+
+        ctx.arc(x,y,12,0,Math.PI*2);
+
+        ctx.fill();
+
+        ctx.fillStyle = "#080910";
+
+        ctx.font = "bold 10px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillText(
+            delivered.has(d.package) ? "✓" : "!",
+            x,
+            y
+        );
+    });
+
+
+    /* player */
+
+    ctx.fillStyle = "#63f5ff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x * W,
+        player.y * H,
+        9,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x * W,
+        player.y * H,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+}
+
+
+/* =====================================================
+   ROAD CHECK
+===================================================== */
+
+function nearestRoadPoint(x,y) {
+
+    let best = null;
+    let bestDistance = Infinity;
+
+    roads.forEach(path => {
+
+        for(let i=0;i<path.length-1;i++) {
+
+            const a = {
+                x:path[i][0] * W,
+                y:path[i][1] * H
+            };
+
+            const b = {
+                x:path[i+1][0] * W,
+                y:path[i+1][1] * H
+            };
+
+            const dx = b.x-a.x;
+            const dy = b.y-a.y;
+
+            const len2 = dx*dx+dy*dy;
+
+            let t =
+                ((x-a.x)*dx+(y-a.y)*dy) /
+                len2;
+
+            t = Math.max(0,Math.min(1,t));
+
+            const px = a.x+dx*t;
+            const py = a.y+dy*t;
+
+            const dist =
+                Math.hypot(x-px,y-py);
+
+            if(dist < bestDistance) {
+
+                bestDistance = dist;
+
+                best = {
+                    x:px,
+                    y:py
+                };
+            }
+        }
+    });
+
+    return {
+        point:best,
+        distance:bestDistance
+    };
+}
+
+
+/* =====================================================
+   TOUCH / MOUSE
+===================================================== */
+
+function pointerPosition(e) {
+
+    const rect = canvas.getBoundingClientRect();
+
+    let clientX;
+    let clientY;
+
+    if(e.touches) {
+
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+
+    } else {
+
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+
+    return {
+        x:clientX-rect.left,
+        y:clientY-rect.top
+    };
+}
+
+
+function startPointer(e) {
+
+    e.preventDefault();
+
+    if(!gameRunning) return;
+
+    const p = pointerPosition(e);
+
+    const distance = Math.hypot(
+        p.x-player.x*W,
+        p.y-player.y*H
+    );
+
+    if(distance < 45) {
+
+        drawing = true;
+    }
+}
+
+
+function movePointer(e) {
+
+    e.preventDefault();
+
+    if(!drawing || !gameRunning)
+        return;
+
+    const p = pointerPosition(e);
+
+    const road = nearestRoadPoint(p.x,p.y);
+
+    if(!road.point)
+        return;
+
+    if(road.distance > 35)
+        return;
+
+    const nx = road.point.x/W;
+    const ny = road.point.y/H;
+
+    const dx = (nx-player.x)*W;
+    const dy = (ny-player.y)*H;
+
+    const movement = Math.hypot(dx,dy);
+
+    traveledDistance += movement;
+
+    player.x = nx;
+    player.y = ny;
+
+    damage += movement * 0.003;
+
+    checkDestinations();
+    checkEvent();
+
+    updateHUD();
+}
+
+
+function stopPointer() {
+
+    drawing = false;
+}
+
+
+canvas.addEventListener("touchstart",startPointer,{passive:false});
+canvas.addEventListener("touchmove",movePointer,{passive:false});
+canvas.addEventListener("touchend",stopPointer);
+
+canvas.addEventListener("mousedown",startPointer);
+canvas.addEventListener("mousemove",movePointer);
+canvas.addEventListener("mouseup",stopPointer);
+
+
+/* =====================================================
+   DESTINATION
+===================================================== */
+
+function checkDestinations() {
+
+    destinations.forEach(d => {
+
+        if(delivered.has(d.package))
+            return;
+
+        const dist = Math.hypot(
+            player.x-d.x,
+            player.y-d.y
+        );
+
+        if(dist < 0.055) {
+
+            delivered.add(d.package);
+
+            damage += 0.5;
+
+            if(delivered.size === destinations.length) {
+
+                finishGame();
+            }
+        }
+    });
+}
+
+
+/* =====================================================
+   EVENTS
+===================================================== */
+
+function checkEvent() {
+
+    if(eventTriggered)
+        return;
+
+    const dist = Math.hypot(
+        player.x-0.50,
+        player.y-0.50
+    );
+
+    if(dist < 0.06) {
+
+        eventTriggered = true;
+
+        showRandomEvent();
+    }
+}
+
+
+const events = [
+
+    {
+        title:"🚧 ROAD ACCIDENT",
+        description:
+        "앞쪽 도로에서 사고가 발생했습니다.<br><br>" +
+        "배송품이 약간 흔들렸습니다.",
+        damage:4
+    },
+
+    {
+        title:"⚡ ELECTROMAGNETIC WAVE",
+        description:
+        "강한 전자기파가 주변을 통과했습니다.<br><br>" +
+        "전자 부품이 약간 손상되었습니다.",
+        damage:7
+    },
+
+    {
+        title:"🛵 DELIVERY DRONE",
+        description:
+        "근처의 배달 드론이 당신을 도와줍니다.<br><br>" +
+        "이동 경로가 잠시 안정됩니다.",
+        damage:-2
+    },
+
+    {
+        title:"🚦 GREEN LIGHT",
+        description:
+        "교통 신호가 전부 녹색으로 바뀌었습니다.<br><br>" +
+        "좋은 타이밍입니다.",
+        damage:-3
+    }
+];
+
+
+function showRandomEvent() {
+
+    const event =
+        events[Math.floor(Math.random()*events.length)];
+
+    damage += event.damage;
+
+    damage = Math.max(0,damage);
+
+    document.getElementById("eventTitle")
+        .textContent = event.title;
+
+    document.getElementById("eventDescription")
+        .innerHTML = event.description;
+
+    document.getElementById("eventOverlay")
+        .style.display = "flex";
+
+    updateHUD();
+}
+
+
+function closeEvent() {
+
+    document.getElementById("eventOverlay")
+        .style.display = "none";
+}
+
+
+/* =====================================================
+   GAME LOOP
+===================================================== */
+
+let gameRunning = false;
+
+function startGame() {
+
+    if(selectedPackages.size === 0) {
+
+        alert("배달품을 하나 이상 선택해주세요.");
+        return;
+    }
+
+    showScreen("gameScreen");
+
+    resizeCanvas();
+
+    createMap();
+
+    damage = 0;
+    traveledDistance = 0;
+
+    startTime = performance.now();
+
+    gameRunning = true;
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+function gameLoop(now) {
+
+    if(!gameRunning)
+        return;
+
+    elapsed =
+        (now-startTime)/1000;
+
+    updateHUD();
+
+    drawMap();
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+function updateHUD() {
+
+    document.getElementById("timeDisplay")
+        .textContent = elapsed.toFixed(1)+"s";
+
+    document.getElementById("distanceDisplay")
+        .textContent =
+        Math.round(traveledDistance)+"m";
+
+    document.getElementById("damageDisplay")
+        .textContent =
+        Math.min(100,damage).toFixed(1)+"%";
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishGame() {
+
+    gameRunning = false;
+
+    const finalDamage =
+        Math.min(100,damage);
+
+    const efficiency =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                100 - Math.max(0,traveledDistance-500)/10
+            )
+        );
+
+    let score = 1000;
+
+    score -= elapsed * 4;
+    score -= traveledDistance * 0.5;
+    score -= finalDamage * 20;
+
+    score = Math.max(0,Math.round(score));
+
+    let grade;
+
+    if(score >= 800)
+        grade = "S";
+    else if(score >= 650)
+        grade = "A";
+    else if(score >= 500)
+        grade = "B";
+    else if(score >= 300)
+        grade = "C";
+    else
+        grade = "D";
+
+    document.getElementById("resultDistance")
+        .textContent =
+        Math.round(traveledDistance)+"m";
+
+    document.getElementById("resultTime")
+        .textContent =
+        elapsed.toFixed(1)+"s";
+
+    document.getElementById("resultDamage")
+        .textContent =
+        finalDamage.toFixed(1)+"%";
+
+    document.getElementById("resultEfficiency")
+        .textContent =
+        Math.round(efficiency)+"%";
+
+    document.getElementById("resultMoney")
+        .textContent =
+        "¥ "+(Math.max(100,score*10)).toLocaleString();
+
+    document.getElementById("grade")
+        .textContent = grade;
+
+    setTimeout(() => {
+
+        showScreen("resultScreen");
+
+    },500);
+}
+
+</script>
+
+</body>
+</html>

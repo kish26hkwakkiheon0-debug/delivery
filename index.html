@@ -21,10 +21,8 @@
 html,body{
     margin:0;
     padding:0;
-
     width:100%;
     height:100%;
-
     overflow:hidden;
 
     background:#070910;
@@ -68,7 +66,6 @@ button{
         );
 
     flex-direction:column;
-
     align-items:center;
     justify-content:center;
 
@@ -79,19 +76,14 @@ button{
 
 .logo-small{
     color:#63f5ff;
-
     font-size:11px;
-
     letter-spacing:5px;
-
     margin-bottom:15px;
 }
 
 .logo{
     font-size:38px;
-
     font-weight:900;
-
     letter-spacing:4px;
 
     color:#fff;
@@ -105,7 +97,6 @@ button{
     color:#ff3c91;
 
     font-size:12px;
-
     letter-spacing:5px;
 
     margin-top:10px;
@@ -123,7 +114,6 @@ button{
     border-bottom:1px solid #263044;
 
     position:relative;
-
     overflow:hidden;
 }
 
@@ -141,14 +131,12 @@ button{
 .title-city::before{
     width:100%;
     height:1px;
-
     top:35px;
 }
 
 .title-city::after{
     width:1px;
     height:100%;
-
     left:55%;
 }
 
@@ -165,9 +153,7 @@ button{
     color:#63f5ff;
 
     font-size:15px;
-
     font-weight:bold;
-
     letter-spacing:2px;
 }
 
@@ -261,7 +247,6 @@ button{
 
 .cargo-icon{
     font-size:28px;
-
     margin-bottom:8px;
 }
 
@@ -269,7 +254,6 @@ button{
     color:#ddd;
 
     font-size:11px;
-
     font-weight:bold;
 }
 
@@ -352,7 +336,6 @@ button{
 
 .cargo-start:disabled{
     border-color:#2d3340;
-
     color:#555b67;
 }
 
@@ -552,19 +535,16 @@ button{
     color:#bbb;
 
     font-size:12px;
-
     font-weight:bold;
 }
 
 .control.deliver{
     color:#63f5ff;
-
     border-color:#63f5ff;
 }
 
 .control:disabled{
     color:#555;
-
     border-color:#292e38;
 }
 
@@ -702,7 +682,6 @@ button{
 </style>
 </head>
 
-
 <body>
 
 
@@ -735,14 +714,14 @@ button{
     </button>
 
     <div class="version">
-        MOBILE PROTOTYPE v0.3
+        MOBILE PROTOTYPE v0.4
     </div>
 
 </section>
 
 
 <!-- =====================================================
-     CARGO SELECT
+     CARGO
 ===================================================== -->
 
 <section id="cargoScreen"
@@ -760,11 +739,9 @@ button{
 
     </div>
 
-
     <div class="cargo-grid"
          id="cargoGrid">
     </div>
-
 
     <div class="cargo-footer">
 
@@ -832,8 +809,8 @@ button{
     <div class="mode-message"
          id="modeMessage">
 
-        출발점에서 손가락으로 도로를 따라
-        경로를 그리세요
+        출발점에서 손가락을 누르고
+        도로를 따라 경로를 그리세요
 
     </div>
 
@@ -1030,7 +1007,6 @@ const cargoData=[
     }
 
 ];
-
 
 let selectedCargo=[];
 
@@ -1244,7 +1220,7 @@ const startPoint={
 
 
 /* =====================================================
-   GAME STATE
+   STATE
 ===================================================== */
 
 let route=[];
@@ -1274,6 +1250,14 @@ let triggeredEvents=new Set();
 let W=0;
 
 let H=0;
+
+
+/*
+    현재 손가락이 잡고 있는 segment.
+    손가락을 떼어도 유지된다.
+*/
+
+let currentSegment=null;
 
 
 /* =====================================================
@@ -1335,7 +1319,7 @@ window.addEventListener(
 
 
 /* =====================================================
-   START
+   START GAME
 ===================================================== */
 
 function startRoutePlanning(){
@@ -1364,10 +1348,13 @@ function startRoutePlanning(){
     triggeredEvents.clear();
 
 
+    currentSegment=null;
+
+
     document.getElementById(
         "modeMessage"
     ).textContent=
-        "출발점에서 손가락을 누르고 도로를 따라 이동하세요";
+        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
 
     document.getElementById(
@@ -1393,14 +1380,8 @@ function startRoutePlanning(){
 
 
 /* =====================================================
-   ROAD GEOMETRY
+   ROAD SNAP
 ===================================================== */
-
-/*
-    가장 가까운 도로 segment를 찾는다.
-
-    판정 범위는 넉넉하게 70px.
-*/
 
 function roadPoint(x,y){
 
@@ -1496,9 +1477,7 @@ function roadPoint(x,y){
 
                 bestSegment=s;
             }
-
         }
-
     }
 
 
@@ -1512,7 +1491,7 @@ function roadPoint(x,y){
 
 
 /* =====================================================
-   SEGMENT HELPERS
+   SEGMENT
 ===================================================== */
 
 function segmentKey(
@@ -1530,6 +1509,7 @@ function getSegment(
 ){
 
     return{
+
         a:{
             x:roads[road][segment][0],
             y:roads[road][segment][1]
@@ -1539,13 +1519,10 @@ function getSegment(
             x:roads[road][segment+1][0],
             y:roads[road][segment+1][1]
         }
+
     };
 }
 
-
-/*
-    두 segment가 공유하는 교차점 / 코너를 찾는다.
-*/
 
 function sharedPoint(
     r1,s1,
@@ -1602,7 +1579,7 @@ function sharedPoint(
 
 
 /* =====================================================
-   POINTER
+   POINTER POSITION
 ===================================================== */
 
 function pointerPosition(e){
@@ -1629,15 +1606,21 @@ function pointerPosition(e){
     }else{
 
         clientX=e.clientX;
-
         clientY=e.clientY;
 
     }
 
 
     return{
-        x:clientX-rect.left,
-        y:clientY-rect.top
+
+        x:
+            clientX-
+            rect.left,
+
+        y:
+            clientY-
+            rect.top
+
     };
 }
 
@@ -1651,129 +1634,9 @@ function pointerDown(e){
     e.preventDefault();
 
 
-    if(!planning)
-        return;
-
-
-    const p=
-        pointerPosition(e);
-
-
-    const sx=
-        startPoint.x*W;
-
-    const sy=
-        startPoint.y*H;
-
-
-    /*
-       시작점 판정도 넉넉하게.
-    */
-
     if(
-        Math.hypot(
-            p.x-sx,
-            p.y-sy
-        )>70
-    ){
-
-        return;
-    }
-
-
-    const first=
-        roadPoint(
-            p.x,
-            p.y
-        );
-
-
-    if(
-        !first.point ||
-        first.distance>70
-    ){
-
-        return;
-    }
-
-
-    /*
-       출발점에서 실제 첫 segment로
-       연결될 수 있는 경우만 시작.
-    */
-
-    const firstKey=
-        segmentKey(
-            first.road,
-            first.segment
-        );
-
-
-    route=[
-        {
-            x:startPoint.x,
-            y:startPoint.y
-        }
-    ];
-
-
-    visitedSegments.clear();
-
-
-    visitedSegments.add(
-        firstKey
-    );
-
-
-    route.push(
-        first.point
-    );
-
-
-    routeDistance=
-        Math.hypot(
-            (
-                first.point.x-
-                startPoint.x
-            )*W,
-
-            (
-                first.point.y-
-                startPoint.y
-            )*H
-        );
-
-
-    drawing=true;
-
-
-    checkDestination(
-        first.point
-    );
-
-
-    updateHUD();
-
-    updateCargoHud();
-
-    updateDeliverButton();
-
-    draw();
-}
-
-
-/* =====================================================
-   POINTER MOVE
-===================================================== */
-
-function pointerMove(e){
-
-    e.preventDefault();
-
-
-    if(
-        !drawing ||
-        !planning
+        !planning ||
+        delivering
     )
         return;
 
@@ -1789,22 +1652,117 @@ function pointerMove(e){
         );
 
 
-    /*
-       아주 넉넉한 도로 판정.
-
-       모바일에서 손가락은 실제 위치가
-       도로 중앙과 정확하게 일치하기 어렵기 때문에
-       70px까지 허용한다.
-    */
-
     if(
         !road.point ||
-        road.distance>70
+        road.distance>80
     ){
 
         return;
     }
 
+
+    /*
+       ★ 첫 번째 터치
+    */
+
+    if(route.length===0){
+
+        const sx=
+            startPoint.x*W;
+
+        const sy=
+            startPoint.y*H;
+
+
+        if(
+            Math.hypot(
+                p.x-sx,
+                p.y-sy
+            )>85
+        ){
+
+            showTemporaryMessage(
+                "출발점 근처에서 시작하세요"
+            );
+
+            return;
+        }
+
+
+        const key=
+            segmentKey(
+                road.road,
+                road.segment
+            );
+
+
+        visitedSegments.add(
+            key
+        );
+
+
+        route.push({
+            x:startPoint.x,
+            y:startPoint.y
+        });
+
+
+        /*
+           첫 segment의 현재 위치를
+           출발점부터 연결한다.
+        */
+
+        route.push(
+            road.point
+        );
+
+
+        routeDistance=
+            Math.hypot(
+                (
+                    road.point.x-
+                    startPoint.x
+                )*W,
+
+                (
+                    road.point.y-
+                    startPoint.y
+                )*H
+            );
+
+
+        currentSegment={
+            road:road.road,
+            segment:road.segment
+        };
+
+
+        drawing=true;
+
+
+        checkDestination(
+            road.point
+        );
+
+
+        updateHUD();
+        updateCargoHud();
+        updateDeliverButton();
+
+        draw();
+
+        return;
+    }
+
+
+    /*
+       ★ 이미 경로가 존재하는 경우
+
+       다시 누르면 "현재 경로 끝점"에서
+       계속 이어진다.
+
+       출발점으로 돌아가지 않는다.
+    */
 
     const last=
         route[
@@ -1812,60 +1770,29 @@ function pointerMove(e){
         ];
 
 
-    /*
-       현재 마지막으로 사용 중인 segment 찾기
-    */
+    const lx=
+        last.x*W;
 
-    const lastRoadInfo=
-        getLastSegment();
-
-
-    /*
-       같은 segment 안에서 움직이는 경우
-       그냥 직선으로 추가한다.
-    */
-
-    if(
-        lastRoadInfo &&
-        lastRoadInfo.road===
-        road.road &&
-        lastRoadInfo.segment===
-        road.segment
-    ){
-
-        addRoutePoint(
-            road.point
-        );
-
-        return;
-    }
+    const ly=
+        last.y*H;
 
 
     /*
-       새로운 segment로 넘어가는 경우.
-    */
+       손가락을 현재 경로 끝점 근처에서
+       다시 눌러야 한다.
 
-    const newKey=
-        segmentKey(
-            road.road,
-            road.segment
-        );
-
-
-    /*
-       이미 사용한 segment라면 금지.
+       모바일을 고려해 85px 허용.
     */
 
     if(
-        visitedSegments.has(
-            newKey
-        )
+        Math.hypot(
+            p.x-lx,
+            p.y-ly
+        )>85
     ){
-
-        drawing=false;
 
         showTemporaryMessage(
-            "⚠ 이미 지나간 도로입니다!"
+            "현재 경로의 끝부분에서 다시 눌러주세요"
         );
 
         return;
@@ -1873,50 +1800,87 @@ function pointerMove(e){
 
 
     /*
-       마지막 segment와 현재 segment가
-       실제로 연결되는지 확인.
+       현재 끝점이 속한 segment에서
+       다시 시작하는 경우.
     */
 
-    if(lastRoadInfo){
+    if(
+        currentSegment &&
+        road.road===
+        currentSegment.road &&
+        road.segment===
+        currentSegment.segment
+    ){
+
+        drawing=true;
+
+        return;
+    }
+
+
+    /*
+       새로운 segment로 이어지는지 확인.
+    */
+
+    if(currentSegment){
 
         const corner=
             sharedPoint(
-                lastRoadInfo.road,
-                lastRoadInfo.segment,
+                currentSegment.road,
+                currentSegment.segment,
 
                 road.road,
                 road.segment
             );
 
 
+        /*
+           이어지지 않는 도로라면 무시.
+        */
+
         if(!corner){
 
-            /*
-               연결되지 않은 도로로
-               손가락이 순간이동한 경우.
+            showTemporaryMessage(
+                "연결된 도로에서 계속하세요"
+            );
 
-               아무 선도 그리지 않는다.
-            */
+            return;
+        }
+
+
+        const newKey=
+            segmentKey(
+                road.road,
+                road.segment
+            );
+
+
+        /*
+           이미 사용한 segment면 금지.
+        */
+
+        if(
+            visitedSegments.has(
+                newKey
+            )
+        ){
+
+            showTemporaryMessage(
+                "⚠ 이미 지나간 도로입니다!"
+            );
 
             return;
         }
 
 
         /*
-           ★ 핵심 ★
+           ★ 직각 연결
 
-           여기서 대각선으로 바로 연결하지 않고
-
-           기존 도로
+           마지막 위치
               ↓
-           [교차점]
+           교차점
               ↓
            새로운 도로
-
-           순서로 정확히 추가한다.
-
-           따라서 경로는 항상
-           수평 / 수직 / 90도 코너가 된다.
         */
 
         addRoutePoint(
@@ -1934,15 +1898,187 @@ function pointerMove(e){
         );
 
 
-    }else{
+        currentSegment={
+            road:road.road,
+            segment:road.segment
+        };
+
+
+        drawing=true;
+
+
+        checkDestination(
+            road.point
+        );
+
+
+        updateHUD();
+        updateCargoHud();
+        updateDeliverButton();
+
+        draw();
+    }
+}
+
+
+/* =====================================================
+   POINTER MOVE
+===================================================== */
+
+function pointerMove(e){
+
+    e.preventDefault();
+
+
+    if(
+        !drawing ||
+        !planning ||
+        delivering
+    )
+        return;
+
+
+    const p=
+        pointerPosition(e);
+
+
+    const road=
+        roadPoint(
+            p.x,
+            p.y
+        );
+
+
+    /*
+       ★ 판정 범위를 넓게
+    */
+
+    if(
+        !road.point ||
+        road.distance>80
+    ){
+
+        return;
+    }
+
+
+    /*
+       현재 segment와 같은 경우
+       자유롭게 이동.
+    */
+
+    if(
+        currentSegment &&
+        road.road===
+        currentSegment.road &&
+        road.segment===
+        currentSegment.segment
+    ){
+
+        addRoutePoint(
+            road.point
+        );
+
+
+        checkDestination(
+            road.point
+        );
+
+
+        updateHUD();
+        updateCargoHud();
+        updateDeliverButton();
+
+        draw();
+
+        return;
+    }
+
+
+    /*
+       새로운 segment
+    */
+
+    const newKey=
+        segmentKey(
+            road.road,
+            road.segment
+        );
+
+
+    /*
+       이미 사용한 도로는 금지.
+    */
+
+    if(
+        visitedSegments.has(
+            newKey
+        )
+    ){
+
+        drawing=false;
+
+
+        showTemporaryMessage(
+            "⚠ 이미 지나간 도로입니다!"
+        );
+
+
+        return;
+    }
+
+
+    /*
+       현재 segment와 연결되는지 확인.
+    */
+
+    if(currentSegment){
+
+        const corner=
+            sharedPoint(
+                currentSegment.road,
+                currentSegment.segment,
+
+                road.road,
+                road.segment
+            );
+
+
+        /*
+           연결되지 않은 곳으로
+           손가락이 순간이동한 경우 무시.
+        */
+
+        if(!corner){
+
+            return;
+        }
+
+
+        /*
+           직각 코너 추가
+        */
+
+        addRoutePoint(
+            corner
+        );
+
 
         visitedSegments.add(
             newKey
         );
 
+
         addRoutePoint(
             road.point
         );
+
+
+        currentSegment={
+            road:road.road,
+            segment:road.segment
+        };
+
     }
 
 
@@ -1952,45 +2088,10 @@ function pointerMove(e){
 
 
     updateHUD();
-
     updateCargoHud();
-
     updateDeliverButton();
 
     draw();
-}
-
-
-/* =====================================================
-   GET LAST SEGMENT
-===================================================== */
-
-function getLastSegment(){
-
-    if(
-        visitedSegments.size===0
-    )
-        return null;
-
-
-    const arr=
-        Array.from(
-            visitedSegments
-        );
-
-
-    const key=
-        arr[arr.length-1];
-
-
-    const parts=
-        key.split("_");
-
-
-    return{
-        road:Number(parts[0]),
-        segment:Number(parts[1])
-    };
 }
 
 
@@ -2039,10 +2140,6 @@ function addRoutePoint(point){
         return;
 
 
-    /*
-       실제 이동거리 기록
-    */
-
     routeDistance+=distance;
 
 
@@ -2050,16 +2147,6 @@ function addRoutePoint(point){
         x:point.x,
         y:point.y
     });
-
-
-    /*
-       경로가 업데이트될 때마다
-       모든 배송지를 검사한다.
-    */
-
-    checkDestination(
-        point
-    );
 }
 
 
@@ -2072,6 +2159,15 @@ function pointerUp(e){
     if(e)
         e.preventDefault();
 
+
+    /*
+       ★ 중요
+
+       여기서는 route를 절대로 지우지 않는다.
+
+       손가락을 떼어도 현재 경로는 그대로 유지되고,
+       다음 pointerDown에서 현재 끝점부터 이어진다.
+    */
 
     drawing=false;
 
@@ -2102,15 +2198,16 @@ function showTemporaryMessage(
             document.getElementById(
                 "modeMessage"
             ).textContent=
-                "도로를 따라 손가락을 움직여 경로를 만드세요";
+                "경로 끝부분에서 다시 눌러 계속 이어갈 수 있습니다";
+
         }
 
-    },1200);
+    },1300);
 }
 
 
 /* =====================================================
-   DESTINATION CHECK
+   DESTINATION
 ===================================================== */
 
 function checkDestination(point){
@@ -2140,15 +2237,12 @@ function checkDestination(point){
             );
 
 
-        /*
-           배송지 판정도 넉넉하게.
-        */
-
         if(d<.065){
 
             deliveredCargo.add(
                 item.id
             );
+
         }
 
     });
@@ -2173,19 +2267,21 @@ function clearRoute(){
 
     visitedSegments.clear();
 
+    triggeredEvents.clear();
+
+    currentSegment=null;
+
     drawing=false;
 
 
     document.getElementById(
         "modeMessage"
     ).textContent=
-        "출발점에서 손가락을 누르고 도로를 따라 이동하세요";
+        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
 
     updateHUD();
-
     updateCargoHud();
-
     updateDeliverButton();
 
     draw();
@@ -2241,7 +2337,6 @@ function startDelivery(){
 
     delivering=true;
 
-
     damage=0;
 
     deliveryProgress=0;
@@ -2251,11 +2346,6 @@ function startDelivery(){
 
     deliveryElapsed=0;
 
-
-    /*
-       배송 시작 시 배송 여부를
-       다시 계산하기 위해 초기화.
-    */
 
     deliveredCargo.clear();
 
@@ -2285,6 +2375,9 @@ function startDelivery(){
     updateCargoHud();
 
 
+    deliveryLoop.lastTime=null;
+
+
     requestAnimationFrame(
         deliveryLoop
     );
@@ -2292,7 +2385,7 @@ function startDelivery(){
 
 
 /* =====================================================
-   DELIVERY LOOP
+   DELIVERY
 ===================================================== */
 
 function deliveryLoop(now){
@@ -2308,47 +2401,27 @@ function deliveryLoop(now){
         )/1000;
 
 
-    /*
-       빠른 배송 속도.
-
-       실제 화면 크기에 관계없이
-       일정한 속도로 이동하도록 계산.
-    */
-
     const speed=500;
 
 
-    /*
-       requestAnimationFrame의 실제
-       시간 차이를 이용한다.
-    */
-
     const dt=
         Math.min(
-            0.05,
-            (now-
-             (deliveryLoop.lastTime||
-              now))/1000
+            .05,
+            (
+                now-
+                (
+                    deliveryLoop.lastTime||
+                    now
+                )
+            )/1000
         );
 
 
     deliveryLoop.lastTime=now;
 
 
-    const movement=
-        speed*dt;
-
-
-    /*
-       routeProgress를 거리 기반으로
-       처리한다.
-
-       단순 배열 index 방식보다
-       부드럽고 정확하다.
-    */
-
     let remaining=
-        movement;
+        speed*dt;
 
 
     while(
@@ -2371,9 +2444,7 @@ function deliveryLoop(now){
             route[index];
 
         const b=
-            route[
-                index+1
-            ];
+            route[index+1];
 
 
         const segmentLength=
@@ -2416,23 +2487,16 @@ function deliveryLoop(now){
     }
 
 
-    /*
-       현재 위치에서 배송지 검사.
-    */
-
     checkDeliveryDestinations();
 
-
-    /*
-       손상
-    */
 
     const rate=
         getDamageRate();
 
 
     damage+=
-        movement*
+        speed*
+        dt*
         .002*
         rate;
 
@@ -2448,7 +2512,6 @@ function deliveryLoop(now){
 
 
     updateHUD();
-
     updateCargoHud();
 
     drawDelivery();
@@ -2512,6 +2575,7 @@ function getDeliveryPosition(){
 
 
     return{
+
         x:
             a.x+
             (
@@ -2523,6 +2587,7 @@ function getDeliveryPosition(){
             (
                 b.y-a.y
             )*fraction
+
     };
 }
 
@@ -2567,7 +2632,6 @@ function checkDeliveryDestinations(){
             deliveredCargo.add(
                 item.id
             );
-
         }
 
     });
@@ -2950,7 +3014,7 @@ function updateCargoHud(){
 
 
 /* =====================================================
-   DRAW MAP
+   DRAW
 ===================================================== */
 
 function draw(){
@@ -2967,10 +3031,6 @@ function draw(){
     );
 
 
-    /*
-       BACKGROUND
-    */
-
     ctx.fillStyle="#070910";
 
     ctx.fillRect(
@@ -2981,9 +3041,7 @@ function draw(){
     );
 
 
-    /*
-       CITY BLOCKS
-    */
+    /* CITY */
 
     for(
         let x=0;
@@ -3050,14 +3108,11 @@ function draw(){
                 36,
                 36
             );
-
         }
     }
 
 
-    /*
-       ROADS
-    */
+    /* ROADS */
 
     roads.forEach(path=>{
 
@@ -3118,9 +3173,7 @@ function draw(){
     });
 
 
-    /*
-       EVENT NODE
-    */
+    /* EVENT */
 
     ctx.fillStyle="#ffcf55";
 
@@ -3141,13 +3194,10 @@ function draw(){
 
     ctx.fill();
 
-
     ctx.shadowBlur=0;
 
 
-    /*
-       DESTINATIONS
-    */
+    /* DESTINATIONS */
 
     cargoData.forEach(item=>{
 
@@ -3233,11 +3283,11 @@ function draw(){
     });
 
 
-    /*
-       ROUTE
-    */
+    /* ROUTE */
 
-    if(route.length>1){
+    if(
+        route.length>1
+    ){
 
         ctx.save();
 
@@ -3269,27 +3319,23 @@ function draw(){
            GLOW
         */
 
-        ctx.lineWidth=11;
+        ctx.lineWidth=12;
 
         ctx.strokeStyle=
             delivering
             ? "rgba(255,60,145,.18)"
             : "rgba(99,245,255,.20)";
 
+        ctx.lineJoin="miter";
+
+        ctx.lineCap="square";
+
         ctx.stroke();
 
 
         /*
            MAIN ROUTE
-
-           lineJoin = miter로 해서
-           코너가 날카롭게 연결되도록 함.
         */
-
-        ctx.lineJoin="miter";
-
-        ctx.lineCap="square";
-
 
         ctx.lineWidth=5;
 
@@ -3298,12 +3344,10 @@ function draw(){
             ? "#ff3c91"
             : "#63f5ff";
 
-
         ctx.shadowColor=
             delivering
             ? "#ff3c91"
             : "#63f5ff";
-
 
         ctx.shadowBlur=10;
 
@@ -3314,9 +3358,7 @@ function draw(){
     }
 
 
-    /*
-       START POINT
-    */
+    /* START */
 
     const sx=
         startPoint.x*W;
@@ -3366,7 +3408,8 @@ function draw(){
 
 
     /*
-       START RING
+       경로가 아직 없을 때
+       시작점 강조
     */
 
     if(
@@ -3392,6 +3435,47 @@ function draw(){
 
         ctx.stroke();
     }
+
+
+    /*
+       현재 경로 끝점
+    */
+
+    if(
+        planning &&
+        route.length>1
+    ){
+
+        const last=
+            route[
+                route.length-1
+            ];
+
+
+        ctx.fillStyle=
+            "#ffffff";
+
+        ctx.shadowColor=
+            "#63f5ff";
+
+        ctx.shadowBlur=12;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            last.x*W,
+            last.y*H,
+            5,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.shadowBlur=0;
+    }
 }
 
 
@@ -3408,17 +3492,12 @@ function drawDelivery(){
         getDeliveryPosition();
 
 
-    /*
-       CYBER DELIVERY VEHICLE
-    */
-
     ctx.save();
 
 
     ctx.shadowColor="#ff3c91";
 
     ctx.shadowBlur=20;
-
 
     ctx.fillStyle="#ff3c91";
 
@@ -3457,6 +3536,40 @@ function drawDelivery(){
 
     ctx.restore();
 }
+
+
+/* =====================================================
+   INPUT EVENTS
+===================================================== */
+
+/*
+   Pointer Events를 사용하기 때문에
+   모바일 터치 + PC 마우스를 모두 지원한다.
+*/
+
+canvas.addEventListener(
+    "pointerdown",
+    pointerDown,
+    {passive:false}
+);
+
+canvas.addEventListener(
+    "pointermove",
+    pointerMove,
+    {passive:false}
+);
+
+canvas.addEventListener(
+    "pointerup",
+    pointerUp,
+    {passive:false}
+);
+
+canvas.addEventListener(
+    "pointercancel",
+    pointerUp,
+    {passive:false}
+);
 
 </script>
 

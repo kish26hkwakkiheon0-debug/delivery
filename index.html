@@ -1,12 +1,8 @@
 <!DOCTYPE html><html lang="ko">
 <head>
-<meta charset="UTF-8"><meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
-
-<title>CYBER DELIVERY</title><style>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>CYBER DELIVERY</title><style>
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -14,7 +10,6 @@ user-scalable=no">
 
 html,body{
     margin:0;
-    padding:0;
     width:100%;
     height:100%;
     overflow:hidden;
@@ -31,8 +26,6 @@ button{
 .screen{
     position:absolute;
     inset:0;
-    width:100%;
-    height:100%;
     display:none;
 }
 
@@ -41,19 +34,13 @@ button{
 }
 
 
-/* =====================================================
+/* =========================
    TITLE
-===================================================== */
+========================= */
 
 #titleScreen{
     background:
-        radial-gradient(
-            circle at center,
-            #151b2b 0%,
-            #080a11 55%,
-            #05060a 100%
-        );
-
+        radial-gradient(circle at center,#151b2b 0%,#080a11 55%,#05060a 100%);
     flex-direction:column;
     align-items:center;
     justify-content:center;
@@ -72,12 +59,8 @@ button{
     font-size:38px;
     font-weight:900;
     letter-spacing:4px;
-
     color:#fff;
-
-    text-shadow:
-        0 0 8px #63f5ff,
-        0 0 25px rgba(99,245,255,.5);
+    text-shadow:0 0 8px #63f5ff,0 0 25px rgba(99,245,255,.5);
 }
 
 .logo-sub{
@@ -92,42 +75,37 @@ button{
     max-width:360px;
     height:120px;
     margin:35px 0;
-
     border-top:1px solid #263044;
     border-bottom:1px solid #263044;
-
     position:relative;
-    overflow:hidden;
 }
 
-.title-city::before,
-.title-city::after{
+.title-city::before{
     content:"";
     position:absolute;
+    width:100%;
+    height:1px;
+    top:35px;
     background:#63f5ff;
     opacity:.35;
 }
 
-.title-city::before{
-    width:100%;
-    height:1px;
-    top:35px;
-}
-
 .title-city::after{
+    content:"";
+    position:absolute;
     width:1px;
     height:100%;
     left:55%;
+    background:#63f5ff;
+    opacity:.35;
 }
 
 .start-button{
     width:100%;
     max-width:360px;
     padding:17px;
-
     background:#101722;
     border:2px solid #63f5ff;
-
     color:#63f5ff;
     font-size:15px;
     font-weight:bold;
@@ -141,18 +119,14 @@ button{
 }
 
 
-/* =====================================================
+/* =========================
    CARGO
-===================================================== */
+========================= */
 
 #cargoScreen{
     background:#080a11;
-
     flex-direction:column;
-
     padding:18px;
-
-    overflow:hidden;
 }
 
 .cargo-header{
@@ -176,40 +150,26 @@ button{
 
 .cargo-grid{
     flex:1;
-
     overflow-y:auto;
-
     padding:15px 0;
-
     display:grid;
-    grid-template-columns:
-        repeat(2,minmax(0,1fr));
-
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:9px;
-
     touch-action:pan-y;
 }
 
 .cargo-card{
     position:relative;
-
     min-height:130px;
-
     padding:13px;
-
     background:#10141e;
-
     border:1px solid #303746;
 }
 
 .cargo-card.selected{
     border-color:#63f5ff;
-
     background:#101c25;
-
-    box-shadow:
-        inset 0 0 20px
-        rgba(99,245,255,.08);
+    box-shadow:inset 0 0 20px rgba(99,245,255,.08);
 }
 
 .cargo-icon{
@@ -237,22 +197,15 @@ button{
 
 .check{
     position:absolute;
-
     top:8px;
     right:8px;
-
     width:19px;
     height:19px;
-
     border:1px solid #454d5d;
-
     display:flex;
-
     align-items:center;
     justify-content:center;
-
     color:transparent;
-
     font-size:11px;
 }
 
@@ -264,9 +217,7 @@ button{
 
 .cargo-footer{
     flex-shrink:0;
-
     border-top:1px solid #292f3b;
-
     padding-top:12px;
 }
 
@@ -279,15 +230,10 @@ button{
 
 .cargo-start{
     width:100%;
-
     padding:14px;
-
     background:#101722;
-
     border:2px solid #63f5ff;
-
     color:#63f5ff;
-
     font-weight:bold;
 }
 
@@ -297,9 +243,9 @@ button{
 }
 
 
-/* =====================================================
+/* =========================
    GAME
-===================================================== */
+========================= */
 
 #gameScreen{
     background:#070910;
@@ -307,47 +253,34 @@ button{
 
 #gameCanvas{
     position:absolute;
-
     inset:0;
-
     width:100%;
     height:100%;
-
     image-rendering:pixelated;
-
     touch-action:none;
 }
 
 
-/* =====================================================
+/* =========================
    HUD
-===================================================== */
+========================= */
 
 .hud{
     position:absolute;
-
     top:0;
     left:0;
     right:0;
-
     padding:8px;
-
     pointer-events:none;
-
     z-index:10;
 }
 
 .hud-inner{
     background:rgba(5,7,14,.94);
-
     border:1px solid #303847;
-
     padding:9px;
-
     display:flex;
-
     justify-content:space-between;
-
     font-size:10px;
 }
 
@@ -359,103 +292,57 @@ button{
     color:#ff648d;
 }
 
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
 .mode-message{
     position:absolute;
-
     top:54px;
-
     left:10px;
     right:10px;
-
     text-align:center;
-
     padding:7px;
-
     background:rgba(5,7,14,.82);
-
     color:#aeb4c0;
-
     font-size:10px;
-
     pointer-events:none;
-
     z-index:10;
 }
-
-
-/* =====================================================
-   DELIVERY STATUS
-===================================================== */
 
 .delivery-status{
     display:none;
-
     position:absolute;
-
     top:83px;
     left:50%;
-
     transform:translateX(-50%);
-
     background:rgba(5,7,14,.94);
-
     border:1px solid #63f5ff;
-
     color:#63f5ff;
-
     padding:7px 13px;
-
     font-size:10px;
-
     white-space:nowrap;
-
     z-index:10;
-
     pointer-events:none;
 }
 
-
-/* =====================================================
-   CARGO HUD
-===================================================== */
-
 .cargo-hud{
     position:absolute;
-
     top:107px;
     left:9px;
-
     width:160px;
-
     background:rgba(5,7,14,.86);
-
     border:1px solid #303847;
-
     padding:8px;
-
     z-index:8;
-
     pointer-events:none;
 }
 
 .cargo-hud-title{
     color:#63f5ff;
-
     font-size:9px;
-
     margin-bottom:5px;
 }
 
 .cargo-hud-item{
     color:#888f9d;
-
     font-size:8px;
-
     margin:4px 0;
 }
 
@@ -464,37 +351,27 @@ button{
 }
 
 
-/* =====================================================
+/* =========================
    CONTROLS
-===================================================== */
+========================= */
 
 .controls{
     position:absolute;
-
     left:10px;
     right:10px;
     bottom:10px;
-
     display:flex;
-
     gap:8px;
-
     z-index:20;
 }
 
 .control{
     flex:1;
-
     padding:14px 5px;
-
     background:rgba(10,13,21,.96);
-
     border:1px solid #3a4252;
-
     color:#bbb;
-
     font-size:12px;
-
     font-weight:bold;
 }
 
@@ -509,30 +386,21 @@ button{
 }
 
 
-/* =====================================================
+/* =========================
    EVENT
-===================================================== */
+========================= */
 
 #event{
     display:none;
-
     position:absolute;
-
     left:50%;
     top:50%;
-
     transform:translate(-50%,-50%);
-
     width:min(88%,360px);
-
     padding:20px;
-
     background:#11141e;
-
     border:2px solid #ffcf55;
-
     text-align:center;
-
     z-index:40;
 }
 
@@ -543,78 +411,57 @@ button{
 
 #event p{
     color:#aaa;
-
     font-size:11px;
-
     line-height:1.6;
 }
 
 .event-button{
     width:100%;
-
     padding:12px;
-
     background:#181c27;
-
     border:1px solid #ffcf55;
-
     color:#ffcf55;
 }
 
 
-/* =====================================================
+/* =========================
    RESULT
-===================================================== */
+========================= */
 
 #resultScreen{
     background:#080910;
-
     align-items:center;
     justify-content:center;
-
     padding:20px;
 }
 
 .result-box{
     width:100%;
     max-width:400px;
-
     background:#11141e;
-
     border:2px solid #63f5ff;
-
     padding:21px;
 }
 
 .result-box h1{
     margin:0;
-
     text-align:center;
-
     color:#63f5ff;
-
     font-size:20px;
 }
 
 .grade{
     text-align:center;
-
     font-size:62px;
-
     color:#ffd75a;
-
     margin:13px 0 18px;
 }
 
 .result-row{
     display:flex;
-
     justify-content:space-between;
-
     padding:10px 0;
-
     border-bottom:1px solid #292f3a;
-
     font-size:12px;
 }
 
@@ -624,23 +471,17 @@ button{
 
 .restart{
     width:100%;
-
     margin-top:19px;
-
     padding:14px;
-
     background:#111722;
-
     border:2px solid #63f5ff;
-
     color:#63f5ff;
-
     font-weight:bold;
 }
 
-</style></head><body><!-- =====================================================
+</style></head><body><!-- =========================
      TITLE
-===================================================== --><section id="titleScreen" class="screen active"><div class="logo-small">
+========================= --><section id="titleScreen" class="screen active"><div class="logo-small">
     NIGHT CITY LOGISTICS
 </div>
 
@@ -654,25 +495,20 @@ button{
 
 <div class="title-city"></div>
 
-<button
-    class="start-button"
-    onclick="showCargoScreen()">
-
+<button class="start-button"
+        onclick="showCargoScreen()">
     START DELIVERY
-
 </button>
 
 <div class="version">
     MOBILE PROTOTYPE v0.6
 </div>
 
-</section><!-- =====================================================
+</section><!-- =========================
      CARGO
-===================================================== --><section id="cargoScreen" class="screen"><div class="cargo-header">
+========================= --><section id="cargoScreen" class="screen"><div class="cargo-header">
 
-    <h1>
-        SELECT CARGO
-    </h1>
+    <h1>SELECT CARGO</h1>
 
     <p>
         배달할 물품을 선택하세요
@@ -680,37 +516,29 @@ button{
 
 </div>
 
-<div
-    class="cargo-grid"
-    id="cargoGrid">
+<div class="cargo-grid"
+     id="cargoGrid">
 </div>
 
 <div class="cargo-footer">
 
-    <div
-        class="selected-count"
-        id="selectedCount">
-
+    <div class="selected-count"
+         id="selectedCount">
         선택된 물품: 0개
-
     </div>
 
-    <button
-        class="cargo-start"
-        id="cargoStart"
-        onclick="startRoutePlanning()"
-        disabled>
-
+    <button class="cargo-start"
+            id="cargoStart"
+            onclick="startRoutePlanning()"
+            disabled>
         BEGIN ROUTE PLANNING
-
     </button>
 
 </div>
 
-</section><!-- =====================================================
+</section><!-- =========================
      GAME
-===================================================== --><section id="gameScreen" class="screen"><canvas id="gameCanvas"></canvas>
-
+========================= --><section id="gameScreen" class="screen"><canvas id="gameCanvas"></canvas>
 
 <div class="hud">
 
@@ -736,61 +564,41 @@ button{
 </div>
 
 
-<div
-    class="mode-message"
-    id="modeMessage">
-
-    출발점에서 손가락을 누르고
-    도로를 따라 경로를 그리세요
-
+<div class="mode-message"
+     id="modeMessage">
+    출발 블럭에서 손가락을 누르고<br>
+    원하는 도로를 따라 이동하세요
 </div>
 
 
-<div
-    class="delivery-status"
-    id="deliveryStatus">
-
+<div class="delivery-status"
+     id="deliveryStatus">
     ● DELIVERING...
-
 </div>
 
 
-<div
-    class="cargo-hud"
-    id="cargoHud">
-
-    <div class="cargo-hud-title">
-        DELIVERY LIST
-    </div>
-
+<div class="cargo-hud"
+     id="cargoHud">
 </div>
 
 
 <div class="controls">
 
-    <button
-        class="control"
-        id="clearButton"
-        onclick="clearRoute()">
-
+    <button class="control"
+            id="clearButton"
+            onclick="clearRoute()">
         CLEAR
-
     </button>
 
-    <button
-        class="control deliver"
-        id="deliverButton"
-        onclick="startDelivery()"
-        disabled>
-
+    <button class="control deliver"
+            id="deliverButton"
+            onclick="startDelivery()"
+            disabled>
         DELIVER
-
     </button>
 
 </div>
 
-
-<!-- EVENT -->
 
 <div id="event">
 
@@ -800,30 +608,22 @@ button{
 
     <p id="eventText"></p>
 
-    <button
-        class="event-button"
-        onclick="closeEvent()">
-
+    <button class="event-button"
+            onclick="closeEvent()">
         CONTINUE
-
     </button>
 
 </div>
 
-</section><!-- =====================================================
+</section><!-- =========================
      RESULT
-===================================================== --><section id="resultScreen" class="screen"><div class="result-box">
+========================= --><section id="resultScreen" class="screen"><div class="result-box">
 
-    <h1>
-        DELIVERY COMPLETE
-    </h1>
+    <h1>DELIVERY COMPLETE</h1>
 
-    <div
-        class="grade"
-        id="grade">
-
+    <div class="grade"
+         id="grade">
         A
-
     </div>
 
     <div class="result-row">
@@ -851,12 +651,9 @@ button{
         <strong id="resultReward">¥0</strong>
     </div>
 
-    <button
-        class="restart"
-        onclick="location.reload()">
-
+    <button class="restart"
+            onclick="location.reload()">
         NEXT DELIVERY
-
     </button>
 
 </div>
@@ -864,7 +661,7 @@ button{
 </section><script>
 
 /* =====================================================
-   CARGO DATA
+   CARGO
 ===================================================== */
 
 const cargoData=[
@@ -874,8 +671,7 @@ const cargoData=[
         icon:"🍜",
         name:"NEON RAMEN",
         destination:"Noodle District",
-        x:.80,
-        y:.20,
+        block:"r2",
         damageRate:.7,
         reward:1200
     },
@@ -885,8 +681,7 @@ const cargoData=[
         icon:"💊",
         name:"MEDICAL CHIP",
         destination:"Medical Sector",
-        x:.80,
-        y:.80,
+        block:"r8",
         damageRate:1.4,
         reward:2200
     },
@@ -896,8 +691,7 @@ const cargoData=[
         icon:"🔧",
         name:"CYBER COMPONENT",
         destination:"Industrial Zone",
-        x:.20,
-        y:.80,
+        block:"r6",
         damageRate:.35,
         reward:1500
     },
@@ -907,8 +701,7 @@ const cargoData=[
         icon:"💾",
         name:"ENCRYPTED DATA",
         destination:"Data District",
-        x:.20,
-        y:.20,
+        block:"r1",
         damageRate:.25,
         reward:3000
     },
@@ -918,8 +711,7 @@ const cargoData=[
         icon:"🧬",
         name:"BIO SAMPLE",
         destination:"Bio Lab",
-        x:.50,
-        y:.80,
+        block:"r7",
         damageRate:1.8,
         reward:2800
     },
@@ -929,8 +721,7 @@ const cargoData=[
         icon:"💎",
         name:"LUXURY CHIP",
         destination:"Corporate Tower",
-        x:.50,
-        y:.20,
+        block:"r4",
         damageRate:1.5,
         reward:5000
     }
@@ -941,7 +732,7 @@ let selectedCargo=[];
 
 
 /* =====================================================
-   DOM CACHE
+   DOM
 ===================================================== */
 
 const $=id=>document.getElementById(id);
@@ -1003,7 +794,7 @@ function renderCargo(){
 
     const selectedSet=new Set(selectedCargo);
 
-    cargoData.forEach(item=>{
+    for(const item of cargoData){
 
         const card=document.createElement("div");
 
@@ -1013,35 +804,23 @@ function renderCargo(){
             card.classList.add("selected");
 
         card.innerHTML=`
-
             <div class="check">✓</div>
-
-            <div class="cargo-icon">
-                ${item.icon}
-            </div>
-
-            <div class="cargo-name">
-                ${item.name}
-            </div>
-
+            <div class="cargo-icon">${item.icon}</div>
+            <div class="cargo-name">${item.name}</div>
             <div class="cargo-destination">
                 → ${item.destination}
             </div>
-
             <div class="cargo-reward">
                 ¥${item.reward.toLocaleString()}
             </div>
-
         `;
 
-        card.addEventListener(
-            "click",
-            ()=>toggleCargo(item.id)
-        );
+        card.addEventListener("click",()=>{
+            toggleCargo(item.id);
+        });
 
         cargoGrid.appendChild(card);
-
-    });
+    }
 
     updateCargoSelection();
 }
@@ -1063,9 +842,7 @@ function toggleCargo(id){
 function updateCargoSelection(){
 
     selectedCount.textContent=
-        "선택된 물품: "+
-        selectedCargo.length+
-        "개";
+        `선택된 물품: ${selectedCargo.length}개`;
 
     cargoStart.disabled=
         selectedCargo.length===0;
@@ -1073,71 +850,73 @@ function updateCargoSelection(){
 
 
 /* =====================================================
-   MAP
+   ROAD BLOCK MAP
+=====================================================
+
+   각각의 숫자가 하나의 "도로 블럭".
+
+       0 ─ 1 ─ 2 ─ 3 ─ 4
+           │       │
+           5       6
+           │       │
+           7 ─ 8 ─ 9
+
+   실제 게임에서는 이 블럭들을 더 많이 만들면
+   훨씬 큰 도시를 만들 수 있다.
 ===================================================== */
 
-const roads=[
+const roadBlocks={
 
-    [
-        [.08,.20],
-        [.20,.20],
-        [.35,.20],
-        [.50,.20],
-        [.65,.20],
-        [.80,.20],
-        [.92,.20]
-    ],
+    r0:{x:.10,y:.20,connections:["r1"]},
 
-    [
-        [.08,.50],
-        [.20,.50],
-        [.35,.50],
-        [.50,.50],
-        [.65,.50],
-        [.80,.50],
-        [.92,.50]
-    ],
+    r1:{x:.30,y:.20,connections:["r0","r2","r5"]},
 
-    [
-        [.08,.80],
-        [.20,.80],
-        [.35,.80],
-        [.50,.80],
-        [.65,.80],
-        [.80,.80],
-        [.92,.80]
-    ],
+    r2:{x:.50,y:.20,connections:["r1","r3"]},
 
-    [
-        [.20,.08],
-        [.20,.20],
-        [.20,.50],
-        [.20,.80],
-        [.20,.92]
-    ],
+    r3:{x:.70,y:.20,connections:["r2","r4","r6"]},
 
-    [
-        [.50,.08],
-        [.50,.20],
-        [.50,.50],
-        [.50,.80],
-        [.50,.92]
-    ],
+    r4:{x:.90,y:.20,connections:["r3"]},
 
-    [
-        [.80,.08],
-        [.80,.20],
-        [.80,.50],
-        [.80,.80],
-        [.80,.92]
-    ]
+    r5:{x:.30,y:.50,connections:["r1","r7"]},
 
-];
+    r6:{x:.70,y:.50,connections:["r3","r9"]},
+
+    r7:{x:.30,y:.80,connections:["r5","r8"]},
+
+    r8:{x:.50,y:.80,connections:["r7","r9"]},
+
+    r9:{x:.70,y:.80,connections:["r8","r6"]}
+
+};
 
 
-const startPoint={
-    x:.08,
-    y:.50
+/*
+   시작 블럭
+*/
+
+const START_BLOCK="r5";
+
+
+/*
+   이벤트가 존재하는 블럭
+*/
+
+const events={
+
+    r1:{
+        title:"⚡ ELECTROMAGNETIC STORM",
+        text:
+            "강한 전자기 폭풍이 도로를 덮쳤습니다.<br><br>"+
+            "배송품 손상도 +5%"
+    },
+
+    r6:{
+        title:"🚨 SECURITY CHECK",
+        text:
+            "기업 보안 드론이 배송 차량을 검사합니다.<br><br>"+
+            "잠시 정차해야 합니다."
+    }
+
 };
 
 
@@ -1145,12 +924,21 @@ const startPoint={
    GAME STATE
 ===================================================== */
 
-let route=[];
+let routeBlocks=[];
+
+/*
+   중요:
+   이 Set은 절대 자동으로 삭제되지 않는다.
+   CLEAR를 눌렀을 때만 초기화된다.
+*/
+
+let visitedBlocks=new Set();
 
 let routeDistance=0;
 
 let planning=false;
 let drawing=false;
+
 let delivering=false;
 let pausedByEvent=false;
 
@@ -1162,42 +950,12 @@ let damage=0;
 
 let deliveredCargo=new Set();
 
-let visitedSegments=new Set();
-
 let triggeredEvents=new Set();
-
-let currentSegment=null;
 
 let W=0;
 let H=0;
 
-let messageTimer=null;
-
-
-/*
-   routeSegments는 실제로 지나간
-   도로 segment의 순서를 저장한다.
-
-   예:
-
-   [가로0, 가로1, 세로2, 세로3]
-
-   유턴하면 뒤에서부터 잘라낸다.
-*/
-let routeSegments=[];
-
-
-/*
-   현재 손가락이 위치한 도로상의 좌표.
-   "경로의 커서" 역할을 한다.
-*/
-let routeCursor=null;
-
-
-/*
-   pointer capture용 상태
-*/
-let activePointerId=null;
+let cursorBlock=null;
 
 
 /* =====================================================
@@ -1210,10 +968,11 @@ const ctx=canvas.getContext("2d");
 
 function resize(){
 
-    const dpr=Math.min(
-        window.devicePixelRatio||1,
-        2
-    );
+    const dpr=
+        Math.min(
+            window.devicePixelRatio||1,
+            2
+        );
 
     W=window.innerWidth;
     H=window.innerHeight;
@@ -1225,26 +984,83 @@ function resize(){
     canvas.style.height=H+"px";
 
     ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
+        dpr,0,0,dpr,0,0
     );
 
     draw();
 }
 
-
-window.addEventListener(
-    "resize",
-    resize
-);
+window.addEventListener("resize",resize);
 
 
 /* =====================================================
-   ROUTE PLANNING START
+   BLOCK HELPERS
+===================================================== */
+
+function blockPixel(id){
+
+    const b=roadBlocks[id];
+
+    return{
+        x:b.x*W,
+        y:b.y*H
+    };
+}
+
+
+/*
+   손가락이 어느 블럭 위에 있는지 찾는다.
+
+   판정 범위를 넓게 잡아서 모바일 터치에 대응한다.
+*/
+
+function getBlockAt(x,y){
+
+    let nearest=null;
+    let nearestDistance=Infinity;
+
+    for(const id in roadBlocks){
+
+        const p=blockPixel(id);
+
+        const d=Math.hypot(
+            x-p.x,
+            y-p.y
+        );
+
+        if(d<nearestDistance){
+
+            nearestDistance=d;
+            nearest=id;
+        }
+    }
+
+    /*
+       블럭 판정 반경
+    */
+
+    if(nearestDistance<=75)
+        return nearest;
+
+    return null;
+}
+
+
+/*
+   두 블럭이 실제로 연결되어 있는지
+*/
+
+function areConnected(a,b){
+
+    if(!a || !b)
+        return false;
+
+    return roadBlocks[a].connections.includes(b);
+}
+
+
+/* =====================================================
+   ROUTE START
 ===================================================== */
 
 function startRoutePlanning(){
@@ -1252,290 +1068,40 @@ function startRoutePlanning(){
     showScreen(gameScreen);
 
     planning=true;
+    drawing=false;
     delivering=false;
     pausedByEvent=false;
-    drawing=false;
 
-    route=[];
+    routeBlocks=[];
+    visitedBlocks.clear();
+
     routeDistance=0;
 
     damage=0;
 
     deliveredCargo.clear();
-    visitedSegments.clear();
     triggeredEvents.clear();
 
-    routeSegments=[];
-    currentSegment=null;
-    routeCursor=null;
+    cursorBlock=null;
 
-    modeMessage.textContent=
-        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
+    /*
+       시작 블럭을 이미 방문한 것으로 기록
+    */
+
+    routeBlocks.push(START_BLOCK);
+    visitedBlocks.add(START_BLOCK);
+
+    modeMessage.innerHTML=
+        "출발 블럭에서 손가락을 누르고<br>"+
+        "연결된 도로 블럭으로 이동하세요";
 
     deliveryStatus.style.display="none";
 
     clearButton.disabled=false;
+    deliverButton.disabled=true;
 
-    updateCargoHud();
-    updateHUD();
-    updateDeliverButton();
-
+    updateAll();
     resize();
-}
-
-
-/* =====================================================
-   ROAD POINT
-===================================================== */
-
-/*
-   화면 좌표를 가장 가까운 도로 위 좌표로 변환한다.
-
-   판정 범위를 넉넉하게 잡아서
-   모바일에서 손가락으로 쉽게 조작할 수 있도록 한다.
-*/
-
-function roadPoint(x,y){
-
-    let bestPoint=null;
-    let bestDistance=Infinity;
-
-    let bestRoad=-1;
-    let bestSegment=-1;
-
-    for(let r=0;r<roads.length;r++){
-
-        const road=roads[r];
-
-        for(let s=0;s<road.length-1;s++){
-
-            const ax=road[s][0]*W;
-            const ay=road[s][1]*H;
-
-            const bx=road[s+1][0]*W;
-            const by=road[s+1][1]*H;
-
-            const dx=bx-ax;
-            const dy=by-ay;
-
-            const len2=dx*dx+dy*dy;
-
-            if(len2===0)
-                continue;
-
-            let t=(
-                (x-ax)*dx+
-                (y-ay)*dy
-            )/len2;
-
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
-
-            const px=ax+dx*t;
-            const py=ay+dy*t;
-
-            const d=Math.hypot(
-                x-px,
-                y-py
-            );
-
-            if(d<bestDistance){
-
-                bestDistance=d;
-
-                bestPoint={
-                    x:px/W,
-                    y:py/H
-                };
-
-                bestRoad=r;
-                bestSegment=s;
-            }
-        }
-    }
-
-    return{
-        point:bestPoint,
-        distance:bestDistance,
-        road:bestRoad,
-        segment:bestSegment
-    };
-}
-
-
-/* =====================================================
-   SEGMENT HELPERS
-===================================================== */
-
-function segmentKey(road,segment){
-    return road+"_"+segment;
-}
-
-
-function getSegment(road,segment){
-
-    if(
-        road<0 ||
-        segment<0 ||
-        !roads[road] ||
-        !roads[road][segment] ||
-        !roads[road][segment+1]
-    )
-        return null;
-
-    return{
-        a:{
-            x:roads[road][segment][0],
-            y:roads[road][segment][1]
-        },
-
-        b:{
-            x:roads[road][segment+1][0],
-            y:roads[road][segment+1][1]
-        }
-    };
-}
-
-
-function sharedPoint(
-    r1,s1,
-    r2,s2
-){
-
-    const a=getSegment(r1,s1);
-    const b=getSegment(r2,s2);
-
-    if(!a || !b)
-        return null;
-
-    const pointsA=[a.a,a.b];
-    const pointsB=[b.a,b.b];
-
-    for(const p of pointsA){
-
-        for(const q of pointsB){
-
-            if(
-                Math.abs(p.x-q.x)<0.0001 &&
-                Math.abs(p.y-q.y)<0.0001
-            ){
-
-                return{
-                    x:p.x,
-                    y:p.y
-                };
-            }
-        }
-    }
-
-    return null;
-}
-
-
-/* =====================================================
-   SEGMENT ORIENTATION
-===================================================== */
-
-function isHorizontal(road,segment){
-
-    const s=getSegment(road,segment);
-
-    if(!s)
-        return false;
-
-    return Math.abs(
-        s.a.y-s.b.y
-    )<0.0001;
-}
-
-
-function isVertical(road,segment){
-
-    const s=getSegment(road,segment);
-
-    if(!s)
-        return false;
-
-    return Math.abs(
-        s.a.x-s.b.x
-    )<0.0001;
-}
-
-
-/* =====================================================
-   SEGMENT CONNECTION
-===================================================== */
-
-function getConnectedSegment(
-    road,
-    segment
-){
-
-    if(!currentSegment)
-        return null;
-
-    if(
-        road===currentSegment.road &&
-        segment===currentSegment.segment
-    )
-        return null;
-
-    const corner=sharedPoint(
-        currentSegment.road,
-        currentSegment.segment,
-        road,
-        segment
-    );
-
-    if(!corner)
-        return null;
-
-    /*
-       현재 segment와 새 segment가
-       반드시 직선/직각 도로인지 확인한다.
-    */
-
-    const oldHorizontal=
-        isHorizontal(
-            currentSegment.road,
-            currentSegment.segment
-        );
-
-    const oldVertical=
-        isVertical(
-            currentSegment.road,
-            currentSegment.segment
-        );
-
-    const newHorizontal=
-        isHorizontal(
-            road,
-            segment
-        );
-
-    const newVertical=
-        isVertical(
-            road,
-            segment
-        );
-
-    if(
-        !(
-            (oldHorizontal && newVertical) ||
-            (oldVertical && newHorizontal)
-        )
-    ){
-
-        return null;
-    }
-
-    return{
-        corner,
-        road,
-        segment
-    };
 }
 
 
@@ -1545,403 +1111,13 @@ function getConnectedSegment(
 
 function pointerPosition(e){
 
-    const rect=canvas.getBoundingClientRect();
+    const rect=
+        canvas.getBoundingClientRect();
 
     return{
         x:e.clientX-rect.left,
         y:e.clientY-rect.top
     };
-}
-
-
-/* =====================================================
-   ROUTE POINT DISTANCE
-===================================================== */
-
-function distanceBetweenPoints(a,b){
-
-    if(!a || !b)
-        return 0;
-
-    return Math.hypot(
-        (b.x-a.x)*W,
-        (b.y-a.y)*H
-    );
-}
-
-
-/* =====================================================
-   SET ROUTE CURSOR
-===================================================== */
-
-function setRouteCursor(point){
-
-    if(!point)
-        return;
-
-    routeCursor={
-        x:point.x,
-        y:point.y
-    };
-
-    /*
-       경로의 마지막 점은 항상
-       현재 커서를 따라간다.
-
-       이것이 이번 수정의 핵심이다.
-    */
-
-    if(route.length===0){
-
-        route.push({
-            x:point.x,
-            y:point.y
-        });
-
-        return;
-    }
-
-    const last=
-        route[route.length-1];
-
-    last.x=point.x;
-    last.y=point.y;
-
-    routeDistance=
-        calculateRouteDistance();
-}
-
-
-/* =====================================================
-   APPEND NEW SEGMENT
-===================================================== */
-
-function appendSegment(
-    road,
-    segment,
-    corner,
-    point
-){
-
-    const key=segmentKey(
-        road,
-        segment
-    );
-
-    /*
-       이미 지나간 도로라면
-       새 도로로 추가하지 않는다.
-    */
-
-    if(visitedSegments.has(key))
-        return false;
-
-    /*
-       코너를 먼저 넣는다.
-       따라서 대각선 연결이 생기지 않는다.
-    */
-
-    if(corner){
-
-        const last=
-            route[route.length-1];
-
-        if(
-            !last ||
-            distanceBetweenPoints(
-                last,
-                corner
-            )>2
-        ){
-
-            route.push({
-                x:corner.x,
-                y:corner.y
-            });
-        }
-    }
-
-    visitedSegments.add(key);
-
-    routeSegments.push({
-        road,
-        segment
-    });
-
-    currentSegment={
-        road,
-        segment
-    };
-
-    /*
-       새 segment 위의 손가락 위치를
-       마지막 point로 만든다.
-    */
-
-    if(point){
-
-        route.push({
-            x:point.x,
-            y:point.y
-        });
-
-        routeCursor={
-            x:point.x,
-            y:point.y
-        };
-    }
-
-    routeDistance=
-        calculateRouteDistance();
-
-    return true;
-}
-
-
-/* =====================================================
-   FIND ROUTE POSITION
-===================================================== */
-
-/*
-   현재 손가락이 기존 route의 어느 segment에
-   올라와 있는지 찾는다.
-
-   중요한 점:
-   "도로가 같은가?"만 보는 것이 아니라
-   실제 routeSegments 순서를 기준으로 찾는다.
-*/
-
-function findRouteSegmentIndex(
-    road,
-    segment
-){
-
-    for(
-        let i=routeSegments.length-1;
-        i>=0;
-        i--
-    ){
-
-        const item=routeSegments[i];
-
-        if(
-            item.road===road &&
-            item.segment===segment
-        ){
-
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-
-/* =====================================================
-   TRIM ROUTE TO POSITION
-===================================================== */
-
-function trimRouteToSegment(
-    segmentIndex,
-    point
-){
-
-    if(
-        segmentIndex<0 ||
-        segmentIndex>=routeSegments.length ||
-        !point
-    )
-        return;
-
-    /*
-       유지할 segment 수
-    */
-
-    const keepCount=
-        segmentIndex+1;
-
-    routeSegments=
-        routeSegments.slice(
-            0,
-            keepCount
-        );
-
-    /*
-       방문한 도로도 정확히
-       현재 routeSegments와 동일하게 만든다.
-    */
-
-    visitedSegments.clear();
-
-    for(const item of routeSegments){
-
-        visitedSegments.add(
-            segmentKey(
-                item.road,
-                item.segment
-            )
-        );
-    }
-
-    /*
-       기존 route를 도로 segment 순서로
-       정확하게 재구성한다.
-    */
-
-    route=[
-        {
-            x:startPoint.x,
-            y:startPoint.y
-        }
-    ];
-
-    for(
-        let i=0;
-        i<routeSegments.length;
-        i++
-    ){
-
-        const item=routeSegments[i];
-
-        const seg=getSegment(
-            item.road,
-            item.segment
-        );
-
-        if(!seg)
-            continue;
-
-        if(i>0){
-
-            const prev=
-                routeSegments[i-1];
-
-            const corner=
-                sharedPoint(
-                    prev.road,
-                    prev.segment,
-                    item.road,
-                    item.segment
-                );
-
-            if(corner){
-
-                route.push({
-                    x:corner.x,
-                    y:corner.y
-                });
-            }
-        }
-
-        /*
-           마지막 segment는
-           손가락 위치까지 그린다.
-        */
-
-        if(
-            i===
-            routeSegments.length-1
-        ){
-
-            route.push({
-                x:point.x,
-                y:point.y
-            });
-
-        }else{
-
-            /*
-               중간 segment는
-               연결되는 끝점까지 간다.
-            */
-
-            route.push({
-                x:seg.b.x,
-                y:seg.b.y
-            });
-        }
-    }
-
-    currentSegment={
-        road:
-            routeSegments[
-                routeSegments.length-1
-            ].road,
-
-        segment:
-            routeSegments[
-                routeSegments.length-1
-            ].segment
-    };
-
-    routeCursor={
-        x:point.x,
-        y:point.y
-    };
-
-    routeDistance=
-        calculateRouteDistance();
-
-    /*
-       경로를 줄였으므로
-       배송지 판정도 다시 계산한다.
-    */
-
-    deliveredCargo.clear();
-
-    for(const p of route)
-        checkDestination(p);
-
-    showTemporaryMessage(
-        "↶ 지나온 경로가 취소되었습니다"
-    );
-
-    updateAll();
-    draw();
-}
-
-
-/* =====================================================
-   TRIM WITHIN CURRENT SEGMENT
-===================================================== */
-
-/*
-   같은 도로에서 손가락을 뒤로 움직이면
-   route의 마지막 점을 손가락 위치로 옮긴다.
-
-   즉, 선 자체가 손가락을 따라 줄어든다.
-*/
-
-function updateCurrentSegmentPoint(point){
-
-    if(
-        route.length<2 ||
-        !point
-    )
-        return;
-
-    const lastIndex=
-        route.length-1;
-
-    const last=
-        route[lastIndex];
-
-    /*
-       마지막 point만 이동시킨다.
-    */
-
-    last.x=point.x;
-    last.y=point.y;
-
-    routeCursor={
-        x:point.x,
-        y:point.y
-    };
-
-    routeDistance=
-        calculateRouteDistance();
-
-    checkDestination(point);
 }
 
 
@@ -1960,225 +1136,62 @@ function pointerDown(e){
     )
         return;
 
-    /*
-       pointer capture:
-       손가락이 조금 움직여도
-       같은 드래그를 계속 추적한다.
-    */
-
-    activePointerId=e.pointerId;
-
-    try{
-        canvas.setPointerCapture(
-            e.pointerId
-        );
-    }catch(err){}
-
     const p=pointerPosition(e);
 
-    const road=roadPoint(
-        p.x,
-        p.y
-    );
+    const block=getBlockAt(p.x,p.y);
 
-    if(
-        !road.point ||
-        road.distance>100
-    )
+    if(!block)
         return;
 
-
-    /* ---------------------------------------------
-       첫 시작
-    --------------------------------------------- */
-
-    if(route.length===0){
-
-        const sx=startPoint.x*W;
-        const sy=startPoint.y*H;
-
-        if(
-            Math.hypot(
-                p.x-sx,
-                p.y-sy
-            )>105
-        ){
-
-            showTemporaryMessage(
-                "출발점 근처에서 시작하세요"
-            );
-
-            return;
-        }
-
-        /*
-           출발점에서 시작할 때는
-           실제 손가락 위치가 아니라
-           도로 위의 위치를 사용한다.
-        */
-
-        const key=segmentKey(
-            road.road,
-            road.segment
-        );
-
-        visitedSegments.add(key);
-
-        route=[
-            {
-                x:startPoint.x,
-                y:startPoint.y
-            }
-        ];
-
-        routeSegments=[{
-            road:road.road,
-            segment:road.segment
-        }];
-
-        currentSegment={
-            road:road.road,
-            segment:road.segment
-        };
-
-        routeCursor={
-            x:road.point.x,
-            y:road.point.y
-        };
-
-        route.push({
-            x:road.point.x,
-            y:road.point.y
-        });
-
-        routeDistance=
-            calculateRouteDistance();
-
-        drawing=true;
-
-        checkDestination(road.point);
-
-        updateAll();
-        draw();
-
-        return;
-    }
-
-
-    /* ---------------------------------------------
-       이미 만들어진 경로의 어느 부분에서
-       다시 손가락을 누른 경우
-    --------------------------------------------- */
-
-    const routeIndex=
-        findRouteSegmentIndex(
-            road.road,
-            road.segment
-        );
-
-    if(routeIndex>=0){
-
-        /*
-           현재 route의 기존 도로를 다시 잡았다.
-           그 지점 이후를 잘라낸다.
-        */
-
-        trimRouteToSegment(
-            routeIndex,
-            road.point
-        );
-
-        drawing=true;
-
-        updateAll();
-        draw();
-
-        return;
-    }
-
-
-    /* ---------------------------------------------
-       새로 이어서 시작
-    --------------------------------------------- */
+    /*
+       손가락이 현재 마지막 블럭을 누르면
+       드래그를 시작한다.
+    */
 
     const last=
-        route[route.length-1];
+        routeBlocks[routeBlocks.length-1];
 
-    const lastDistance=
-        distanceBetweenPoints(
-            last,
-            road.point
-        );
+    if(block===last){
+
+        drawing=true;
+        cursorBlock=block;
+
+        draw();
+        return;
+    }
 
     /*
-       다시 누르는 위치는
-       현재 경로 끝 근처여야 한다.
+       이미 지나간 블럭은 절대 재방문 불가.
     */
 
-    if(lastDistance>105){
+    if(visitedBlocks.has(block)){
 
         showTemporaryMessage(
-            "현재 경로의 끝부분에서 다시 눌러주세요"
+            "이미 지나간 도로입니다"
         );
 
         return;
     }
 
     /*
-       같은 segment면 그대로 이어서 그린다.
+       마지막 블럭과 연결되어 있어야 한다.
     */
 
     if(
-        currentSegment &&
-        road.road===currentSegment.road &&
-        road.segment===currentSegment.segment
+        areConnected(last,block)
     ){
 
-        updateCurrentSegmentPoint(
-            road.point
-        );
+        addBlockToRoute(block);
 
         drawing=true;
 
-        updateAll();
-        draw();
-
-        return;
-    }
-
-    /*
-       연결 가능한 새 segment인지 확인
-    */
-
-    const connection=
-        getConnectedSegment(
-            road.road,
-            road.segment
-        );
-
-    if(connection){
-
-        appendSegment(
-            road.road,
-            road.segment,
-            connection.corner,
-            road.point
-        );
-
-        drawing=true;
-
-        checkDestination(
-            road.point
-        );
-
-        updateAll();
         draw();
 
         return;
     }
 
     showTemporaryMessage(
-        "연결된 도로에서 계속하세요"
+        "연결된 도로를 선택하세요"
     );
 }
 
@@ -2199,202 +1212,56 @@ function pointerMove(e){
     )
         return;
 
-    if(
-        activePointerId!==null &&
-        e.pointerId!==activePointerId
-    )
-        return;
-
     const p=pointerPosition(e);
 
-    const road=roadPoint(
-        p.x,
-        p.y
-    );
+    const block=getBlockAt(p.x,p.y);
+
+    if(!block)
+        return;
+
+    cursorBlock=block;
+
+    const last=
+        routeBlocks[routeBlocks.length-1];
 
     /*
-       도로에서 약간 벗어나도
-       마지막으로 잡은 도로를 유지한다.
+       현재 블럭이면 아무것도 하지 않는다.
+    */
+
+    if(block===last){
+
+        draw();
+        return;
+    }
+
+    /*
+       ★ 이미 방문한 도로는 무조건 금지
+    */
+
+    if(visitedBlocks.has(block)){
+
+        showTemporaryMessage(
+            "이미 지나간 도로입니다"
+        );
+
+        draw();
+        return;
+    }
+
+    /*
+       ★ 현재 블럭에서 연결된 블럭인지 확인
     */
 
     if(
-        !road.point ||
-        road.distance>105
-    )
-        return;
+        areConnected(last,block)
+    ){
 
+        addBlockToRoute(block);
 
-    /* =================================================
-       ★ 핵심 1:
-       현재 경로에 이미 존재하는 segment라면
-       그 segment로 "되돌아간 것"이다.
-    ================================================= */
-
-    const oldIndex=
-        findRouteSegmentIndex(
-            road.road,
-            road.segment
-        );
-
-
-    if(oldIndex>=0){
-
-        /*
-           같은 current segment인 경우에는
-           단순히 cursor만 이동시킨다.
-        */
-
-        const isCurrent=
-            currentSegment &&
-            road.road===currentSegment.road &&
-            road.segment===currentSegment.segment;
-
-        if(isCurrent){
-
-            /*
-               현재 segment에서 뒤로 움직였는지 확인한다.
-
-               segment 위에서 현재 cursor와
-               손가락 위치의 위치값을 비교한다.
-            */
-
-            const seg=getSegment(
-                road.road,
-                road.segment
-            );
-
-            if(seg){
-
-                const horizontal=
-                    isHorizontal(
-                        road.road,
-                        road.segment
-                    );
-
-                const cursor=routeCursor||route[route.length-1];
-
-                let oldT;
-                let newT;
-
-                if(horizontal){
-
-                    oldT=
-                        (
-                            cursor.x-seg.a.x
-                        )/
-                        (
-                            seg.b.x-seg.a.x
-                        );
-
-                    newT=
-                        (
-                            road.point.x-seg.a.x
-                        )/
-                        (
-                            seg.b.x-seg.a.x
-                        );
-
-                }else{
-
-                    oldT=
-                        (
-                            cursor.y-seg.a.y
-                        )/
-                        (
-                            seg.b.y-seg.a.y
-                        );
-
-                    newT=
-                        (
-                            road.point.y-seg.a.y
-                        )/
-                        (
-                            seg.b.y-seg.a.y
-                        );
-                }
-
-                /*
-                   앞으로 가면 cursor 이동.
-                   뒤로 가면 역시 cursor 이동.
-
-                   중요한 것은 새 route를 추가하지 않는다는 것.
-                */
-
-                updateCurrentSegmentPoint(
-                    road.point
-                );
-
-                updateAll();
-                draw();
-
-                return;
-            }
-        }
-
-        /*
-           다른 과거 segment로 돌아갔다.
-           여기서부터의 경로를 전부 취소한다.
-        */
-
-        trimRouteToSegment(
-            oldIndex,
-            road.point
-        );
-
-        drawing=true;
-
-        updateAll();
         draw();
 
         return;
     }
-
-
-    /* =================================================
-       ★ 핵심 2:
-       새 segment
-    ================================================= */
-
-    const connection=
-        getConnectedSegment(
-            road.road,
-            road.segment
-        );
-
-    if(!connection)
-        return;
-
-
-    /*
-       이미 방문했던 segment면 추가하지 않는다.
-    */
-
-    const key=segmentKey(
-        road.road,
-        road.segment
-    );
-
-    if(visitedSegments.has(key))
-        return;
-
-
-    /*
-       직각 코너 + 새 segment
-    */
-
-    appendSegment(
-        road.road,
-        road.segment,
-        connection.corner,
-        road.point
-    );
-
-    checkDestination(
-        road.point
-    );
-
-    updateAll();
-    draw();
 }
 
 
@@ -2407,22 +1274,12 @@ function pointerUp(e){
     if(e)
         e.preventDefault();
 
+    /*
+       손가락을 떼도 routeBlocks는
+       절대 초기화하지 않는다.
+    */
+
     drawing=false;
-
-    if(
-        activePointerId!==null
-    ){
-
-        try{
-
-            canvas.releasePointerCapture(
-                activePointerId
-            );
-
-        }catch(err){}
-    }
-
-    activePointerId=null;
 
     updateDeliverButton();
     draw();
@@ -2430,66 +1287,95 @@ function pointerUp(e){
 
 
 /* =====================================================
-   ROUTE DISTANCE
+   ADD BLOCK
 ===================================================== */
 
-function calculateRouteDistance(){
+function addBlockToRoute(id){
 
-    let total=0;
+    const last=
+        routeBlocks[routeBlocks.length-1];
 
-    for(
-        let i=1;
-        i<route.length;
-        i++
-    ){
+    /*
+       안전장치
+    */
 
-        total+=distanceBetweenPoints(
-            route[i-1],
-            route[i]
+    if(!id)
+        return;
+
+    if(id===last)
+        return;
+
+    /*
+       이미 방문한 블럭이면 절대 추가하지 않는다.
+    */
+
+    if(visitedBlocks.has(id))
+        return;
+
+    /*
+       연결되지 않은 블럭이면 추가하지 않는다.
+    */
+
+    if(!areConnected(last,id))
+        return;
+
+    routeBlocks.push(id);
+
+    visitedBlocks.add(id);
+
+    routeDistance+=
+        distanceBetweenBlocks(
+            last,
+            id
         );
-    }
 
-    return total;
+    checkPlanningDestinations(id);
+
+    updateAll();
 }
 
 
 /* =====================================================
-   DESTINATION
+   DISTANCE
 ===================================================== */
 
-function checkDestination(point){
+function distanceBetweenBlocks(a,b){
 
-    if(!point)
-        return;
+    const p1=blockPixel(a);
+    const p2=blockPixel(b);
+
+    return Math.hypot(
+        p2.x-p1.x,
+        p2.y-p1.y
+    );
+}
+
+
+/* =====================================================
+   DESTINATIONS
+===================================================== */
+
+function checkPlanningDestinations(block){
 
     for(const item of cargoData){
 
         if(
-            !selectedCargo.includes(
-                item.id
-            )
+            !selectedCargo.includes(item.id)
         )
             continue;
 
         if(
-            deliveredCargo.has(
-                item.id
-            )
+            deliveredCargo.has(item.id)
         )
             continue;
 
-        const d=Math.hypot(
-            point.x-item.x,
-            point.y-item.y
-        );
+        if(item.block===block){
 
-        if(d<.065){
-
-            deliveredCargo.add(
-                item.id
-            );
+            deliveredCargo.add(item.id);
         }
     }
+
+    updateDeliverButton();
 }
 
 
@@ -2502,23 +1388,34 @@ function clearRoute(){
     if(!planning)
         return;
 
-    route=[];
+    /*
+       ★ 유일하게 방문 기록을
+       삭제하는 곳
+    */
+
+    routeBlocks=[];
+    visitedBlocks.clear();
+
     routeDistance=0;
 
     deliveredCargo.clear();
 
-    visitedSegments.clear();
     triggeredEvents.clear();
 
-    routeSegments=[];
-
-    currentSegment=null;
-    routeCursor=null;
+    cursorBlock=null;
 
     drawing=false;
 
-    modeMessage.textContent=
-        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
+    /*
+       시작 블럭은 다시 방문
+    */
+
+    routeBlocks.push(START_BLOCK);
+    visitedBlocks.add(START_BLOCK);
+
+    modeMessage.innerHTML=
+        "출발 블럭에서 손가락을 누르고<br>"+
+        "연결된 도로 블럭으로 이동하세요";
 
     updateAll();
     draw();
@@ -2526,10 +1423,14 @@ function clearRoute(){
 
 
 /* =====================================================
-   DELIVER BUTTON
+   DELIVERY BUTTON
 ===================================================== */
 
 function updateDeliverButton(){
+
+    /*
+       모든 배송지가 경로에 포함되어야 한다.
+    */
 
     const complete=
         selectedCargo.length>0 &&
@@ -2538,7 +1439,7 @@ function updateDeliverButton(){
 
     deliverButton.disabled=
         !complete ||
-        route.length<2 ||
+        routeBlocks.length<2 ||
         delivering;
 }
 
@@ -2565,16 +1466,17 @@ function startDelivery(){
     delivering=true;
     pausedByEvent=false;
 
+    /*
+       배송 시작 시 목적지 판정용 Set 초기화
+    */
+
+    deliveredCargo.clear();
+
     damage=0;
 
     deliveryProgress=0;
-
-    deliveryStart=
-        performance.now();
-
+    deliveryStart=performance.now();
     deliveryElapsed=0;
-
-    deliveredCargo.clear();
 
     clearButton.disabled=true;
     deliverButton.disabled=true;
@@ -2582,16 +1484,13 @@ function startDelivery(){
     modeMessage.textContent=
         "계획한 경로를 따라 배송 중";
 
-    deliveryStatus.style.display=
-        "block";
+    deliveryStatus.style.display="block";
 
     updateCargoHud();
 
     deliveryLoop.lastTime=null;
 
-    requestAnimationFrame(
-        deliveryLoop
-    );
+    requestAnimationFrame(deliveryLoop);
 }
 
 
@@ -2605,16 +1504,11 @@ function deliveryLoop(now){
         return;
 
     /*
-       이벤트가 떠 있으면
-       위치/시간/손상 모두 멈춘다.
+       이벤트가 열려 있으면
+       시간을 진행시키지 않는다.
     */
 
     if(pausedByEvent){
-
-        /*
-           requestAnimationFrame은 하나만
-           유지된다.
-        */
 
         deliveryLoop.lastTime=now;
 
@@ -2628,135 +1522,112 @@ function deliveryLoop(now){
     if(
         deliveryLoop.lastTime===null
     ){
-
         deliveryLoop.lastTime=now;
     }
 
     const dt=Math.min(
         .05,
-        (
-            now-
-            deliveryLoop.lastTime
-        )/1000
+        (now-deliveryLoop.lastTime)/1000
     );
 
     deliveryLoop.lastTime=now;
 
     deliveryElapsed=
-        (
-            now-
-            deliveryStart
-        )/1000;
-
+        (now-deliveryStart)/1000;
 
     /*
-       기존보다 빠른 배달 속도
+       빠른 배송 속도
     */
 
     const speed=620;
 
     let remaining=speed*dt;
 
-
     while(
         remaining>0 &&
         deliveryProgress<
-        route.length-1
+        routeBlocks.length-1
     ){
 
         const index=
-            Math.floor(
-                deliveryProgress
-            );
+            Math.floor(deliveryProgress);
 
         const fraction=
             deliveryProgress-index;
 
         const a=
-            route[index];
-
-        const b=
-            route[index+1];
-
-        const segmentLength=
-            distanceBetweenPoints(
-                a,
-                b
+            blockPixel(
+                routeBlocks[index]
             );
 
-        if(segmentLength<=0){
+        const b=
+            blockPixel(
+                routeBlocks[index+1]
+            );
 
-            deliveryProgress=
-                index+1;
+        const length=
+            Math.hypot(
+                b.x-a.x,
+                b.y-a.y
+            );
 
+        if(length<=0){
+
+            deliveryProgress=index+1;
             continue;
         }
 
-        const remainingOnSegment=
-            segmentLength*
-            (1-fraction);
+        const remainOnSegment=
+            length*(1-fraction);
 
         if(
             remaining<
-            remainingOnSegment
+            remainOnSegment
         ){
 
             deliveryProgress+=
-                remaining/
-                segmentLength;
+                remaining/length;
 
             remaining=0;
 
         }else{
 
             remaining-=
-                remainingOnSegment;
+                remainOnSegment;
 
             deliveryProgress=
                 index+1;
         }
     }
 
-
     checkDeliveryDestinations();
-
-
-    const rate=
-        getDamageRate();
-
 
     damage+=
         speed*
         dt*
         .002*
-        rate;
-
+        getDamageRate();
 
     damage=Math.min(
         100,
         damage
     );
 
-
     checkEvent();
-
 
     updateHUD();
     updateCargoHud();
 
     drawDelivery();
 
-
     if(
         deliveryProgress>=
-        route.length-1
+        routeBlocks.length-1
     ){
 
         finishDelivery();
-
         return;
     }
-
 
     requestAnimationFrame(
         deliveryLoop
@@ -2770,8 +1641,8 @@ function deliveryLoop(now){
 
 function getDeliveryPosition(){
 
-    if(route.length===0)
-        return startPoint;
+    if(routeBlocks.length===0)
+        return blockPixel(START_BLOCK);
 
     const index=
         Math.floor(
@@ -2779,75 +1650,73 @@ function getDeliveryPosition(){
         );
 
     if(
-        index>=route.length-1
+        index>=routeBlocks.length-1
     ){
 
-        return route[
-            route.length-1
-        ];
+        return blockPixel(
+            routeBlocks[
+                routeBlocks.length-1
+            ]
+        );
     }
 
     const fraction=
         deliveryProgress-index;
 
     const a=
-        route[index];
+        blockPixel(
+            routeBlocks[index]
+        );
 
     const b=
-        route[index+1];
+        blockPixel(
+            routeBlocks[index+1]
+        );
 
     return{
-
-        x:
-            a.x+
-            (
-                b.x-a.x
-            )*fraction,
-
-        y:
-            a.y+
-            (
-                b.y-a.y
-            )*fraction
+        x:a.x+(b.x-a.x)*fraction,
+        y:a.y+(b.y-a.y)*fraction
     };
 }
 
 
 /* =====================================================
-   DELIVERY DESTINATIONS
+   DELIVERY DESTINATION
 ===================================================== */
 
 function checkDeliveryDestinations(){
 
-    const p=
-        getDeliveryPosition();
+    const index=
+        Math.floor(
+            deliveryProgress
+        );
+
+    if(
+        index<0 ||
+        index>=routeBlocks.length
+    )
+        return;
+
+    const block=
+        routeBlocks[index];
 
     for(const item of cargoData){
 
         if(
-            !selectedCargo.includes(
-                item.id
-            )
+            !selectedCargo.includes(item.id)
         )
             continue;
 
         if(
-            deliveredCargo.has(
-                item.id
-            )
+            deliveredCargo.has(item.id)
         )
             continue;
 
-        const d=Math.hypot(
-            p.x-item.x,
-            p.y-item.y
-        );
+        if(
+            item.block===block
+        ){
 
-        if(d<.065){
-
-            deliveredCargo.add(
-                item.id
-            );
+            deliveredCargo.add(item.id);
         }
     }
 }
@@ -2883,81 +1752,79 @@ function getDamageRate(){
 
 
 /* =====================================================
-   EVENT
+   EVENTS
 ===================================================== */
 
 function checkEvent(){
 
+    const index=
+        Math.floor(
+            deliveryProgress
+        );
+
     if(
-        triggeredEvents.has(
-            "center"
-        )
+        index<0 ||
+        index>=routeBlocks.length
     )
         return;
 
-    const p=
-        getDeliveryPosition();
+    const block=
+        routeBlocks[index];
 
     if(
-        Math.hypot(
-            p.x-.50,
-            p.y-.50
-        )<.035
-    ){
+        triggeredEvents.has(block)
+    )
+        return;
 
-        triggeredEvents.add(
-            "center"
-        );
+    if(
+        !events[block]
+    )
+        return;
 
+    triggeredEvents.add(block);
+
+    const event=events[block];
+
+    if(block==="r1")
         damage+=5;
 
-        /*
-           여기서 캐릭터가 정지한다.
-        */
+    /*
+       ★ 즉시 이동 정지
+    */
 
-        pausedByEvent=true;
+    pausedByEvent=true;
 
-        showEvent(
-            "⚡ ELECTROMAGNETIC STORM",
-
-            "도시 중앙을 지나던 중 강한<br>"+
-            "전자기 폭풍이 발생했습니다.<br><br>"+
-            "배송품 손상도 +5%"
-        );
-    }
+    showEvent(
+        event.title,
+        event.text
+    );
 }
 
 
-function showEvent(
-    title,
-    text
-){
+function showEvent(title,text){
 
-    eventTitle.textContent=
-        title;
+    eventTitle.textContent=title;
+    eventText.innerHTML=text;
 
-    eventText.innerHTML=
-        text;
-
-    eventBox.style.display=
-        "block";
+    eventBox.style.display="block";
 }
 
 
 function closeEvent(){
 
-    eventBox.style.display=
-        "none";
-
-    /*
-       CONTINUE를 누른 순간부터
-       다시 이동한다.
-    */
+    eventBox.style.display="none";
 
     pausedByEvent=false;
 
     deliveryLoop.lastTime=
         performance.now();
+
+    if(delivering){
+
+        requestAnimationFrame(
+            deliveryLoop
+        );
+    }
 }
 
 
@@ -2972,8 +1839,7 @@ function finishDelivery(){
 
     deliveryLoop.lastTime=null;
 
-    deliveryStatus.style.display=
-        "none";
+    deliveryStatus.style.display="none";
 
     damage=Math.min(
         100,
@@ -2988,16 +1854,13 @@ function finishDelivery(){
             0,
             Math.min(
                 100,
-
                 100-
                 Math.max(
                     0,
-                    routeDistance-
-                    ideal
+                    routeDistance-ideal
                 )/8
             )
         );
-
 
     let reward=0;
 
@@ -3012,22 +1875,18 @@ function finishDelivery(){
             reward+=item.reward;
     }
 
-
     reward*=
         Math.max(
             .2,
             1-damage/100
         );
 
-
     reward*=
         efficiency/100;
-
 
     const score=
         efficiency*.55+
         (100-damage)*.45;
-
 
     let grade="D";
 
@@ -3039,7 +1898,6 @@ function finishDelivery(){
         grade="B";
     else if(score>=52)
         grade="C";
-
 
     $("resultDistance").textContent=
         Math.round(routeDistance)+"m";
@@ -3055,12 +1913,9 @@ function finishDelivery(){
 
     $("resultReward").textContent=
         "¥ "+
-        Math.round(
-            reward
-        ).toLocaleString();
+        Math.round(reward).toLocaleString();
 
-    $("grade").textContent=
-        grade;
+    $("grade").textContent=grade;
 
     showScreen(resultScreen);
 }
@@ -3073,8 +1928,8 @@ function finishDelivery(){
 function getIdealDistance(){
 
     return(
-        750+
-        selectedCargo.length*90
+        600+
+        selectedCargo.length*80
     );
 }
 
@@ -3086,9 +1941,7 @@ function getIdealDistance(){
 function updateHUD(){
 
     distanceEl.textContent=
-        Math.round(
-            routeDistance
-        )+"m";
+        Math.round(routeDistance)+"m";
 
     cargoCountEl.textContent=
         deliveredCargo.size+
@@ -3096,23 +1949,16 @@ function updateHUD(){
         selectedCargo.length;
 
     damageEl.textContent=
-        damage.toFixed(1)+
-        "%";
+        damage.toFixed(1)+"%";
 }
 
-
-/* =====================================================
-   CARGO HUD
-===================================================== */
 
 function updateCargoHud(){
 
     let html=`
-
         <div class="cargo-hud-title">
             DELIVERY LIST
         </div>
-
     `;
 
     for(const id of selectedCargo){
@@ -3129,15 +1975,11 @@ function updateCargoHud(){
             deliveredCargo.has(id);
 
         html+=`
-
             <div class="cargo-hud-item
                 ${done?"delivered":""}">
-
                 ${done?"✓":"○"}
                 ${item.name}
-
             </div>
-
         `;
     }
 
@@ -3145,9 +1987,19 @@ function updateCargoHud(){
 }
 
 
+function updateAll(){
+
+    updateHUD();
+    updateCargoHud();
+    updateDeliverButton();
+}
+
+
 /* =====================================================
-   TEMP MESSAGE
+   MESSAGE
 ===================================================== */
+
+let messageTimer=null;
 
 function showTemporaryMessage(text){
 
@@ -3155,24 +2007,21 @@ function showTemporaryMessage(text){
 
     clearTimeout(messageTimer);
 
-    messageTimer=
-        setTimeout(
-            ()=>{
+    messageTimer=setTimeout(()=>{
 
-                if(planning){
+        if(planning){
 
-                    modeMessage.textContent=
-                        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
-                }
+            modeMessage.innerHTML=
+                "출발 블럭에서 손가락을 누르고<br>"+
+                "연결된 도로 블럭으로 이동하세요";
+        }
 
-            },
-            1400
-        );
+    },1200);
 }
 
 
 /* =====================================================
-   DRAW MAP
+   DRAW
 ===================================================== */
 
 function draw(){
@@ -3180,161 +2029,145 @@ function draw(){
     if(!W || !H)
         return;
 
+    ctx.clearRect(0,0,W,H);
 
-    /* BACKGROUND */
-
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
+    /*
+       BACKGROUND
+    */
 
     ctx.fillStyle="#070910";
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
+    ctx.fillRect(0,0,W,H);
 
 
-    /* CITY BLOCKS */
+    /*
+       CITY GRID
+    */
+
+    ctx.strokeStyle=
+        "rgba(50,60,80,.16)";
+
+    ctx.lineWidth=1;
 
     for(
         let x=0;
         x<W;
-        x+=42
+        x+=32
     ){
 
-        for(
-            let y=0;
-            y<H;
-            y+=42
-        ){
+        ctx.beginPath();
+        ctx.moveTo(x,0);
+        ctx.lineTo(x,H);
+        ctx.stroke();
+    }
 
-            const roadX=
-                Math.min(
-                    Math.abs(x/W-.20),
-                    Math.abs(x/W-.50),
-                    Math.abs(x/W-.80)
-                )<.07;
+    for(
+        let y=0;
+        y<H;
+        y+=32
+    ){
 
-            const roadY=
-                Math.min(
-                    Math.abs(y/H-.20),
-                    Math.abs(y/H-.50),
-                    Math.abs(y/H-.80)
-                )<.07;
+        ctx.beginPath();
+        ctx.moveTo(0,y);
+        ctx.lineTo(W,y);
+        ctx.stroke();
+    }
 
-            if(
-                roadX||
-                roadY
-            )
+
+    /*
+       ROAD BLOCKS
+    */
+
+    for(const id in roadBlocks){
+
+        const b=roadBlocks[id];
+
+        const p=blockPixel(id);
+
+        /*
+           연결 도로
+        */
+
+        for(const next of b.connections){
+
+            /*
+               중복 선 방지
+            */
+
+            if(id>next)
                 continue;
 
-            ctx.fillStyle=
-                (
-                    (x+y)/42
-                )%2===0
-                ? "#111521"
-                : "#0d111a";
+            const q=blockPixel(next);
 
-            ctx.fillRect(
-                x+2,
-                y+2,
-                36,
-                36
-            );
+            ctx.beginPath();
+
+            ctx.moveTo(p.x,p.y);
+            ctx.lineTo(q.x,q.y);
+
+            ctx.lineWidth=34;
+            ctx.strokeStyle="#252a36";
+            ctx.stroke();
+
+            ctx.lineWidth=2;
+            ctx.strokeStyle="#4a5060";
+            ctx.stroke();
+
+            ctx.setLineDash([8,9]);
+
+            ctx.lineWidth=1;
+            ctx.strokeStyle=
+                "rgba(130,140,155,.35)";
+
+            ctx.stroke();
+
+            ctx.setLineDash([]);
         }
     }
 
 
-    /* ROADS */
+    /*
+       이벤트 위치
+    */
 
-    for(const path of roads){
+    for(const id in events){
+
+        const p=blockPixel(id);
+
+        ctx.fillStyle="#ffcf55";
+        ctx.shadowColor="#ffcf55";
+        ctx.shadowBlur=12;
 
         ctx.beginPath();
 
-        for(
-            let i=0;
-            i<path.length;
-            i++
-        ){
+        ctx.arc(
+            p.x,
+            p.y,
+            7,
+            0,
+            Math.PI*2
+        );
 
-            const x=
-                path[i][0]*W;
+        ctx.fill();
 
-            const y=
-                path[i][1]*H;
-
-            if(i===0)
-                ctx.moveTo(x,y);
-            else
-                ctx.lineTo(x,y);
-        }
-
-        ctx.lineWidth=31;
-        ctx.strokeStyle="#252a36";
-        ctx.stroke();
-
-        ctx.lineWidth=2;
-        ctx.strokeStyle="#4a5060";
-        ctx.stroke();
-
-        ctx.setLineDash([8,9]);
-
-        ctx.lineWidth=1;
-        ctx.strokeStyle=
-            "rgba(130,140,155,.35)";
-
-        ctx.stroke();
-
-        ctx.setLineDash([]);
+        ctx.shadowBlur=0;
     }
 
 
-    /* EVENT MARKER */
-
-    ctx.fillStyle="#ffcf55";
-
-    ctx.shadowColor="#ffcf55";
-    ctx.shadowBlur=10;
-
-    ctx.beginPath();
-
-    ctx.arc(
-        W*.50,
-        H*.50,
-        7,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.shadowBlur=0;
-
-
-    /* DESTINATIONS */
+    /*
+       DESTINATIONS
+    */
 
     for(const item of cargoData){
 
         if(
-            !selectedCargo.includes(
-                item.id
-            )
+            !selectedCargo.includes(item.id)
         )
             continue;
 
-        const x=item.x*W;
-        const y=item.y*H;
+        const p=
+            blockPixel(item.block);
 
         const done=
-            deliveredCargo.has(
-                item.id
-            );
+            deliveredCargo.has(item.id);
 
         ctx.strokeStyle=
             done
@@ -3346,9 +2179,9 @@ function draw(){
         ctx.beginPath();
 
         ctx.arc(
-            x,
-            y,
-            17,
+            p.x,
+            p.y,
+            19,
             0,
             Math.PI*2
         );
@@ -3363,9 +2196,9 @@ function draw(){
         ctx.beginPath();
 
         ctx.arc(
-            x,
-            y,
-            10,
+            p.x,
+            p.y,
+            11,
             0,
             Math.PI*2
         );
@@ -3374,25 +2207,23 @@ function draw(){
 
         ctx.fillStyle="#080910";
 
-        ctx.font=
-            "bold 10px Arial";
-
+        ctx.font="bold 10px Arial";
         ctx.textAlign="center";
         ctx.textBaseline="middle";
 
         ctx.fillText(
             done?"✓":"!",
-            x,
-            y
+            p.x,
+            p.y
         );
     }
 
 
-    /* =================================================
+    /*
        ROUTE
-    ================================================= */
+    */
 
-    if(route.length>1){
+    if(routeBlocks.length>1){
 
         ctx.save();
 
@@ -3400,30 +2231,23 @@ function draw(){
 
         for(
             let i=0;
-            i<route.length;
+            i<routeBlocks.length;
             i++
         ){
 
-            const x=
-                route[i].x*W;
-
-            const y=
-                route[i].y*H;
+            const p=
+                blockPixel(
+                    routeBlocks[i]
+                );
 
             if(i===0)
-                ctx.moveTo(x,y);
+                ctx.moveTo(p.x,p.y);
             else
-                ctx.lineTo(x,y);
+                ctx.lineTo(p.x,p.y);
         }
 
-        /*
-           반드시 직각 도로를 그대로 보여준다.
-        */
-
         ctx.lineJoin="miter";
-        ctx.lineCap="butt";
-
-        /* GLOW */
+        ctx.lineCap="square";
 
         ctx.lineWidth=12;
 
@@ -3433,8 +2257,6 @@ function draw(){
             : "rgba(99,245,255,.20)";
 
         ctx.stroke();
-
-        /* MAIN */
 
         ctx.lineWidth=5;
 
@@ -3456,24 +2278,47 @@ function draw(){
     }
 
 
-    /* START */
+    /*
+       BLOCK MARKERS
+    */
 
-    const sx=
-        startPoint.x*W;
+    for(const id of routeBlocks){
 
-    const sy=
-        startPoint.y*H;
+        const p=blockPixel(id);
+
+        ctx.fillStyle="#63f5ff";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,
+            p.y,
+            4,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+
+    /*
+       START
+    */
+
+    const start=
+        blockPixel(START_BLOCK);
 
     ctx.fillStyle="#63f5ff";
 
     ctx.shadowColor="#63f5ff";
-    ctx.shadowBlur=12;
+    ctx.shadowBlur=15;
 
     ctx.beginPath();
 
     ctx.arc(
-        sx,
-        sy,
+        start.x,
+        start.y,
         12,
         0,
         Math.PI*2
@@ -3485,76 +2330,50 @@ function draw(){
 
     ctx.fillStyle="#071016";
 
-    ctx.font=
-        "bold 10px Arial";
+    ctx.font="bold 10px Arial";
 
     ctx.textAlign="center";
     ctx.textBaseline="middle";
 
     ctx.fillText(
         "S",
-        sx,
-        sy
+        start.x,
+        start.y
     );
 
 
-    /* START HIGHLIGHT */
+    /*
+       CURRENT CURSOR
+    */
 
     if(
         planning &&
-        route.length===0
+        cursorBlock
     ){
 
+        const p=
+            blockPixel(cursorBlock);
+
+        /*
+           손가락이 따라가는 커서
+        */
+
         ctx.strokeStyle=
-            "rgba(99,245,255,.35)";
+            "rgba(255,255,255,.85)";
 
         ctx.lineWidth=2;
 
         ctx.beginPath();
 
         ctx.arc(
-            sx,
-            sy,
-            23,
+            p.x,
+            p.y,
+            15,
             0,
             Math.PI*2
         );
 
         ctx.stroke();
-    }
-
-
-    /* CURRENT CURSOR */
-
-    if(
-        planning &&
-        route.length>1
-    ){
-
-        const cursor=
-            routeCursor||
-            route[
-                route.length-1
-            ];
-
-        ctx.fillStyle="#fff";
-
-        ctx.shadowColor="#63f5ff";
-        ctx.shadowBlur=12;
-
-        ctx.beginPath();
-
-        ctx.arc(
-            cursor.x*W,
-            cursor.y*H,
-            5,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-        ctx.shadowBlur=0;
     }
 }
 
@@ -3573,15 +2392,15 @@ function drawDelivery(){
     ctx.save();
 
     ctx.shadowColor="#ff3c91";
-    ctx.shadowBlur=20;
+    ctx.shadowBlur=22;
 
     ctx.fillStyle="#ff3c91";
 
     ctx.beginPath();
 
     ctx.arc(
-        p.x*W,
-        p.y*H,
+        p.x,
+        p.y,
         10,
         0,
         Math.PI*2
@@ -3596,8 +2415,8 @@ function drawDelivery(){
     ctx.beginPath();
 
     ctx.arc(
-        p.x*W+5,
-        p.y*H-4,
+        p.x+5,
+        p.y-4,
         3,
         0,
         Math.PI*2
@@ -3638,17 +2457,6 @@ canvas.addEventListener(
 );
 
 
-/*
-   브라우저가 터치 제스처로
-   pointer 이벤트를 취소하는 것을 최소화
-*/
-
-canvas.addEventListener(
-    "contextmenu",
-    e=>e.preventDefault()
-);
-
-
 /* =====================================================
    INITIAL
 ===================================================== */
@@ -3656,4 +2464,4 @@ canvas.addEventListener(
 resize();
 
 </script></body>
-      </html>
+</html>

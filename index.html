@@ -2,9 +2,12 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-      maximum-scale=1.0, user-scalable=no">
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
 
 <title>CYBER DELIVERY</title>
 
@@ -20,748 +23,609 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #080910;
-    color: white;
+    background: #070910;
     font-family: Arial, sans-serif;
+    color: white;
     touch-action: none;
 }
 
 button {
-    font: inherit;
+    font-family: inherit;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-.screen {
-    display: none;
+
+/* =====================================================
+   GAME
+===================================================== */
+
+#game {
+    position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
-.screen.active {
-    display: flex;
-}
 
-/* =========================
-   TITLE
-========================= */
+/* =====================================================
+   CANVAS
+===================================================== */
 
-#titleScreen {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 25px;
-    text-align: center;
-}
-
-.logo h1 {
-    font-size: clamp(40px, 12vw, 72px);
-    line-height: .85;
-    letter-spacing: 5px;
-    color: #63f5ff;
-    text-shadow:
-        4px 4px 0 #ff3c91,
-        0 0 20px #63f5ff;
-}
-
-.logo p {
-    color: #888;
-    letter-spacing: 4px;
-    font-size: 11px;
-    margin-bottom: 50px;
-}
-
-.mainButton {
-    width: min(90vw, 380px);
-    padding: 17px;
-    background: #111722;
-    color: #63f5ff;
-    border: 2px solid #63f5ff;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.mainButton:active {
-    background: #63f5ff;
-    color: #080910;
-}
-
-/* =========================
-   CARGO SELECT
-========================= */
-
-#selectScreen {
-    flex-direction: column;
-    padding: 15px;
-    overflow-y: auto;
-}
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.topbar h2 {
-    color: #63f5ff;
-    margin: 5px 0 15px;
-}
-
-.money {
-    color: #ffd75a;
-}
-
-.packageList {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-bottom: 20px;
-}
-
-.package {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #11141e;
-    border: 2px solid #292f3d;
-    padding: 12px;
-}
-
-.package.selected {
-    border-color: #63f5ff;
-    box-shadow: 0 0 12px rgba(99,245,255,.2);
-}
-
-.icon {
-    width: 45px;
-    text-align: center;
-    font-size: 29px;
-}
-
-.info {
-    flex: 1;
-}
-
-.info h3 {
-    font-size: 14px;
-    margin: 0 0 5px;
-}
-
-.info p {
-    margin: 2px 0;
-    color: #888;
-    font-size: 10px;
-}
-
-.selectBtn {
-    background: #181c27;
-    border: 1px solid #555;
-    color: #bbb;
-    padding: 8px;
-}
-
-.package.selected .selectBtn {
-    border-color: #63f5ff;
-    color: #63f5ff;
-}
-
-#startDelivery {
-    margin-top: auto;
-    flex-shrink: 0;
-}
-
-/* =========================
-   GAME
-========================= */
-
-#gameScreen {
-    position: relative;
-    flex-direction: column;
-}
-
-#gameCanvas {
+#canvas {
     position: absolute;
     inset: 0;
+
     width: 100%;
     height: 100%;
+
     image-rendering: pixelated;
 }
+
+
+/* =====================================================
+   TOP HUD
+===================================================== */
 
 .hud {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    padding: 9px;
+
+    padding: 8px;
+
     pointer-events: none;
+    z-index: 10;
 }
 
-.hudInner {
-    background: rgba(5,7,13,.9);
-    border: 1px solid #303747;
+.hud-inner {
+    background: rgba(5, 7, 14, 0.94);
+
+    border: 1px solid #303847;
+
     padding: 9px;
+
     display: flex;
     justify-content: space-between;
+
     font-size: 11px;
 }
 
-.hudInner span {
+.hud-item span {
     color: #63f5ff;
 }
 
-.damage {
-    color: #ff648d !important;
+.hud-item.damage span {
+    color: #ff648d;
 }
 
-.instruction {
+
+/* =====================================================
+   MODE MESSAGE
+===================================================== */
+
+.mode-message {
     position: absolute;
-    top: 58px;
+
+    top: 55px;
     left: 10px;
     right: 10px;
+
     text-align: center;
-    background: rgba(5,7,13,.75);
-    padding: 6px;
+
+    padding: 7px;
+
+    background: rgba(5, 7, 14, 0.82);
+
     color: #aaa;
-    font-size: 10px;
+
+    font-size: 11px;
+
+    pointer-events: none;
+
+    z-index: 10;
+}
+
+
+/* =====================================================
+   DELIVERY STATUS
+===================================================== */
+
+.delivery-status {
+    position: absolute;
+
+    top: 84px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: none;
+
+    padding: 7px 14px;
+
+    background: rgba(5, 7, 14, 0.92);
+
+    border: 1px solid #63f5ff;
+
+    color: #63f5ff;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    z-index: 10;
+
     pointer-events: none;
 }
 
-/* =========================
-   CONTROLS
-========================= */
+
+/* =====================================================
+   CARGO PANEL
+===================================================== */
+
+.cargo-panel {
+    position: absolute;
+
+    left: 10px;
+    top: 110px;
+
+    width: 145px;
+
+    background: rgba(5, 7, 14, 0.88);
+
+    border: 1px solid #303847;
+
+    padding: 8px;
+
+    z-index: 8;
+
+    pointer-events: none;
+}
+
+.cargo-title {
+    color: #63f5ff;
+    font-size: 10px;
+    margin-bottom: 6px;
+}
+
+.cargo-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 9px;
+
+    margin: 4px 0;
+
+    color: #aaa;
+}
+
+.cargo-item.done {
+    color: #5cff9a;
+}
+
+
+/* =====================================================
+   BOTTOM CONTROLS
+===================================================== */
 
 .controls {
     position: absolute;
+
     left: 10px;
     right: 10px;
-    bottom: 12px;
+    bottom: 10px;
+
     display: flex;
     gap: 8px;
+
+    z-index: 20;
 }
 
-.controlBtn {
+.control {
     flex: 1;
+
     padding: 14px 5px;
-    background: rgba(12,15,23,.94);
-    border: 1px solid #3b4252;
-    color: #ccc;
+
+    background: rgba(10, 13, 21, 0.96);
+
+    border: 1px solid #3a4252;
+
+    color: #bbb;
+
     font-weight: bold;
+    font-size: 13px;
 }
 
-.deliverBtn {
+.control.deliver {
     border-color: #63f5ff;
     color: #63f5ff;
 }
 
-.deliverBtn:disabled {
-    border-color: #333;
+.control.deliver:disabled {
+    border-color: #292e38;
     color: #555;
 }
 
-/* =========================
-   EVENT
-========================= */
 
-#eventOverlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,.72);
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-}
-
-.eventBox {
-    width: 100%;
-    max-width: 380px;
-    padding: 22px;
-    background: #10131d;
-    border: 2px solid #ffcf55;
-    text-align: center;
-}
-
-.eventBox h2 {
-    color: #ffcf55;
-}
-
-.eventBox p {
-    color: #aaa;
-    line-height: 1.6;
-}
-
-.eventBox button {
-    width: 100%;
-    padding: 13px;
-    background: #181c27;
-    color: #ffcf55;
-    border: 1px solid #ffcf55;
-}
-
-/* =========================
-   DELIVERY ANIMATION
-========================= */
-
-#deliveryStatus {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    display: none;
-    background: rgba(5,7,13,.92);
-    border: 2px solid #63f5ff;
-    padding: 20px 30px;
-    text-align: center;
-}
-
-#deliveryStatus h2 {
-    color: #63f5ff;
-    margin: 0 0 10px;
-}
-
-#deliveryStatus p {
-    color: #999;
-    font-size: 12px;
-}
-
-/* =========================
+/* =====================================================
    RESULT
-========================= */
+===================================================== */
 
-#resultScreen {
-    justify-content: center;
+#result {
+    display: none;
+
+    position: absolute;
+
+    inset: 0;
+
+    background: #080910;
+
     align-items: center;
+    justify-content: center;
+
     padding: 20px;
+
+    z-index: 50;
 }
 
-.resultBox {
+.result-box {
     width: 100%;
-    max-width: 420px;
+    max-width: 400px;
+
     background: #11141e;
+
     border: 2px solid #63f5ff;
+
     padding: 22px;
 }
 
-.resultBox h2 {
+.result-box h1 {
     text-align: center;
+
     color: #63f5ff;
+
+    font-size: 21px;
 }
 
 .grade {
     text-align: center;
-    font-size: 60px;
+
+    font-size: 65px;
+
     color: #ffd75a;
-    margin: 15px;
+
+    margin: 12px 0 20px;
 }
 
-.resultRow {
+.result-row {
     display: flex;
     justify-content: space-between;
+
     padding: 11px 0;
+
     border-bottom: 1px solid #292f3a;
+
     font-size: 13px;
 }
 
-.resultRow strong {
+.result-row strong {
     color: #63f5ff;
+}
+
+.restart {
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 15px;
+
+    background: #111722;
+
+    border: 2px solid #63f5ff;
+
+    color: #63f5ff;
+
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   EVENT
+===================================================== */
+
+#event {
+    display: none;
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(88%, 360px);
+
+    background: #11141e;
+
+    border: 2px solid #ffcf55;
+
+    padding: 20px;
+
+    text-align: center;
+
+    z-index: 40;
+}
+
+#event h2 {
+    color: #ffcf55;
+
+    font-size: 18px;
+}
+
+#event p {
+    color: #aaa;
+
+    line-height: 1.5;
+
+    font-size: 12px;
+}
+
+.event-button {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #181c27;
+
+    border: 1px solid #ffcf55;
+
+    color: #ffcf55;
 }
 </style>
 </head>
 
+
 <body>
 
-<!-- TITLE -->
 
-<section id="titleScreen" class="screen active">
-
-    <div class="logo">
-        <h1>CYBER<br>DELIVERY</h1>
-        <p>PLAN YOUR ROUTE. BEAT THE CITY.</p>
-    </div>
-
-    <button class="mainButton"
-            onclick="showScreen('selectScreen')">
-        START DELIVERY
-    </button>
-
-</section>
+<div id="game">
 
 
-<!-- CARGO SELECT -->
+    <!-- =================================================
+         CANVAS
+    ================================================= -->
 
-<section id="selectScreen" class="screen">
-
-    <div class="topbar">
-        <h2>SELECT CARGO</h2>
-        <div class="money">¥ 12,500</div>
-    </div>
-
-    <p style="font-size:11px;color:#777;">
-        배송할 물품을 선택하세요. 여러 개를 선택하면
-        모든 목적지를 방문해야 합니다.
-    </p>
-
-    <div class="packageList">
-
-        <div class="package" data-id="ramen">
-            <div class="icon">🍜</div>
-            <div class="info">
-                <h3>NEON RAMEN</h3>
-                <p>목적지: NORTH</p>
-                <p>시간 ★★★★★ · 내구 ★★★★☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="medicine">
-            <div class="icon">💊</div>
-            <div class="info">
-                <h3>MEDICAL CHIP</h3>
-                <p>목적지: EAST</p>
-                <p>시간 ★★★☆☆ · 내구 ★★☆☆☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="component">
-            <div class="icon">🔧</div>
-            <div class="info">
-                <h3>CYBER COMPONENT</h3>
-                <p>목적지: SOUTH</p>
-                <p>시간 ★★☆☆☆ · 내구 ★★★★★</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="data">
-            <div class="icon">💾</div>
-            <div class="info">
-                <h3>ENCRYPTED DATA</h3>
-                <p>목적지: WEST</p>
-                <p>시간 ★★★★★ · 내구 ★★★★★</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="robot">
-            <div class="icon">🤖</div>
-            <div class="info">
-                <h3>PROTOTYPE AI</h3>
-                <p>목적지: CENTER</p>
-                <p>시간 ★★★★☆ · 내구 ★★☆☆☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="flower">
-            <div class="icon">🌱</div>
-            <div class="info">
-                <h3>BIO SAMPLE</h3>
-                <p>목적지: SOUTH-EAST</p>
-                <p>시간 ★★★☆☆ · 내구 ★☆☆☆☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="weapon">
-            <div class="icon">📦</div>
-            <div class="info">
-                <h3>RESTRICTED CARGO</h3>
-                <p>목적지: INDUSTRIAL</p>
-                <p>시간 ★★★★☆ · 내구 ★★★☆☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-        <div class="package" data-id="luxury">
-            <div class="icon">💎</div>
-            <div class="info">
-                <h3>LUXURY CHIP</h3>
-                <p>목적지: CORPORATE</p>
-                <p>시간 ★★★☆☆ · 내구 ★★☆☆☆</p>
-            </div>
-            <button class="selectBtn"
-                    onclick="togglePackage(this)">
-                SELECT
-            </button>
-        </div>
-
-    </div>
-
-    <button id="startDelivery"
-            class="mainButton"
-            onclick="startPlanning()">
-        PLAN ROUTE
-    </button>
-
-</section>
+    <canvas id="canvas"></canvas>
 
 
-<!-- GAME -->
-
-<section id="gameScreen" class="screen">
-
-    <canvas id="gameCanvas"></canvas>
+    <!-- =================================================
+         HUD
+    ================================================= -->
 
     <div class="hud">
-        <div class="hudInner">
-            <div>
-                DIST:
+
+        <div class="hud-inner">
+
+            <div class="hud-item">
+                DIST
                 <span id="distance">0m</span>
             </div>
 
-            <div>
-                CARGO:
+            <div class="hud-item">
+                CARGO
                 <span id="cargoCount">0/0</span>
             </div>
 
-            <div>
-                DAMAGE:
-                <span class="damage"
-                      id="damage">0%</span>
+            <div class="hud-item damage">
+                DAMAGE
+                <span id="damage">0%</span>
             </div>
+
         </div>
+
     </div>
 
-    <div class="instruction" id="instruction">
-        손가락으로 도로를 따라 경로를 그리세요
+
+    <!-- =================================================
+         MESSAGE
+    ================================================= -->
+
+    <div class="mode-message" id="modeMessage">
+
+        출발점에서 손가락으로 도로를 따라
+        배달 경로를 그리세요
+
     </div>
+
+
+    <!-- =================================================
+         DELIVERY STATUS
+    ================================================= -->
+
+    <div class="delivery-status"
+         id="deliveryStatus">
+
+        ● DELIVERING...
+
+    </div>
+
+
+    <!-- =================================================
+         CARGO
+    ================================================= -->
+
+    <div class="cargo-panel">
+
+        <div class="cargo-title">
+            TODAY'S CARGO
+        </div>
+
+        <div class="cargo-item" id="cargo-ramen">
+            🍜 NEON RAMEN
+        </div>
+
+        <div class="cargo-item" id="cargo-medicine">
+            💊 MEDICAL CHIP
+        </div>
+
+        <div class="cargo-item" id="cargo-component">
+            🔧 CYBER COMPONENT
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         CONTROLS
+    ================================================= -->
 
     <div class="controls">
 
-        <button class="controlBtn"
+        <button class="control"
+                id="clearButton"
                 onclick="clearRoute()">
+
             CLEAR
+
         </button>
 
-        <button class="controlBtn deliverBtn"
+        <button class="control deliver"
                 id="deliverButton"
-                onclick="startDeliveryRun()"
+                onclick="startDelivery()"
                 disabled>
+
             DELIVER
+
         </button>
 
     </div>
 
-    <div id="eventOverlay">
 
-        <div class="eventBox">
+    <!-- =================================================
+         EVENT
+    ================================================= -->
 
-            <h2 id="eventTitle">EVENT</h2>
+    <div id="event">
 
-            <p id="eventText"></p>
+        <h2 id="eventTitle">
+            EVENT
+        </h2>
 
-            <button onclick="closeEvent()">
-                CONTINUE
+        <p id="eventText"></p>
+
+        <button class="event-button"
+                onclick="closeEvent()">
+
+            CONTINUE
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         RESULT
+    ================================================= -->
+
+    <div id="result">
+
+        <div class="result-box">
+
+            <h1>
+                DELIVERY COMPLETE
+            </h1>
+
+            <div class="grade"
+                 id="grade">
+
+                A
+
+            </div>
+
+            <div class="result-row">
+
+                <span>
+                    이동거리
+                </span>
+
+                <strong id="resultDistance">
+                    0m
+                </strong>
+
+            </div>
+
+            <div class="result-row">
+
+                <span>
+                    배송시간
+                </span>
+
+                <strong id="resultTime">
+                    0s
+                </strong>
+
+            </div>
+
+            <div class="result-row">
+
+                <span>
+                    배송품 손상
+                </span>
+
+                <strong id="resultDamage">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="result-row">
+
+                <span>
+                    경로 효율
+                </span>
+
+                <strong id="resultEfficiency">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="result-row">
+
+                <span>
+                    보상
+                </span>
+
+                <strong id="resultReward">
+                    ¥0
+                </strong>
+
+            </div>
+
+            <button class="restart"
+                    onclick="location.reload()">
+
+                NEXT DELIVERY
+
             </button>
 
         </div>
 
     </div>
 
-    <div id="deliveryStatus">
-
-        <h2>DELIVERING...</h2>
-
-        <p id="deliveryStatusText">
-            계획된 경로를 따라 이동하고 있습니다.
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- RESULT -->
-
-<section id="resultScreen" class="screen">
-
-    <div class="resultBox">
-
-        <h2>DELIVERY COMPLETE</h2>
-
-        <div class="grade" id="grade">
-            A
-        </div>
-
-        <div class="resultRow">
-            <span>이동거리</span>
-            <strong id="resultDistance">0m</strong>
-        </div>
-
-        <div class="resultRow">
-            <span>배송시간</span>
-            <strong id="resultTime">0s</strong>
-        </div>
-
-        <div class="resultRow">
-            <span>배송품 손상</span>
-            <strong id="resultDamage">0%</strong>
-        </div>
-
-        <div class="resultRow">
-            <span>경로 효율</span>
-            <strong id="resultEfficiency">0%</strong>
-        </div>
-
-        <div class="resultRow">
-            <span>보상</span>
-            <strong id="resultMoney">¥0</strong>
-        </div>
-
-        <button class="mainButton"
-                style="width:100%;margin-top:20px;"
-                onclick="location.reload()">
-            NEXT DELIVERY
-        </button>
-
-    </div>
-
-</section>
+</div>
 
 
 <script>
 
-/* =========================================================
-   SCREEN
-========================================================= */
-
-function showScreen(id) {
-
-    document.querySelectorAll(".screen")
-        .forEach(s => s.classList.remove("active"));
-
-    document.getElementById(id)
-        .classList.add("active");
-}
-
-
-/* =========================================================
-   CARGO
-========================================================= */
-
-const selectedPackages = new Set();
-
-const cargoData = {
-
-    ramen: {
-        name:"NEON RAMEN",
-        destination:"north",
-        durability:0.7,
-        speed:1.15,
-        reward:1200
-    },
-
-    medicine: {
-        name:"MEDICAL CHIP",
-        destination:"east",
-        durability:1.4,
-        speed:1,
-        reward:2200
-    },
-
-    component: {
-        name:"CYBER COMPONENT",
-        destination:"south",
-        durability:0.35,
-        speed:0.95,
-        reward:1500
-    },
-
-    data: {
-        name:"ENCRYPTED DATA",
-        destination:"west",
-        durability:0.25,
-        speed:1.25,
-        reward:3000
-    },
-
-    robot: {
-        name:"PROTOTYPE AI",
-        destination:"center",
-        durability:1.3,
-        speed:1,
-        reward:3500
-    },
-
-    flower: {
-        name:"BIO SAMPLE",
-        destination:"southeast",
-        durability:1.8,
-        speed:0.9,
-        reward:2800
-    },
-
-    weapon: {
-        name:"RESTRICTED CARGO",
-        destination:"industrial",
-        durability:0.9,
-        speed:1.05,
-        reward:4000
-    },
-
-    luxury: {
-        name:"LUXURY CHIP",
-        destination:"corporate",
-        durability:1.5,
-        speed:1,
-        reward:5000
-    }
-};
-
-
-function togglePackage(button) {
-
-    const packageElement =
-        button.parentElement;
-
-    const id =
-        packageElement.dataset.id;
-
-    if(selectedPackages.has(id)) {
-
-        selectedPackages.delete(id);
-
-        packageElement.classList.remove("selected");
-
-        button.textContent = "SELECT";
-
-    } else {
-
-        selectedPackages.add(id);
-
-        packageElement.classList.add("selected");
-
-        button.textContent = "SELECTED";
-    }
-}
-
-
-/* =========================================================
+/* =====================================================
    CANVAS
-========================================================= */
+===================================================== */
 
 const canvas =
-    document.getElementById("gameCanvas");
+    document.getElementById("canvas");
 
 const ctx =
     canvas.getContext("2d");
@@ -770,43 +634,153 @@ let W = 0;
 let H = 0;
 
 
-function resizeCanvas() {
+function resize() {
 
     const dpr =
-        Math.min(window.devicePixelRatio || 1,2);
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
 
     W = window.innerWidth;
     H = window.innerHeight;
 
-    canvas.width = W*dpr;
-    canvas.height = H*dpr;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
 
-    canvas.style.width = W+"px";
-    canvas.style.height = H+"px";
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
 
     ctx.setTransform(
-        dpr,0,0,dpr,0,0
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
     );
+
+    draw();
 }
+
 
 window.addEventListener(
     "resize",
-    resizeCanvas
+    resize
 );
 
 
-/* =========================================================
+/* =====================================================
+   CARGO
+===================================================== */
+
+const cargo = [
+
+    {
+        id:"ramen",
+        name:"NEON RAMEN",
+        destination:"north",
+        x:.80,
+        y:.20,
+        damageRate:.7,
+        reward:1200
+    },
+
+    {
+        id:"medicine",
+        name:"MEDICAL CHIP",
+        destination:"east",
+        x:.80,
+        y:.80,
+        damageRate:1.4,
+        reward:2200
+    },
+
+    {
+        id:"component",
+        name:"CYBER COMPONENT",
+        destination:"south",
+        x:.20,
+        y:.80,
+        damageRate:.35,
+        reward:1500
+    }
+
+];
+
+
+/* =====================================================
    MAP
-========================================================= */
+===================================================== */
 
-let roads = [];
+/*
+    도시의 도로.
 
-let destinations = [];
+    숫자는 화면 크기에 대한 비율이다.
+*/
 
-let startPoint = {
-    x:0.08,
-    y:0.50
-};
+const roads = [
+
+    [
+        [.08,.20],
+        [.20,.20],
+        [.35,.20],
+        [.50,.20],
+        [.65,.20],
+        [.80,.20],
+        [.92,.20]
+    ],
+
+    [
+        [.08,.50],
+        [.20,.50],
+        [.35,.50],
+        [.50,.50],
+        [.65,.50],
+        [.80,.50],
+        [.92,.50]
+    ],
+
+    [
+        [.08,.80],
+        [.20,.80],
+        [.35,.80],
+        [.50,.80],
+        [.65,.80],
+        [.80,.80],
+        [.92,.80]
+    ],
+
+    [
+        [.20,.08],
+        [.20,.20],
+        [.20,.50],
+        [.20,.80],
+        [.20,.92]
+    ],
+
+    [
+        [.50,.08],
+        [.50,.20],
+        [.50,.50],
+        [.50,.80],
+        [.50,.92]
+    ],
+
+    [
+        [.80,.08],
+        [.80,.20],
+        [.80,.50],
+        [.80,.80],
+        [.80,.92]
+    ]
+
+];
+
+
+/* =====================================================
+   GAME STATE
+===================================================== */
 
 let route = [];
 
@@ -818,362 +792,140 @@ let planning = true;
 
 let delivering = false;
 
-let deliveryStartTime = 0;
+let deliveryIndex = 0;
 
-let finalTime = 0;
+let deliveryStart = 0;
+
+let deliveryElapsed = 0;
 
 let damage = 0;
 
-let delivered = new Set();
+let deliveredCargo = new Set();
 
-let eventsTriggered = new Set();
-
-
-function createMap() {
-
-    roads = [
-
-        [[0.08,0.20],
-         [0.35,0.20],
-         [0.65,0.20],
-         [0.92,0.20]],
-
-        [[0.08,0.50],
-         [0.35,0.50],
-         [0.65,0.50],
-         [0.92,0.50]],
-
-        [[0.08,0.80],
-         [0.35,0.80],
-         [0.65,0.80],
-         [0.92,0.80]],
-
-        [[0.20,0.08],
-         [0.20,0.20],
-         [0.20,0.50],
-         [0.20,0.80],
-         [0.20,0.92]],
-
-        [[0.50,0.08],
-         [0.50,0.20],
-         [0.50,0.50],
-         [0.50,0.80],
-         [0.50,0.92]],
-
-        [[0.80,0.08],
-         [0.80,0.20],
-         [0.80,0.50],
-         [0.80,0.80],
-         [0.80,0.92]]
-    ];
+let triggeredEvents = new Set();
 
 
-    destinations = [];
+const start = {
+    x:.08,
+    y:.50
+};
 
-    selectedPackages.forEach(id => {
 
-        const d =
-            cargoData[id].destination;
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
-        let point = null;
+function init() {
 
-        if(d === "north")
-            point = [0.80,0.20];
+    resize();
 
-        if(d === "east")
-            point = [0.80,0.80];
+    updateHUD();
 
-        if(d === "south")
-            point = [0.20,0.80];
-
-        if(d === "west")
-            point = [0.20,0.20];
-
-        if(d === "center")
-            point = [0.50,0.50];
-
-        if(d === "southeast")
-            point = [0.80,0.80];
-
-        if(d === "industrial")
-            point = [0.20,0.50];
-
-        if(d === "corporate")
-            point = [0.50,0.20];
-
-        destinations.push({
-
-            x:point[0],
-            y:point[1],
-
-            package:id,
-
-            name:d
-        });
-    });
+    draw();
 }
 
+init();
 
-/* =========================================================
-   DRAW MAP
-========================================================= */
 
-function drawMap() {
+/* =====================================================
+   FIND NEAREST ROAD
+===================================================== */
 
-    ctx.clearRect(
-        0,0,W,H
-    );
-
-    ctx.fillStyle = "#080910";
-
-    ctx.fillRect(
-        0,0,W,H
-    );
-
-
-    /* city blocks */
-
-    for(let x=0;x<W;x+=42) {
-
-        for(let y=0;y<H;y+=42) {
-
-            const nearRoadX =
-                [0.2,0.5,0.8]
-                .some(v =>
-                    Math.abs(x/W-v)<0.075
-                );
-
-            const nearRoadY =
-                [0.2,0.5,0.8]
-                .some(v =>
-                    Math.abs(y/H-v)<0.075
-                );
-
-            if(nearRoadX || nearRoadY)
-                continue;
-
-            ctx.fillStyle =
-                ((x+y)/42)%2===0
-                ? "#111521"
-                : "#0d111b";
-
-            ctx.fillRect(
-                x+2,
-                y+2,
-                36,
-                36
-            );
-        }
-    }
-
-
-    /* roads */
-
-    roads.forEach(path => {
-
-        ctx.beginPath();
-
-        path.forEach((p,i)=>{
-
-            const x=p[0]*W;
-            const y=p[1]*H;
-
-            if(i===0)
-                ctx.moveTo(x,y);
-            else
-                ctx.lineTo(x,y);
-        });
-
-        ctx.lineWidth=30;
-        ctx.strokeStyle="#252a36";
-        ctx.stroke();
-
-        ctx.lineWidth=2;
-        ctx.strokeStyle="#414858";
-        ctx.stroke();
-    });
-
-
-    /* route */
-
-    if(route.length>1) {
-
-        ctx.beginPath();
-
-        route.forEach((p,i)=>{
-
-            const x=p.x*W;
-            const y=p.y*H;
-
-            if(i===0)
-                ctx.moveTo(x,y);
-            else
-                ctx.lineTo(x,y);
-        });
-
-        ctx.lineWidth=6;
-
-        ctx.strokeStyle =
-            delivering
-            ? "#ff3c91"
-            : "#63f5ff";
-
-        ctx.shadowBlur=10;
-
-        ctx.shadowColor =
-            delivering
-            ? "#ff3c91"
-            : "#63f5ff";
-
-        ctx.stroke();
-
-        ctx.shadowBlur=0;
-    }
-
-
-    /* event marker */
-
-    ctx.fillStyle="#ffcf55";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        W*.50,
-        H*.50,
-        8,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-
-    /* destinations */
-
-    destinations.forEach(d=>{
-
-        const x=d.x*W;
-        const y=d.y*H;
-
-        ctx.fillStyle =
-            delivered.has(d.package)
-            ? "#5cff9a"
-            : "#ffcf55";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            x,y,
-            12,
-            0,
-            Math.PI*2
-        );
-
-        ctx.fill();
-
-        ctx.fillStyle="#080910";
-
-        ctx.font="bold 10px Arial";
-        ctx.textAlign="center";
-        ctx.textBaseline="middle";
-
-        ctx.fillText(
-            delivered.has(d.package)
-            ? "✓"
-            : "!",
-            x,y
-        );
-    });
-
-
-    /* start */
-
-    ctx.fillStyle="#63f5ff";
-
-    ctx.beginPath();
-
-    ctx.arc(
-        startPoint.x*W,
-        startPoint.y*H,
-        11,
-        0,
-        Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.fillStyle="#080910";
-
-    ctx.font="bold 9px Arial";
-    ctx.textAlign="center";
-    ctx.textBaseline="middle";
-
-    ctx.fillText(
-        "S",
-        startPoint.x*W,
-        startPoint.y*H
-    );
-}
-
-
-/* =========================================================
-   ROAD SNAP
-========================================================= */
-
-function nearestRoadPoint(x,y) {
+function nearestRoad(x,y) {
 
     let best = null;
+
     let bestDistance = Infinity;
 
-    roads.forEach(path=>{
 
-        for(let i=0;i<path.length-1;i++){
+    for(
+        let r=0;
+        r<roads.length;
+        r++
+    ) {
 
-            const a={
+        const path =
+            roads[r];
+
+
+        for(
+            let i=0;
+            i<path.length-1;
+            i++
+        ) {
+
+            const a = {
+
                 x:path[i][0]*W,
                 y:path[i][1]*H
+
             };
 
-            const b={
+
+            const b = {
+
                 x:path[i+1][0]*W,
                 y:path[i+1][1]*H
+
             };
 
-            const dx=b.x-a.x;
-            const dy=b.y-a.y;
 
-            const len2=
+            const dx =
+                b.x-a.x;
+
+            const dy =
+                b.y-a.y;
+
+
+            const lengthSquared =
                 dx*dx+dy*dy;
 
-            let t=
-                ((x-a.x)*dx+
-                 (y-a.y)*dy)/len2;
 
-            t=Math.max(
-                0,
-                Math.min(1,t)
-            );
+            let t =
+                (
+                    (x-a.x)*dx +
+                    (y-a.y)*dy
+                ) /
+                lengthSquared;
 
-            const px=a.x+dx*t;
-            const py=a.y+dy*t;
 
-            const dist=
+            t =
+                Math.max(
+                    0,
+                    Math.min(1,t)
+                );
+
+
+            const px =
+                a.x+dx*t;
+
+            const py =
+                a.y+dy*t;
+
+
+            const distance =
                 Math.hypot(
                     x-px,
                     y-py
                 );
 
-            if(dist<bestDistance){
 
-                bestDistance=dist;
+            if(
+                distance <
+                bestDistance
+            ) {
 
-                best={
-                    x:px,
-                    y:py
+                bestDistance =
+                    distance;
+
+                best = {
+                    x:px/W,
+                    y:py/H
                 };
             }
         }
-    });
+    }
+
 
     return {
         point:best,
@@ -1182,122 +934,208 @@ function nearestRoadPoint(x,y) {
 }
 
 
-/* =========================================================
-   ROUTE DRAWING
-========================================================= */
+/* =====================================================
+   POINTER POSITION
+===================================================== */
 
-function getPointer(e){
+function pointerPosition(e) {
 
     const rect =
         canvas.getBoundingClientRect();
 
-    let x,y;
 
-    if(e.touches){
+    let x;
+    let y;
 
-        x=e.touches[0].clientX;
-        y=e.touches[0].clientY;
 
-    }else{
+    if(e.touches) {
+
+        x =
+            e.touches[0].clientX;
+
+        y =
+            e.touches[0].clientY;
+
+    } else {
 
         x=e.clientX;
         y=e.clientY;
     }
 
+
     return {
+
         x:x-rect.left,
         y:y-rect.top
+
     };
 }
 
 
-function pointerDown(e){
+/* =====================================================
+   START ROUTE
+===================================================== */
+
+function pointerDown(e) {
 
     e.preventDefault();
+
 
     if(!planning)
         return;
 
-    const p=getPointer(e);
 
-    const sx=startPoint.x*W;
-    const sy=startPoint.y*H;
+    const p =
+        pointerPosition(e);
 
-    if(Math.hypot(
-        p.x-sx,
-        p.y-sy
-    )<55){
 
-        drawing=true;
+    const sx =
+        start.x*W;
 
-        route=[
-            {
-                x:startPoint.x,
-                y:startPoint.y
-            }
-        ];
+    const sy =
+        start.y*H;
 
-        routeDistance=0;
 
-        updateHUD();
+    /*
+       반드시 출발점 근처에서
+       경로를 시작해야 한다.
+    */
+
+    if(
+        Math.hypot(
+            p.x-sx,
+            p.y-sy
+        ) > 50
+    ) {
+
+        return;
     }
+
+
+    drawing=true;
+
+    route=[{
+        x:start.x,
+        y:start.y
+    }];
+
+
+    routeDistance=0;
+
+    deliveredCargo.clear();
+
+    updateCargoUI();
+
+    updateHUD();
+
+    draw();
 }
 
 
-function pointerMove(e){
+/* =====================================================
+   DRAW ROUTE
+===================================================== */
+
+function pointerMove(e) {
 
     e.preventDefault();
 
-    if(!drawing || !planning)
+
+    if(
+        !drawing ||
+        !planning
+    ) {
+
         return;
+    }
 
-    const p=getPointer(e);
 
-    const snap =
-        nearestRoadPoint(
+    const p =
+        pointerPosition(e);
+
+
+    const road =
+        nearestRoad(
             p.x,
             p.y
         );
 
-    if(!snap.point)
+
+    /*
+       손가락이 도로에서
+       너무 멀리 떨어지면 무시
+    */
+
+    if(
+        road.distance > 38
+    ) {
+
         return;
+    }
 
-    if(snap.distance>34)
-        return;
 
-    const nx=snap.point.x/W;
-    const ny=snap.point.y/H;
+    const point =
+        road.point;
 
-    const last=
-        route[route.length-1];
 
-    const movement=
+    const last =
+        route[
+            route.length-1
+        ];
+
+
+    const distance =
         Math.hypot(
-            (nx-last.x)*W,
-            (ny-last.y)*H
+            (point.x-last.x)*W,
+            (point.y-last.y)*H
         );
 
-    if(movement<2)
+
+    /*
+       너무 짧은 이동은
+       점을 추가하지 않는다.
+    */
+
+    if(distance < 3)
         return;
 
-    route.push({
-        x:nx,
-        y:ny
-    });
 
-    routeDistance+=movement;
+    route.push(point);
+
+    routeDistance += distance;
+
+
+    /*
+       목적지 도달 여부
+    */
+
+    checkPlanningDestinations(
+        point
+    );
+
 
     updateHUD();
 
-    checkRouteDestinations();
+    updateDeliverButton();
+
+    draw();
 }
 
 
-function pointerUp(){
+/* =====================================================
+   STOP DRAWING
+===================================================== */
+
+function pointerUp(e) {
+
+    if(e)
+        e.preventDefault();
 
     drawing=false;
 
-    checkDeliverReady();
+    updateDeliverButton();
+
+    draw();
 }
 
 
@@ -1315,8 +1153,10 @@ canvas.addEventListener(
 
 canvas.addEventListener(
     "touchend",
-    pointerUp
+    pointerUp,
+    {passive:false}
 );
+
 
 canvas.addEventListener(
     "mousedown",
@@ -1334,135 +1174,161 @@ canvas.addEventListener(
 );
 
 
-/* =========================================================
-   DESTINATION CHECK WHILE PLANNING
-========================================================= */
+/* =====================================================
+   DESTINATION CHECK
+===================================================== */
 
-function checkRouteDestinations(){
+function checkPlanningDestinations(point) {
 
-    destinations.forEach(d=>{
+    cargo.forEach(item => {
 
-        if(delivered.has(d.package))
+        if(
+            deliveredCargo.has(
+                item.id
+            )
+        ) {
+
             return;
-
-        const last=
-            route[route.length-1];
-
-        const dist=
-            Math.hypot(
-                last.x-d.x,
-                last.y-d.y
-            );
-
-        if(dist<0.055){
-
-            delivered.add(
-                d.package
-            );
-
-            updateHUD();
         }
+
+
+        const distance =
+            Math.hypot(
+                point.x-item.x,
+                point.y-item.y
+            );
+
+
+        if(distance < .045) {
+
+            deliveredCargo.add(
+                item.id
+            );
+
+            updateCargoUI();
+        }
+
     });
+
 }
 
 
-/* =========================================================
-   CLEAR
-========================================================= */
+/* =====================================================
+   DELIVERY BUTTON
+===================================================== */
 
-function clearRoute(){
+function updateDeliverButton() {
+
+    const button =
+        document.getElementById(
+            "deliverButton"
+        );
+
+
+    const allVisited =
+        deliveredCargo.size ===
+        cargo.length;
+
+
+    button.disabled =
+        !allVisited ||
+        route.length < 2 ||
+        delivering;
+}
+
+
+/* =====================================================
+   CLEAR ROUTE
+===================================================== */
+
+function clearRoute() {
 
     if(!planning)
         return;
+
 
     route=[];
 
     routeDistance=0;
 
-    delivered.clear();
+    deliveredCargo.clear();
+
+    updateCargoUI();
+
+    updateDeliverButton();
 
     updateHUD();
 
-    checkDeliverReady();
+    draw();
 }
 
 
-/* =========================================================
-   DELIVER READY
-========================================================= */
+/* =====================================================
+   START DELIVERY
+===================================================== */
 
-function checkDeliverReady(){
+function startDelivery() {
 
-    if(route.length<2){
+    if(!planning)
+        return;
 
-        document.getElementById(
-            "deliverButton"
-        ).disabled=true;
+
+    if(
+        deliveredCargo.size !==
+        cargo.length
+    ) {
 
         return;
     }
 
-    /*
-       모든 목적지를 방문했는지 확인
-    */
-
-    const allDelivered =
-        delivered.size === destinations.length;
-
-    document.getElementById(
-        "deliverButton"
-    ).disabled=!allDelivered;
-}
-
-
-/* =========================================================
-   DELIVERY
-========================================================= */
-
-let deliveryProgress=0;
-
-let lastDeliveryPoint=0;
-
-
-function startDeliveryRun(){
-
-    if(delivering)
-        return;
-
-    if(delivered.size!==destinations.length)
-        return;
 
     planning=false;
+
     delivering=true;
+
+    deliveryIndex=0;
+
+    deliveryStart=
+        performance.now();
+
+    damage=0;
+
+
+    document.getElementById(
+        "clearButton"
+    ).disabled=true;
+
 
     document.getElementById(
         "deliverButton"
     ).disabled=true;
 
+
     document.getElementById(
-        "instruction"
-    ).textContent=
-        "배달 중... 계획한 경로를 따라 이동합니다.";
+        "modeMessage"
+    ).textContent =
+        "계획한 경로를 따라 자동으로 배달합니다";
+
+
+    /*
+       팝업 대신
+       상단의 작은 상태 표시만 사용
+    */
 
     document.getElementById(
         "deliveryStatus"
     ).style.display="block";
 
+
     /*
-       계획 단계에서 계산된 목적지 방문 상태를
-       다시 초기화한다.
+       실제 배송 시작 전
+       배송 완료 표시를 초기화
     */
 
-    delivered.clear();
+    deliveredCargo.clear();
 
-    damage=0;
+    updateCargoUI();
 
-    deliveryStartTime=
-        performance.now();
-
-    deliveryProgress=0;
-
-    lastDeliveryPoint=0;
 
     requestAnimationFrame(
         deliveryLoop
@@ -1470,71 +1336,90 @@ function startDeliveryRun(){
 }
 
 
-function deliveryLoop(now){
+/* =====================================================
+   DELIVERY LOOP
+===================================================== */
+
+function deliveryLoop(now) {
 
     if(!delivering)
         return;
 
-    const elapsedTime=
-        (now-deliveryStartTime)/1000;
+
+    deliveryElapsed =
+        (now-deliveryStart)/1000;
+
 
     /*
-       전체 경로를 따라 이동하는 속도
+       route의 한 점씩 따라간다.
+
+       실제 게임에서는 이 값을 더 부드럽게
+       보간(interpolation)할 수 있다.
     */
 
     const speed =
-        115;
+        150;
 
-    deliveryProgress +=
-        speed * 0.016;
 
-    const targetIndex=
-        Math.floor(
-            deliveryProgress
-        );
+    const moveAmount =
+        speed *
+        0.016;
 
-    if(targetIndex>=route.length){
+
+    deliveryIndex +=
+        moveAmount /
+        10;
+
+
+    if(
+        deliveryIndex >=
+        route.length-1
+    ) {
 
         finishDelivery();
 
         return;
     }
 
-    /*
-       현재 위치
-    */
 
-    const point=
-        route[targetIndex];
+    const current =
+        route[
+            Math.floor(
+                deliveryIndex
+            )
+        ];
 
-    /*
-       경로 이동에 따른 손상
-    */
-
-    if(targetIndex>lastDeliveryPoint){
-
-        const segment =
-            targetIndex-lastDeliveryPoint;
-
-        calculateDamage(segment);
-
-        checkDeliveryAtPoint(
-            point
-        );
-
-        lastDeliveryPoint=
-            targetIndex;
-    }
 
     /*
-       부드러운 이동
+       배송 중 손상 계산
     */
 
-    drawDeliveryPosition(
-        targetIndex
+    const sensitivity =
+        getAverageDamageRate();
+
+
+    damage +=
+        moveAmount *
+        .003 *
+        sensitivity;
+
+
+    /*
+       이벤트 확인
+    */
+
+    checkDeliveryEvent(
+        current
     );
 
+
+    drawDelivery(
+        deliveryIndex
+    );
+
+
     updateHUD();
+
 
     requestAnimationFrame(
         deliveryLoop
@@ -1542,166 +1427,133 @@ function deliveryLoop(now){
 }
 
 
-/* =========================================================
-   DELIVERY DAMAGE
-========================================================= */
+/* =====================================================
+   AVERAGE DAMAGE
+===================================================== */
 
-function calculateDamage(distance){
+function getAverageDamageRate() {
 
-    let sensitivity=0;
+    let total=0;
 
-    selectedPackages.forEach(id=>{
 
-        sensitivity +=
-            cargoData[id].durability;
+    cargo.forEach(item => {
+
+        total +=
+            item.damageRate;
+
     });
 
-    if(selectedPackages.size>0)
-        sensitivity/=selectedPackages.size;
 
-    damage +=
-        distance *
-        0.015 *
-        sensitivity;
+    return total /
+        cargo.length;
 }
 
 
-/* =========================================================
-   DELIVERY DESTINATIONS
-========================================================= */
+/* =====================================================
+   DELIVERY EVENT
+===================================================== */
 
-function checkDeliveryAtPoint(point){
+function checkDeliveryEvent(point) {
 
-    destinations.forEach(d=>{
+    const eventX=.50;
+    const eventY=.50;
 
-        if(delivered.has(d.package))
-            return;
 
-        const dist=
-            Math.hypot(
-                point.x-d.x,
-                point.y-d.y
-            );
+    if(
+        triggeredEvents.has(
+            "center"
+        )
+    ) {
 
-        if(dist<0.04){
+        return;
+    }
 
-            delivered.add(
-                d.package
-            );
 
-            document.getElementById(
-                "deliveryStatusText"
-            ).textContent=
-                cargoData[d.package].name+
-                " 배송 완료!";
-        }
-    });
+    const distance =
+        Math.hypot(
+            point.x-eventX,
+            point.y-eventY
+        );
 
-    checkDeliveryEvent(point);
+
+    if(distance < .035) {
+
+        triggeredEvents.add(
+            "center"
+        );
+
+
+        damage += 6;
+
+
+        showEvent(
+            "⚡ ELECTROMAGNETIC STORM",
+            "강한 전자기파가 도시를 통과했습니다.<br><br>" +
+            "배송품 일부가 영향을 받았습니다."
+        );
+    }
 }
 
 
-/* =========================================================
-   EVENTS
-========================================================= */
+/* =====================================================
+   DRAW DELIVERY
+===================================================== */
 
-function checkDeliveryEvent(point){
+function drawDelivery(index) {
 
-    const events=[
-        {
-            id:"center",
-            x:.50,
-            y:.50,
-            title:"⚡ ELECTROMAGNETIC STORM",
-            text:
-            "강한 전자기파가 도시를 통과했습니다.<br>" +
-            "전자 장비가 약간 손상되었습니다.",
-            damage:7
-        }
-    ];
-
-    events.forEach(ev=>{
-
-        if(eventsTriggered.has(ev.id))
-            return;
-
-        const dist=
-            Math.hypot(
-                point.x-ev.x,
-                point.y-ev.y
-            );
-
-        if(dist<.04){
-
-            eventsTriggered.add(
-                ev.id
-            );
-
-            damage+=ev.damage;
-
-            showEvent(
-                ev.title,
-                ev.text
-            );
-        }
-    });
-}
+    draw();
 
 
-function showEvent(title,text){
-
-    document.getElementById(
-        "eventTitle"
-    ).textContent=title;
-
-    document.getElementById(
-        "eventText"
-    ).innerHTML=text;
-
-    document.getElementById(
-        "eventOverlay"
-    ).style.display="flex";
-}
+    const i =
+        Math.floor(index);
 
 
-function closeEvent(){
+    const next =
+        Math.min(
+            i+1,
+            route.length-1
+        );
 
-    document.getElementById(
-        "eventOverlay"
-    ).style.display="none";
-}
+
+    const a =
+        route[i];
+
+    const b =
+        route[next];
 
 
-/* =========================================================
-   DELIVERY POSITION
-========================================================= */
+    const t =
+        index-i;
 
-function drawDeliveryPosition(index){
+
+    const x =
+        a.x+
+        (b.x-a.x)*t;
+
+
+    const y =
+        a.y+
+        (b.y-a.y)*t;
+
 
     /*
-       실제 게임에서는 여기에서
-       배달 오토바이 스프라이트를 그리면 된다.
+       배달원
     */
 
-    drawMap();
+    ctx.save();
 
-    const p=route[
-        Math.min(
-            index,
-            route.length-1
-        )
-    ];
 
     ctx.fillStyle="#ff3c91";
 
-    ctx.shadowBlur=15;
     ctx.shadowColor="#ff3c91";
+    ctx.shadowBlur=16;
+
 
     ctx.beginPath();
 
     ctx.arc(
-        p.x*W,
-        p.y*H,
+        x*W,
+        y*H,
         9,
         0,
         Math.PI*2
@@ -1709,63 +1561,125 @@ function drawDeliveryPosition(index){
 
     ctx.fill();
 
+
     ctx.shadowBlur=0;
+
+
+    /*
+       헤드라이트
+    */
+
+    ctx.fillStyle="#ffffff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x*W+5,
+        y*H-3,
+        3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
 }
 
 
-/* =========================================================
-   FINISH
-========================================================= */
+/* =====================================================
+   EVENT UI
+===================================================== */
 
-function finishDelivery(){
+function showEvent(
+    title,
+    text
+) {
+
+    document.getElementById(
+        "eventTitle"
+    ).textContent=title;
+
+
+    document.getElementById(
+        "eventText"
+    ).innerHTML=text;
+
+
+    document.getElementById(
+        "event"
+    ).style.display="block";
+}
+
+
+function closeEvent() {
+
+    document.getElementById(
+        "event"
+    ).style.display="none";
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishDelivery() {
 
     delivering=false;
 
-    finalTime=
-        (performance.now()-
-         deliveryStartTime)/1000;
 
-    /*
-       배송품 손상은 최대 100%
-    */
+    document.getElementById(
+        "deliveryStatus"
+    ).style.display="none";
 
-    damage=
+
+    damage =
         Math.min(
             100,
             damage
         );
 
+
     /*
-       경로 효율
-       현재 프로토타입에서는
-       700m를 기준으로 계산
+       경로 효율.
+
+       테스트용 기준거리.
     */
 
-    const efficiency=
+    const idealDistance=850;
+
+
+    const efficiency =
         Math.max(
             0,
             Math.min(
                 100,
-                100-
+                100 -
                 Math.max(
                     0,
-                    routeDistance-700
-                )/10
+                    routeDistance-
+                    idealDistance
+                )/8
             )
         );
 
 
     /*
-       보상
+       기본 보상
     */
 
     let reward=0;
 
-    selectedPackages.forEach(id=>{
+
+    cargo.forEach(item => {
 
         reward +=
-            cargoData[id].reward;
+            item.reward;
+
     });
+
 
     reward *=
         Math.max(
@@ -1773,165 +1687,495 @@ function finishDelivery(){
             1-damage/100
         );
 
+
     reward *=
         efficiency/100;
 
 
     /*
-       등급
+       점수
     */
 
-    const score=
-        efficiency*.5+
-        (100-damage)*.35+
-        Math.max(
-            0,
-            100-finalTime
-        )*.15;
+    const score =
+        efficiency*.55+
+        (100-damage)*.45;
+
 
     let grade="D";
 
-    if(score>=90)
+
+    if(score>=92)
         grade="S";
-    else if(score>=80)
+
+    else if(score>=82)
         grade="A";
-    else if(score>=65)
+
+    else if(score>=68)
         grade="B";
-    else if(score>=50)
+
+    else if(score>=52)
         grade="C";
 
 
     /*
-       결과 표시
+       결과
     */
 
     document.getElementById(
         "resultDistance"
-    ).textContent=
-        Math.round(routeDistance)+"m";
+    ).textContent =
+        Math.round(
+            routeDistance
+        )+"m";
+
 
     document.getElementById(
         "resultTime"
-    ).textContent=
-        finalTime.toFixed(1)+"s";
+    ).textContent =
+        deliveryElapsed.toFixed(1)+"s";
+
 
     document.getElementById(
         "resultDamage"
-    ).textContent=
+    ).textContent =
         damage.toFixed(1)+"%";
+
 
     document.getElementById(
         "resultEfficiency"
-    ).textContent=
-        Math.round(efficiency)+"%";
+    ).textContent =
+        Math.round(
+            efficiency
+        )+"%";
+
 
     document.getElementById(
-        "resultMoney"
-    ).textContent=
+        "resultReward"
+    ).textContent =
         "¥ "+
-        Math.round(reward)
-        .toLocaleString();
+        Math.round(
+            reward
+        ).toLocaleString();
+
 
     document.getElementById(
         "grade"
-    ).textContent=
-        grade;
+    ).textContent=grade;
 
 
-    setTimeout(()=>{
-
-        document.getElementById(
-            "deliveryStatus"
-        ).style.display="none";
-
-        showScreen(
-            "resultScreen"
-        );
-
-    },700);
+    document.getElementById(
+        "result"
+    ).style.display="flex";
 }
 
 
-/* =========================================================
+/* =====================================================
    HUD
-========================================================= */
+===================================================== */
 
-function updateHUD(){
+function updateHUD() {
 
     document.getElementById(
         "distance"
-    ).textContent=
-        Math.round(routeDistance)+"m";
+    ).textContent =
+        Math.round(
+            routeDistance
+        )+"m";
+
 
     document.getElementById(
         "cargoCount"
-    ).textContent=
-        delivered.size+
+    ).textContent =
+        deliveredCargo.size+
         "/"+
-        destinations.length;
+        cargo.length;
+
 
     document.getElementById(
         "damage"
-    ).textContent=
+    ).textContent =
         damage.toFixed(1)+"%";
 }
 
 
-/* =========================================================
-   START PLANNING
-========================================================= */
+/* =====================================================
+   CARGO UI
+===================================================== */
 
-function startPlanning(){
+function updateCargoUI() {
 
-    if(selectedPackages.size===0){
+    cargo.forEach(item => {
 
-        alert(
-            "배달품을 하나 이상 선택해주세요."
-        );
+        const element =
+            document.getElementById(
+                "cargo-"+item.id
+            );
 
-        return;
-    }
 
-    showScreen(
-        "gameScreen"
-    );
+        if(
+            deliveredCargo.has(
+                item.id
+            )
+        ) {
 
-    resizeCanvas();
+            element.classList.add(
+                "done"
+            );
 
-    createMap();
+        } else {
 
-    route=[];
+            element.classList.remove(
+                "done"
+            );
+        }
 
-    routeDistance=0;
-
-    damage=0;
-
-    delivered.clear();
-
-    eventsTriggered.clear();
-
-    planning=true;
-
-    delivering=false;
-
-    document.getElementById(
-        "instruction"
-    ).textContent=
-        "손가락으로 도로를 따라 경로를 그리세요";
-
-    updateHUD();
-
-    drawMap();
+    });
 }
 
 
-/* =========================================================
-   INITIAL
-========================================================= */
+/* =====================================================
+   DRAW MAP
+===================================================== */
 
-resizeCanvas();
+function draw() {
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /*
+       배경
+    */
+
+    ctx.fillStyle="#070910";
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    /*
+       도시 블록
+    */
+
+    for(
+        let x=0;
+        x<W;
+        x+=42
+    ) {
+
+        for(
+            let y=0;
+            y<H;
+            y+=42
+        ) {
+
+            const nearRoadX =
+                Math.min(
+                    Math.abs(x/W-.2),
+                    Math.abs(x/W-.5),
+                    Math.abs(x/W-.8)
+                ) < .07;
+
+
+            const nearRoadY =
+                Math.min(
+                    Math.abs(y/H-.2),
+                    Math.abs(y/H-.5),
+                    Math.abs(y/H-.8)
+                ) < .07;
+
+
+            if(
+                nearRoadX ||
+                nearRoadY
+            )
+                continue;
+
+
+            ctx.fillStyle =
+                ((x+y)/42)%2===0
+                ? "#111521"
+                : "#0d111a";
+
+
+            ctx.fillRect(
+                x+2,
+                y+2,
+                36,
+                36
+            );
+        }
+    }
+
+
+    /*
+       도로
+    */
+
+    roads.forEach(path => {
+
+        ctx.beginPath();
+
+
+        path.forEach(
+            (point,index) => {
+
+                const x =
+                    point[0]*W;
+
+                const y =
+                    point[1]*H;
+
+
+                if(index===0)
+                    ctx.moveTo(x,y);
+
+                else
+                    ctx.lineTo(x,y);
+            }
+        );
+
+
+        ctx.lineWidth=32;
+
+        ctx.strokeStyle=
+            "#252a36";
+
+        ctx.stroke();
+
+
+        ctx.lineWidth=2;
+
+        ctx.strokeStyle=
+            "#454b5a";
+
+        ctx.stroke();
+    });
+
+
+    /*
+       이벤트 위치
+    */
+
+    ctx.fillStyle="#ffcf55";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        W*.50,
+        H*.50,
+        8,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+       ★ 핵심 ★
+
+       플레이어가 계획한 경로를
+       항상 그린다.
+    */
+
+    if(route.length>1) {
+
+        ctx.save();
+
+
+        ctx.beginPath();
+
+
+        route.forEach(
+            (point,index) => {
+
+                const x =
+                    point.x*W;
+
+                const y =
+                    point.y*H;
+
+
+                if(index===0)
+                    ctx.moveTo(x,y);
+
+                else
+                    ctx.lineTo(x,y);
+            }
+        );
+
+
+        /*
+           바깥쪽 빛
+        */
+
+        ctx.lineWidth=9;
+
+        ctx.strokeStyle=
+            "rgba(99,245,255,.18)";
+
+        ctx.stroke();
+
+
+        /*
+           실제 경로 선
+        */
+
+        ctx.lineWidth=5;
+
+        ctx.strokeStyle=
+            delivering
+            ? "#ff3c91"
+            : "#63f5ff";
+
+
+        ctx.shadowColor=
+            delivering
+            ? "#ff3c91"
+            : "#63f5ff";
+
+
+        ctx.shadowBlur=10;
+
+        ctx.stroke();
+
+
+        ctx.shadowBlur=0;
+
+        ctx.restore();
+    }
+
+
+    /*
+       배송지
+    */
+
+    cargo.forEach(item => {
+
+        const x =
+            item.x*W;
+
+        const y =
+            item.y*H;
+
+
+        const done =
+            deliveredCargo.has(
+                item.id
+            );
+
+
+        ctx.fillStyle =
+            done
+            ? "#5cff9a"
+            : "#ffcf55";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            13,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle="#080910";
+
+        ctx.font=
+            "bold 10px Arial";
+
+        ctx.textAlign="center";
+
+        ctx.textBaseline="middle";
+
+
+        ctx.fillText(
+            done ? "✓" : "!",
+            x,
+            y
+        );
+    });
+
+
+    /*
+       출발점
+    */
+
+    ctx.fillStyle="#63f5ff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        start.x*W,
+        start.y*H,
+        12,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle="#080910";
+
+    ctx.font=
+        "bold 10px Arial";
+
+    ctx.textAlign="center";
+
+    ctx.textBaseline="middle";
+
+    ctx.fillText(
+        "S",
+        start.x*W,
+        start.y*H
+    );
+
+
+    /*
+       계획 단계에서는
+       현재 출발점을 다시 표시
+    */
+
+    if(
+        planning &&
+        route.length===0
+    ) {
+
+        ctx.strokeStyle=
+            "rgba(99,245,255,.35)";
+
+        ctx.lineWidth=2;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            start.x*W,
+            start.y*H,
+            23,
+            0,
+            Math.PI*2
+        );
+
+        ctx.stroke();
+    }
+}
 
 </script>
 
 </body>
-      </html>
+</html>

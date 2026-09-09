@@ -813,10 +813,11 @@ button{
 #gameMapArea{
     position:relative;
     width:100%;
-    height:calc(100% - 196px);
-    flex:0 0 calc(100% - 196px);
+    height:auto;
+    flex:1 1 auto;
     min-height:0;
     overflow:hidden;
+    display:block;
 }
 
 #gameCanvas{
@@ -994,7 +995,6 @@ button{
 
     padding:7px;
 
-
     background:rgba(5,7,14,.82);
 
 
@@ -1016,6 +1016,7 @@ button{
 /* =====================================================
    DELIVERY STATUS
 ===================================================== */
+
 
 .delivery-status{
     display:none;
@@ -1077,6 +1078,7 @@ button{
 
     border:1px solid #303847;
 
+
     padding:8px;
 
 
@@ -1096,6 +1098,7 @@ button{
 
     margin-bottom:5px;
 }
+
 
 .cargo-hud-item{
     color:#888f9d;
@@ -1137,6 +1140,7 @@ button{
     gap:7px;
     align-items:center;
 }
+
 .game-control-group.left{width:40%;}
 .game-control-group.right{width:60%; justify-content:flex-end;}
 
@@ -1198,7 +1202,6 @@ button{
     font-size:15px;
     letter-spacing:2px;
 }
-
 .game-modal-row{
     display:flex;
     justify-content:space-between;
@@ -1241,6 +1244,7 @@ button{
 /* =====================================================
    EVENT
 ===================================================== */
+
 
 #event{
     display:none;
@@ -1303,6 +1307,7 @@ button{
 
     border:1px solid #ffcf55;
 
+
     color:#ffcf55;
 }
 
@@ -1320,7 +1325,6 @@ button{
 
     align-items:center;
     justify-content:center;
-
 
     padding:20px;
 }
@@ -1343,6 +1347,7 @@ button{
 
 .result-box h1{
     margin:0;
+
 
     text-align:center;
 
@@ -1462,7 +1467,6 @@ button{
             <div class="neon-sign neon-yellow">24H</div>
         </div>
 
-
         <div class="title-road"></div>
         <div class="title-car"></div>
         <div class="title-ground"></div>
@@ -1548,6 +1552,7 @@ button{
 
         </button>
 
+
     </div>
 
 
@@ -1568,6 +1573,7 @@ button{
 
     <div class="pad-device">
 
+
         <div class="pad-camera"></div>
 
 
@@ -1585,7 +1591,6 @@ button{
 
 
             <div class="pad-apps">
-
 
                 <button class="pad-app active-app" onclick="openDeliveryApp()">
                     <span class="app-status">READY</span>
@@ -1629,6 +1634,7 @@ button{
 
 
         </div>
+
 
         <div class="pad-home"></div>
 
@@ -1753,7 +1759,6 @@ button{
             <button class="game-modal-close" onclick="playSound('back'); closeGameModal('helpModal')">CLOSE</button>
         </div>
     </div>
-
 </section>
 
 <!-- =====================================================
@@ -1775,6 +1780,7 @@ button{
         <div
             class="grade"
             id="grade">
+
 
             A
 
@@ -1836,6 +1842,7 @@ button{
 /* =====================================================
    GAME DAY + SYNTHETIC UI SOUNDS + BGM
 ===================================================== */
+
 
 let gameDay = 1;
 let playerMoney = 10000;
@@ -1899,6 +1906,7 @@ const bgmTracks={
     rain:{name:"RAIN CIRCUIT", bpm:68, notes:[98,123,147,110,165,147,123,110]}
 };
 
+
 let currentBgm="night";
 let bgmPlaying=false;
 let bgmTimer=null;
@@ -1940,6 +1948,7 @@ function scheduleBgmStep(){
     bgmTimer=setTimeout(scheduleBgmStep,beat*1000*.86);
 }
 
+
 function startBgm(){
     initAudio();
     if(!audioCtx) return;
@@ -1960,6 +1969,7 @@ function stopBgm(){
     updateBgmUI();
 }
 
+
 function toggleBgm(){
     initAudio();
     playSound("click");
@@ -1977,7 +1987,6 @@ function setBgm(name, autoStart=true){
     }
     updateBgmUI();
 }
-
 
 function updateBgmUI(){
     const select=$("bgmSelect");
@@ -1999,7 +2008,6 @@ function updateTopGameUI(){
     if(day) day.textContent=String(gameDay).padStart(2,"0");
     if(money) money.textContent=Math.max(0,Math.floor(playerMoney)).toLocaleString();
 }
-
 function updatePadDay(){
     const el=$("padDay");
     if(el) el.textContent="DAY "+String(gameDay).padStart(2,"0");
@@ -2085,6 +2093,7 @@ const cargoData=[
         reward:5000
     }
 
+
 ];
 
 
@@ -2125,6 +2134,7 @@ const cargoHud=$("cargoHud");
 
 const clearButton=$("clearButton");
 const deliverButton=$("deliverButton");
+
 
 const eventBox=$("event");
 const eventTitle=$("eventTitle");
@@ -2187,6 +2197,7 @@ function applyGameVolumes(){
     window.sfxMasterVolume=s?Number(s.value)/100:1;
     window.bgmMasterVolume=b?Number(b.value)/100:.7;
 }
+
 document.addEventListener("input",e=>{
     if(e.target && (e.target.id==="sfxVolume" || e.target.id==="bgmVolume")){
         applyGameVolumes();
@@ -2228,6 +2239,7 @@ function showScreen(screen){
 /* =====================================================
    PAD INTERFACE
 ===================================================== */
+
 
 function showPadScreen(){
     showScreen(padScreen);
@@ -2313,6 +2325,7 @@ function exitToTitle(){
 
 
 
+
 function showCargoScreen(){
 
 
@@ -2350,6 +2363,7 @@ function renderCargo(){
 
 
             <div class="check">✓</div>
+
 
             <div class="cargo-icon">
                 ${item.icon}
@@ -2430,6 +2444,7 @@ function updateCargoSelection(){
    ROAD MAP
    각 도로를 하나의 블록으로 취급
 ===================================================== */
+
 
 /*
    road:
@@ -2512,6 +2527,7 @@ let planning=false;
 
 let delivering=false;
 
+
 let pausedByEvent=false;
 
 
@@ -2532,6 +2548,7 @@ let deliveredCargo=new Set();
 
 let triggeredEvents=new Set();
 
+
 let W=0;
 let H=0;
 
@@ -2548,26 +2565,27 @@ const ctx=canvas.getContext("2d");
 
 
 function resize(){
-
-
     const dpr=Math.min(
         window.devicePixelRatio||1,
         2
     );
 
-
-    W=window.innerWidth;
     const mapArea=document.getElementById("gameMapArea");
+
+    W=mapArea ? mapArea.clientWidth : window.innerWidth;
     H=mapArea ? mapArea.clientHeight : window.innerHeight;
 
+    if(W<=0 || H<=0){
+        requestAnimationFrame(resize);
+        return;
+    }
 
-    canvas.width=W*dpr;
-    canvas.height=H*dpr;
-
+    canvas.width=Math.round(W*dpr);
+    canvas.height=Math.round(H*dpr);
 
     canvas.style.width=W+"px";
     canvas.style.height=H+"px";
-
+    canvas.style.display="block";
 
     ctx.setTransform(
         dpr,0,0,dpr,0,0
@@ -2582,6 +2600,12 @@ window.addEventListener(
     resize
 );
 
+window.addEventListener(
+    "orientationchange",
+    ()=>{
+        requestAnimationFrame(resize);
+    }
+);
 
 
 
@@ -2591,6 +2615,7 @@ window.addEventListener(
 
 
 function getRoadPoint(road,t){
+
 
     return{
         x:road.x1+
@@ -2654,6 +2679,7 @@ function projectToRoad(road,x,y){
     };
 }
 
+
 /*
    현재 위치에서 가장 가까운 도로.
    교차로에서는 현재 도로를 우선한다.
@@ -2666,7 +2692,6 @@ function findRoad(x,y){
 
 
     for(const road of roads){
-
 
         const hit=projectToRoad(road,x,y);
 
@@ -2686,7 +2711,6 @@ function findRoad(x,y){
             bestDistance=hit.distance;
         }
     }
-
 
     return best && best.distance<=78 ? best : null;
 }
@@ -2750,7 +2774,6 @@ function pushRoutePoint(p){
     if(!p)
         return false;
 
-
     const last=route[route.length-1];
 
 
@@ -2779,6 +2802,7 @@ function getLastRoadT(){
 
     if(route.length===0)
         return null;
+
 
     const road=getRoadById(activeRoadId);
 
@@ -2812,7 +2836,6 @@ function directionFromT(previousT,currentT){
     if(Math.abs(delta)<0.002)
         return 0;
 
-
     return delta>0 ? 1 : -1;
 }
 
@@ -2832,7 +2855,6 @@ function isNearStart(hit){
 
 
 function continueOnCurrentRoad(hit){
-
 
     const lastT=getLastRoadT();
 
@@ -2897,13 +2919,13 @@ function beginFirstRoad(hit){
 
     pushRoutePoint(hit.point);
 
-
     lastPointer={x:hit.x,y:hit.y};
 
 
     checkDestinationsOnRoute();
     updateAll();
     draw();
+
 
     return true;
 }
@@ -2937,13 +2959,13 @@ function switchToNextRoad(hit){
 
     const corner=getIntersection(previous,hit.road);
 
-
     if(!corner)
         return false;
 
 
     const cx=corner.x*W;
     const cy=corner.y*H;
+
 
     /*
        새 도로는 실제 교차로 근처에서만 선택 가능.
@@ -2987,6 +3009,7 @@ function switchToNextRoad(hit){
     activeRoadDirection=
         directionFromT(cornerT,hit.t);
 
+
     pushRoutePoint(hit.point);
 
 
@@ -3005,6 +3028,7 @@ function switchToNextRoad(hit){
 /* =====================================================
    START PLANNING
 ===================================================== */
+
 
 function startRoutePlanning(){
 
@@ -3047,6 +3071,7 @@ function startRoutePlanning(){
 
     clearButton.disabled=false;
 
+
     updateCargoHud();
     updateHUD();
     updateDeliverButton();
@@ -3059,7 +3084,6 @@ function startRoutePlanning(){
 /* =====================================================
    POINTER DOWN
 ===================================================== */
-
 
 function pointerDown(e){
 
@@ -3081,12 +3105,12 @@ function pointerDown(e){
     const x=e.clientX-rect.left;
     const y=e.clientY-rect.top;
 
-
     const hit=findRoad(x,y);
 
 
     if(!hit)
         return;
+
 
     if(routeRoads.length===0){
 
@@ -3101,12 +3125,12 @@ function pointerDown(e){
         return;
     }
 
-
     /*
        드래그를 다시 시작할 때는 반드시
        현재 경로의 끝에서 시작해야 한다.
     */
     const end=route[route.length-1];
+
 
     if(
         Math.hypot(
@@ -3119,7 +3143,6 @@ function pointerDown(e){
         );
         return;
     }
-
 
     drawing=true;
     lastPointer={x,y};
@@ -3141,7 +3164,6 @@ function pointerDown(e){
 /* =====================================================
    POINTER MOVE
 ===================================================== */
-
 
 function pointerMove(e){
 
@@ -3170,6 +3192,7 @@ function pointerMove(e){
 
     const hit=findRoad(x,y);
 
+
     if(!hit)
         return;
 
@@ -3182,7 +3205,6 @@ function pointerMove(e){
             updateAll();
             draw();
         }
-
 
         return;
     }
@@ -3202,7 +3224,6 @@ function pointerMove(e){
 
 
 function pointerUp(e){
-
 
     if(e)
         e.preventDefault();
@@ -3225,13 +3246,13 @@ function pointerUp(e){
 
 
 
-
 /* =====================================================
    DESTINATION
 ===================================================== */
 
 
 function checkDestinationsOnRoute(){
+
 
     if(route.length===0)
         return;
@@ -3265,7 +3286,6 @@ function checkDestinationsOnRoute(){
                     p.y-item.y
                 )<.065
             ){
-
 
                 deliveredCargo.add(
                     item.id
@@ -3307,7 +3327,6 @@ function clearRoute(){
 
     routeDistance=0;
 
-
     deliveredCargo.clear();
 
 
@@ -3315,6 +3334,7 @@ function clearRoute(){
     activeRoadId=null;
     activeRoadDirection=0;
     lastPointer=null;
+
 
     modeMessage.textContent=
         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
@@ -3370,7 +3390,6 @@ function calculateRouteDistance(){
    DELIVER BUTTON
 ===================================================== */
 
-
 function updateDeliverButton(){
 
 
@@ -3412,7 +3431,6 @@ function updateAll(){
 
 function startDelivery(){
 
-
     playSound("deliver");
 
 
@@ -3440,6 +3458,7 @@ function startDelivery(){
 
     deliveryProgress=0;
 
+
     deliveryStart=
         performance.now();
 
@@ -3453,13 +3472,13 @@ function startDelivery(){
     clearButton.disabled=true;
     deliverButton.disabled=true;
 
-
     modeMessage.textContent=
         "계획한 경로를 따라 배송 중";
 
 
     deliveryStatus.style.display=
         "block";
+
 
     updateCargoHud();
 
@@ -3471,7 +3490,6 @@ function startDelivery(){
         deliveryLoop
     );
 }
-
 
 
 
@@ -3493,7 +3511,6 @@ function deliveryLoop(now){
        이벤트가 열린 동안
        캐릭터는 완전히 정지한다.
     */
-
 
     if(pausedByEvent){
 
@@ -3522,6 +3539,7 @@ function deliveryLoop(now){
 
 
 
+
     const dt=
         Math.min(
             .05,
@@ -3534,12 +3552,12 @@ function deliveryLoop(now){
 
     deliveryLoop.lastTime=now;
 
-
     deliveryElapsed=
         (
             now-
             deliveryStart
         )/1000;
+
 
 
 
@@ -3556,12 +3574,12 @@ function deliveryLoop(now){
 
 
 
-
     while(
         remaining>0 &&
         deliveryProgress<
         route.length-1
     ){
+
 
         const index=
             Math.floor(
@@ -3592,7 +3610,6 @@ function deliveryLoop(now){
                     b.y-a.y
                 )*H
             );
-
 
 
 
@@ -3679,7 +3696,6 @@ function deliveryLoop(now){
     updateHUD();
     updateCargoHud();
 
-
     drawDelivery();
 
 
@@ -3764,12 +3780,12 @@ function getDeliveryPosition(){
                 b.x-a.x
             )*fraction,
 
-
         y:
             a.y+
             (
                 b.y-a.y
             )*fraction
+
 
     };
 }
@@ -3784,12 +3800,12 @@ function getDeliveryPosition(){
 
 function checkDeliveryDestinations(){
 
-
     const p=
         getDeliveryPosition();
 
 
     for(const item of cargoData){
+
 
         if(
             !selectedCargo.includes(
@@ -3823,7 +3839,6 @@ function checkDeliveryDestinations(){
         }
     }
 }
-
 
 
 
@@ -3888,13 +3903,13 @@ function checkEvent(){
 
 
 
-
     if(
         Math.hypot(
             p.x-.50,
             p.y-.50
         )<.035
     ){
+
 
         triggeredEvents.add(
             "center"
@@ -3916,6 +3931,7 @@ function checkEvent(){
 
 
 
+
         showEvent(
             "⚡ ELECTROMAGNETIC STORM",
 
@@ -3929,11 +3945,11 @@ function checkEvent(){
 
 
 
-
 function showEvent(
     title,
     text
 ){
+
 
     eventTitle.textContent=
         title;
@@ -3949,11 +3965,11 @@ function showEvent(
 
 
 
-
 function closeEvent(){
 
 
     playSound("continue");
+
 
     eventBox.style.display=
         "none";
@@ -3997,6 +4013,7 @@ function finishDelivery(){
     delivering=false;
     pausedByEvent=false;
 
+
     deliveryLoop.lastTime=null;
 
 
@@ -4011,9 +4028,9 @@ function finishDelivery(){
 
 
 
-
     const ideal=
         getIdealDistance();
+
 
 
 
@@ -4049,7 +4066,6 @@ function finishDelivery(){
                 x=>x.id===id
             );
 
-
         if(item)
             reward+=item.reward;
     }
@@ -4071,10 +4087,10 @@ function finishDelivery(){
 
 
 
-
     const score=
         efficiency*.55+
         (100-damage)*.45;
+
 
 
 
@@ -4090,13 +4106,13 @@ function finishDelivery(){
     else if(score>=82)
         grade="A";
 
-
     else if(score>=68)
         grade="B";
 
 
     else if(score>=52)
         grade="C";
+
 
 
 
@@ -4110,7 +4126,6 @@ function finishDelivery(){
 
     $("resultDamage").textContent=
         damage.toFixed(1)+"%";
-
 
     $("resultEfficiency").textContent=
         Math.round(efficiency)+"%";
@@ -4131,7 +4146,6 @@ function finishDelivery(){
 
     showScreen(resultScreen);
 }
-
 
 
 
@@ -4181,6 +4195,7 @@ function getIdealDistance(){
 
 
 
+
 /* =====================================================
    HUD
 ===================================================== */
@@ -4193,7 +4208,6 @@ function updateHUD(){
         Math.round(
             routeDistance
         )+"m";
-
 
     cargoCountEl.textContent=
         deliveredCargo.size+
@@ -4244,6 +4258,7 @@ function updateCargoHud(){
 
 
 
+
         const done=
             deliveredCargo.has(
                 id
@@ -4277,13 +4292,13 @@ function updateCargoHud(){
 
 
 
-
 /* =====================================================
    TEMPORARY MESSAGE
 ===================================================== */
 
 
 let messageTimer=null;
+
 
 
 
@@ -4297,13 +4312,13 @@ function showTemporaryMessage(text){
         messageTimer
     );
 
-
     messageTimer=
         setTimeout(
             ()=>{
 
 
                 if(planning){
+
 
                     modeMessage.textContent=
                         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
@@ -4319,10 +4334,10 @@ function showTemporaryMessage(text){
 
 
 
-
 /* =====================================================
    DRAW MAP
 ===================================================== */
+
 
 function draw(){
 
@@ -4360,10 +4375,10 @@ function draw(){
 
 
 
-
     /*
        CITY BLOCKS
     */
+
 
     for(
         let x=0;
@@ -4377,7 +4392,6 @@ function draw(){
             y<H;
             y+=42
         ){
-
 
             const roadX=
                 roads.some(
@@ -4398,12 +4412,12 @@ function draw(){
                         )<.07
                 );
 
-
             if(
                 roadX||
                 roadY
             )
                 continue;
+
 
 
 
@@ -4428,6 +4442,7 @@ function draw(){
 
 
 
+
     /*
        ROADS
     */
@@ -4437,7 +4452,6 @@ function draw(){
 
 
         ctx.beginPath();
-
 
         ctx.moveTo(
             road.x1*W,
@@ -4461,11 +4475,11 @@ function draw(){
 
 
 
-
         ctx.lineWidth=2;
 
 
         ctx.strokeStyle="#4a5060";
+
 
         ctx.stroke();
 
@@ -4478,7 +4492,6 @@ function draw(){
 
 
         ctx.lineWidth=1;
-
 
         ctx.strokeStyle=
             "rgba(130,140,155,.35)";
@@ -4529,6 +4542,7 @@ function draw(){
 
     ctx.shadowColor="#ffcf55";
 
+
     ctx.shadowBlur=10;
 
 
@@ -4548,6 +4562,7 @@ function draw(){
 
 
     ctx.shadowBlur=0;
+
 
 
 
@@ -4591,6 +4606,7 @@ function draw(){
 
 
 
+
         ctx.beginPath();
 
 
@@ -4601,7 +4617,6 @@ function draw(){
             0,
             Math.PI*2
         );
-
 
         ctx.stroke();
 
@@ -4632,6 +4647,7 @@ function draw(){
 
 
 
+
         ctx.fillStyle="#080910";
 
 
@@ -4644,13 +4660,13 @@ function draw(){
 
 
 
-
         ctx.fillText(
             done?"✓":"!",
             x,
             y
         );
     }
+
 
 
 
@@ -4662,7 +4678,6 @@ function draw(){
     if(
         route.length>1
     ){
-
 
         ctx.save();
 
@@ -4686,7 +4701,6 @@ function draw(){
 
 
 
-
             if(i===0)
                 ctx.moveTo(x,y);
 
@@ -4705,7 +4719,6 @@ function draw(){
 
 
         ctx.lineWidth=12;
-
 
         ctx.strokeStyle=
             delivering
@@ -4726,7 +4739,6 @@ function draw(){
             ? "#ff3c91"
             : "#63f5ff";
 
-
         ctx.shadowColor=
             delivering
             ? "#ff3c91"
@@ -4734,6 +4746,7 @@ function draw(){
 
 
         ctx.shadowBlur=10;
+
 
         ctx.stroke();
 
@@ -4769,7 +4782,6 @@ function draw(){
 
 
 
-
     ctx.beginPath();
 
 
@@ -4789,12 +4801,12 @@ function draw(){
 
 
 
-
     ctx.fillStyle="#071016";
 
 
     ctx.font=
         "bold 10px Arial";
+
 
     ctx.textAlign="center";
     ctx.textBaseline="middle";
@@ -4807,7 +4819,6 @@ function draw(){
         sx,
         sy
     );
-
 
 
 
@@ -4827,7 +4838,6 @@ function draw(){
 
 
         ctx.lineWidth=2;
-
 
 
 
@@ -4858,6 +4868,7 @@ function draw(){
         planning &&
         route.length>1
     ){
+
 
         const last=
             route[
@@ -4894,10 +4905,10 @@ function draw(){
 
 
 
-
         ctx.shadowBlur=0;
     }
 }
+
 
 
 
@@ -4913,9 +4924,9 @@ function drawDelivery(){
 
 
 
-
     const p=
         getDeliveryPosition();
+
 
 
 
@@ -4931,7 +4942,6 @@ function drawDelivery(){
 
 
     ctx.fillStyle="#ff3c91";
-
 
 
 
@@ -4961,6 +4971,7 @@ function drawDelivery(){
 
 
 
+
     ctx.beginPath();
 
 
@@ -4972,7 +4983,6 @@ function drawDelivery(){
         Math.PI*2
     );
 
-
     ctx.fill();
 
 
@@ -4980,6 +4990,7 @@ function drawDelivery(){
 
     ctx.restore();
 }
+
 
 
 
@@ -5001,6 +5012,7 @@ canvas.addEventListener(
     {passive:false}
 );
 
+
 canvas.addEventListener(
     "pointerup",
     pointerUp,
@@ -5020,6 +5032,7 @@ canvas.addEventListener(
 /* =====================================================
    INITIAL
 ===================================================== */
+
 
 resize();
 

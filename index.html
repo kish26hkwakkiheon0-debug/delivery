@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 
+
 <meta name="viewport"
       content="width=device-width,
       initial-scale=1.0,
       maximum-scale=1.0,
       user-scalable=no">
 
+
 <title>CYBER DELIVERY</title>
+
 
 <style>
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
 }
+
 
 html,body{
     margin:0;
@@ -29,9 +33,11 @@ html,body{
     touch-action:none;
 }
 
+
 button{
     font-family:inherit;
 }
+
 
 .screen{
     position:absolute;
@@ -41,14 +47,18 @@ button{
     display:none;
 }
 
+
 .screen.active{
     display:flex;
 }
 
 
+
+
 /* =====================================================
    TITLE — PIXEL CYBERPUNK CITY
 ===================================================== */
+
 
 #titleScreen{
     background:
@@ -61,6 +71,7 @@ button{
     position:relative;
     overflow:hidden;
 }
+
 
 #titleScreen::before{
     content:"";
@@ -77,6 +88,7 @@ button{
     opacity:.5;
 }
 
+
 .logo-small{
     position:relative;
     z-index:3;
@@ -86,6 +98,7 @@ button{
     margin-bottom:9px;
     text-shadow:0 0 8px rgba(99,245,255,.65);
 }
+
 
 .logo{
     position:relative;
@@ -102,6 +115,7 @@ button{
         0 0 28px rgba(99,245,255,.42);
 }
 
+
 .logo-sub{
     position:relative;
     z-index:3;
@@ -112,51 +126,241 @@ button{
     text-shadow:0 0 8px rgba(255,60,145,.6);
 }
 
-/* FULL-SCREEN PIXEL CYBERPUNK CITY */
+
+/*
+   실제 이미지를 사용하지 않고 CSS 도형만으로 만든
+   작은 픽셀아트 스타일의 사이드뷰 도시.
+*/
 .title-city{
+    position:relative;
+    z-index:2;
+    width:min(100%,390px);
+    height:154px;
+    margin:22px 0 25px;
+    overflow:hidden;
+    border:1px solid #29364b;
+    background:#080c15;
+    box-shadow:
+        0 0 0 1px rgba(99,245,255,.06),
+        0 0 25px rgba(99,245,255,.08);
+    image-rendering:pixelated;
+}
+
+
+/* 달 */
+.title-moon{
+    position:absolute;
+    width:28px;
+    height:28px;
+    top:13px;
+    right:34px;
+    border-radius:50%;
+    background:#d7f8ff;
+    box-shadow:0 0 14px rgba(99,245,255,.55);
+}
+
+
+.title-moon::after{
+    content:"";
+    position:absolute;
+    width:28px;
+    height:28px;
+    left:-7px;
+    top:-4px;
+    border-radius:50%;
+    background:#0b111d;
+}
+
+
+/* 먼 도시의 네온 */
+.city-stars{
     position:absolute;
     inset:0;
-    width:100%;
-    height:100%;
-    margin:0;
-    overflow:hidden;
-    border:0;
     background:
-        linear-gradient(to bottom,#050711 0%,#0b1020 52%,#090b12 100%);
-    box-shadow:none;
-    image-rendering:pixelated;
-    z-index:1;
+        radial-gradient(circle at 9% 19%,#63f5ff 0 1px,transparent 2px),
+        radial-gradient(circle at 25% 12%,#ff3c91 0 1px,transparent 2px),
+        radial-gradient(circle at 48% 21%,#63f5ff 0 1px,transparent 2px),
+        radial-gradient(circle at 71% 12%,#ffcf55 0 1px,transparent 2px),
+        radial-gradient(circle at 87% 29%,#63f5ff 0 1px,transparent 2px);
+    opacity:.65;
 }
-.title-city::before{
-    content:"";position:absolute;inset:0;
-    background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 5px);
+
+
+.title-buildings{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:31px;
+    height:104px;
+}
+
+
+.building{
+    position:absolute;
+    bottom:0;
+    background:#111827;
+    border:1px solid #26344a;
+    box-shadow:inset 0 0 14px rgba(99,245,255,.035);
+}
+
+
+.building::before{
+    content:"";
+    position:absolute;
+    left:7px;
+    right:7px;
+    top:9px;
+    height:calc(100% - 18px);
+    background:repeating-linear-gradient(
+        0deg,
+        transparent 0 10px,
+        rgba(99,245,255,.45) 10px 12px,
+        transparent 12px 17px
+    );
     opacity:.45;
 }
-.city-stars{position:absolute;inset:0;background:
-    radial-gradient(circle at 7% 14%,#63f5ff 0 1px,transparent 2px),
-    radial-gradient(circle at 16% 24%,#ff3c91 0 1px,transparent 2px),
-    radial-gradient(circle at 27% 10%,#63f5ff 0 1px,transparent 2px),
-    radial-gradient(circle at 41% 19%,#ffcf55 0 1px,transparent 2px),
-    radial-gradient(circle at 57% 8%,#63f5ff 0 1px,transparent 2px),
-    radial-gradient(circle at 73% 21%,#ff3c91 0 1px,transparent 2px),
-    radial-gradient(circle at 89% 12%,#63f5ff 0 1px,transparent 2px);opacity:.7}
-.title-moon{position:absolute;width:70px;height:70px;right:11%;top:10%;border-radius:50%;background:#d7f8ff;box-shadow:0 0 30px rgba(99,245,255,.35)}
-.title-moon::after{content:"";position:absolute;width:70px;height:70px;left:-17px;top:-7px;border-radius:50%;background:#0a0f1b}
-.title-buildings{position:absolute;left:0;right:0;bottom:18%;height:70%;}
-.building{position:absolute;bottom:0;background:#101827;border:1px solid #26344a;box-shadow:inset 0 0 25px rgba(99,245,255,.05)}
-.building::before{content:"";position:absolute;left:7px;right:7px;top:10px;height:calc(100% - 20px);background:repeating-linear-gradient(0deg,transparent 0 13px,rgba(99,245,255,.45) 13px 15px,transparent 15px 21px);opacity:.45}
-.b1{left:-2%;width:14%;height:47%}.b2{left:9%;width:13%;height:72%}.b3{left:20%;width:11%;height:54%}.b4{left:29%;width:17%;height:88%}.b5{left:44%;width:12%;height:63%}.b6{left:53%;width:18%;height:78%}.b7{left:69%;width:12%;height:52%}
-.title-buildings::after{content:"";position:absolute;left:80%;bottom:0;width:23%;height:92%;background:#0f1726;border:1px solid #26344a;box-shadow:inset 0 0 22px rgba(255,60,145,.05)}
-.neon-sign{position:absolute;z-index:2;padding:6px 9px;border:1px solid currentColor;font-size:9px;font-weight:900;letter-spacing:2px;background:#080c15;transform:skewY(-5deg);text-shadow:0 0 8px currentColor;box-shadow:0 0 10px currentColor}
-.neon-pink{left:13%;top:34%;color:#ff3c91}.neon-blue{left:55%;top:20%;color:#63f5ff}.neon-yellow{left:38%;top:51%;color:#ffcf55}
-.title-road{position:absolute;left:-5%;right:-5%;bottom:11%;height:8%;background:#202838;border-top:3px solid #566074;border-bottom:3px solid #10151f;transform:skewY(-2deg)}
-.title-road::after{content:"";position:absolute;left:0;right:0;top:42%;height:3px;background:repeating-linear-gradient(90deg,#ffcf55 0 22px,transparent 22px 46px);opacity:.7}
-.title-car{position:absolute;z-index:4;left:20%;bottom:14%;width:55px;height:18px;background:#ff3c91;box-shadow:0 0 16px rgba(255,60,145,.75);animation:titleCarMove 6s linear infinite}
-.title-car::before{content:"";position:absolute;width:24px;height:10px;left:12px;top:-8px;background:#63f5ff;border:1px solid #b9fbff}.title-car::after{content:"•  •";position:absolute;left:7px;top:5px;color:#080c15;font-size:10px;letter-spacing:20px}
-@keyframes titleCarMove{0%{transform:translateX(-100px)}100%{transform:translateX(110vw)}}
-.title-ground{position:absolute;left:0;right:0;bottom:0;height:12%;background:#090d16;border-top:1px solid #354055}.title-ground::after{content:"";position:absolute;left:0;right:0;top:45%;height:2px;background:repeating-linear-gradient(90deg,#63f5ff 0 5px,transparent 5px 17px);opacity:.4}
-.title-screen-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,6,12,.1),rgba(4,6,12,.5));z-index:2;pointer-events:none}
-@media(max-height:650px){.title-moon{width:48px;height:48px}.title-moon::after{width:48px;height:48px}.logo{font-size:31px}}
+
+
+.b1{left:1%;width:14%;height:61px;}
+.b2{left:13%;width:16%;height:88px;}
+.b3{left:27%;width:12%;height:68px;}
+.b4{left:38%;width:19%;height:101px;}
+.b5{left:55%;width:13%;height:76px;}
+.b6{left:67%;width:17%;height:94px;}
+.b7{left:82%;width:17%;height:59px;}
+
+.neon-sign{
+    position:absolute;
+    z-index:2;
+    padding:3px 5px;
+    border:1px solid currentColor;
+    font-size:7px;
+    font-weight:900;
+    letter-spacing:1px;
+    background:#080c15;
+    transform:skewY(-5deg);
+    text-shadow:0 0 6px currentColor;
+}
+
+
+.neon-pink{
+    left:14%;
+    top:38px;
+    color:#ff3c91;
+}
+
+.neon-blue{
+    left:59%;
+    top:22px;
+    color:#63f5ff;
+}
+
+
+.neon-yellow{
+    left:42%;
+    top:57px;
+    color:#ffcf55;
+}
+
+
+/* 건물 아래쪽 고가도로 */
+.title-road{
+    position:absolute;
+    left:-4%;
+    right:-4%;
+    bottom:17px;
+    height:15px;
+    background:#202838;
+    border-top:2px solid #566074;
+    border-bottom:2px solid #10151f;
+}
+
+
+.title-road::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:5px;
+    height:2px;
+    background:repeating-linear-gradient(
+        90deg,
+        #ffcf55 0 16px,
+        transparent 16px 31px
+    );
+    opacity:.65;
+}
+
+
+/* 지나가는 픽셀 차량 */
+.title-car{
+    position:absolute;
+    z-index:4;
+    left:21%;
+    bottom:24px;
+    width:38px;
+    height:12px;
+    background:#ff3c91;
+    box-shadow:0 0 9px rgba(255,60,145,.75);
+    animation:titleCarMove 5s linear infinite;
+}
+
+
+.title-car::before{
+    content:"";
+    position:absolute;
+    width:17px;
+    height:7px;
+    left:8px;
+    top:-6px;
+    background:#63f5ff;
+    border:1px solid #b9fbff;
+}
+
+
+.title-car::after{
+    content:"•  •";
+    position:absolute;
+    left:5px;
+    top:4px;
+    color:#080c15;
+    font-size:8px;
+    letter-spacing:14px;
+}
+
+
+@keyframes titleCarMove{
+    0%{transform:translateX(-70px);}
+    100%{transform:translateX(430px);}
+}
+
+
+.title-ground{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:18px;
+    background:#0c111b;
+    border-top:1px solid #354055;
+}
+
+
+.title-ground::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:7px;
+    height:1px;
+    background:repeating-linear-gradient(
+        90deg,
+        #63f5ff 0 4px,
+        transparent 4px 12px
+    );
+    opacity:.4;
+}
+
 
 .start-button{
     position:relative;
@@ -173,10 +377,12 @@ button{
     box-shadow:0 0 15px rgba(99,245,255,.12);
 }
 
+
 .start-button:active{
     transform:translateY(1px);
     background:#142431;
 }
+
 
 .version{
     position:relative;
@@ -186,6 +392,7 @@ button{
     font-size:8px;
     letter-spacing:1px;
 }
+
 
 @media(max-height:650px){
     .logo{font-size:31px;}
@@ -197,50 +404,31 @@ button{
     .title-city .b6{height:74px;}
 }
 
-/* =====================================================
-   DELIVERY REQUEST SELECTOR
-===================================================== */
-#requestScreen{
-    background:#080a11;
-    flex-direction:column;
-    padding:18px;
-    overflow:hidden;
-}
-.request-header{flex-shrink:0;padding:5px 0 15px;border-bottom:1px solid #292f3b}
-.request-header h1{margin:0;color:#63f5ff;font-size:21px;letter-spacing:2px}
-.request-header p{margin:7px 0 0;color:#777f8e;font-size:11px}
-.request-grid{flex:1;overflow-y:auto;padding:15px 0;display:grid;grid-template-columns:1fr;gap:10px;touch-action:pan-y}
-.request-card{position:relative;padding:15px;background:#10141e;border:1px solid #303746;text-align:left;color:#ddd}
-.request-card:active{transform:scale(.985)}
-.request-card.selected{border-color:#63f5ff;background:#101c25;box-shadow:inset 0 0 20px rgba(99,245,255,.08)}
-.request-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.request-name{font-size:13px;font-weight:bold;color:#fff;letter-spacing:1px}
-.request-level{font-size:8px;color:#ffcf55;border:1px solid #66552a;padding:3px 5px}
-.request-desc{margin-top:9px;color:#858e9d;font-size:9px;line-height:1.55}
-.request-meta{display:flex;justify-content:space-between;margin-top:12px;padding-top:9px;border-top:1px solid #292f3b;color:#63f5ff;font-size:9px}
-.request-cargo{color:#9aa3b2}
-.request-footer{flex-shrink:0;border-top:1px solid #292f3b;padding-top:12px}
-.request-back{width:100%;padding:12px;background:#101722;border:1px solid #3a4252;color:#aaa;font-weight:bold}
 
 /* =====================================================
    CARGO
 ===================================================== */
 
+
 #cargoScreen{
     background:#080a11;
+
 
     flex-direction:column;
 
     padding:18px;
 
+
     overflow:hidden;
 }
+
 
 .cargo-header{
     flex-shrink:0;
     padding:5px 0 15px;
     border-bottom:1px solid #292f3b;
 }
+
 
 .cargo-header h1{
     margin:0;
@@ -249,54 +437,71 @@ button{
     letter-spacing:2px;
 }
 
+
 .cargo-header p{
     margin:7px 0 0;
     color:#777f8e;
     font-size:11px;
 }
 
+
 .cargo-grid{
     flex:1;
 
+
     overflow-y:auto;
 
+
     padding:15px 0;
+
 
     display:grid;
     grid-template-columns:
         repeat(2,minmax(0,1fr));
 
+
     gap:9px;
+
 
     touch-action:pan-y;
 }
 
+
 .cargo-card{
     position:relative;
 
+
     min-height:130px;
+
 
     padding:13px;
 
+
     background:#10141e;
+
 
     border:1px solid #303746;
 }
 
+
 .cargo-card.selected{
     border-color:#63f5ff;
 
+
     background:#101c25;
+
 
     box-shadow:
         inset 0 0 20px
         rgba(99,245,255,.08);
 }
 
+
 .cargo-icon{
     font-size:28px;
     margin-bottom:8px;
 }
+
 
 .cargo-name{
     color:#ddd;
@@ -304,11 +509,13 @@ button{
     font-weight:bold;
 }
 
+
 .cargo-destination{
     margin-top:6px;
     color:#777f8e;
     font-size:9px;
 }
+
 
 .cargo-reward{
     margin-top:9px;
@@ -316,26 +523,34 @@ button{
     font-size:10px;
 }
 
+
 .check{
     position:absolute;
+
 
     top:8px;
     right:8px;
 
+
     width:19px;
     height:19px;
 
+
     border:1px solid #454d5d;
+
 
     display:flex;
 
     align-items:center;
     justify-content:center;
 
+
     color:transparent;
+
 
     font-size:11px;
 }
+
 
 .cargo-card.selected .check{
     background:#63f5ff;
@@ -343,13 +558,17 @@ button{
     border-color:#63f5ff;
 }
 
+
 .cargo-footer{
     flex-shrink:0;
 
+
     border-top:1px solid #292f3b;
+
 
     padding-top:12px;
 }
+
 
 .selected-count{
     color:#777f8e;
@@ -358,19 +577,25 @@ button{
     margin-bottom:9px;
 }
 
+
 .cargo-start{
     width:100%;
 
     padding:14px;
 
+
     background:#101722;
+
 
     border:2px solid #63f5ff;
 
+
     color:#63f5ff;
+
 
     font-weight:bold;
 }
+
 
 .cargo-start:disabled{
     border-color:#2d3340;
@@ -379,9 +604,12 @@ button{
 
 
 
+
+
 /* =====================================================
    PAD INTERFACE
 ===================================================== */
+
 
 #padScreen{
     background:
@@ -390,6 +618,7 @@ button{
     justify-content:center;
     padding:18px;
 }
+
 
 .pad-device{
     width:min(94vw,430px);
@@ -407,6 +636,7 @@ button{
     flex-direction:column;
 }
 
+
 .pad-camera{
     position:absolute;
     top:7px;
@@ -417,6 +647,7 @@ button{
     background:#202735;
     border-radius:4px;
 }
+
 
 .pad-screen{
     flex:1;
@@ -434,6 +665,7 @@ button{
     overflow:hidden;
 }
 
+
 .pad-status{
     display:flex;
     justify-content:space-between;
@@ -445,14 +677,17 @@ button{
     letter-spacing:1px;
 }
 
+
 .pad-status strong{
     color:#63f5ff;
     font-size:9px;
 }
 
+
 .pad-clock{
     color:#aeb4c0;
 }
+
 
 .pad-title{
     margin:20px 0 4px;
@@ -461,6 +696,7 @@ button{
     font-weight:900;
     letter-spacing:3px;
 }
+
 
 .pad-subtitle{
     color:#687383;
@@ -476,6 +712,7 @@ button{
     gap:10px;
     align-content:start;
 }
+
 
 .pad-app{
     min-height:128px;
@@ -493,16 +730,19 @@ button{
     transform:scale(.97);
 }
 
+
 .pad-app.active-app{
     border-color:#63f5ff;
     box-shadow:inset 0 0 20px rgba(99,245,255,.07);
 }
+
 
 .pad-app-icon{
     font-size:27px;
     margin-bottom:13px;
     filter:grayscale(.1);
 }
+
 
 .pad-app-name{
     color:#fff;
@@ -511,12 +751,14 @@ button{
     letter-spacing:1px;
 }
 
+
 .pad-app-desc{
     color:#697382;
     font-size:8px;
     margin-top:6px;
     line-height:1.5;
 }
+
 
 .pad-app .app-status{
     position:absolute;
@@ -526,9 +768,11 @@ button{
     font-size:7px;
 }
 
+
 .pad-app.active-app .app-status{
     color:#63f5ff;
 }
+
 
 .pad-footer{
     border-top:1px solid #293241;
@@ -541,6 +785,7 @@ button{
     justify-content:space-between;
 }
 
+
 .pad-home{
     width:52px;
     height:5px;
@@ -552,27 +797,53 @@ button{
 }
 
 
+
+
 /* =====================================================
    GAME
 ===================================================== */
 
+
 #gameScreen{
     background:#070910;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+#gameMapArea{
+    position:relative;
+    width:100%;
+    height:calc(100% - 196px);
+    flex:0 0 calc(100% - 196px);
+    min-height:0;
+    overflow:hidden;
 }
 
 #gameCanvas{
     position:absolute;
-
     inset:0;
-
     width:100%;
     height:100%;
-
     image-rendering:pixelated;
-
     touch-action:none;
 }
 
+
+
+
+/* =====================================================
+   GAME TOP BAR
+===================================================== */
+.game-top-panel{height:46px;flex:0 0 46px;padding:6px 9px;background:#080c14;border-bottom:1px solid #2b3443;display:flex;align-items:center;gap:7px;z-index:35;}
+.game-top-info{display:flex;align-items:center;gap:6px;min-width:0;flex:1;}
+.game-top-chip{padding:6px 7px;background:#101722;border:1px solid #303847;color:#aeb4c0;font-size:8px;white-space:nowrap;}
+.game-top-chip strong{color:#63f5ff;margin-left:3px;}
+.game-top-chip.money strong{color:#ffcf55;}
+.game-top-bgm{display:flex;align-items:center;gap:4px;min-width:0;flex:1;}
+.game-top-bgm select{width:100%;min-width:0;padding:6px 5px;background:#101722;border:1px solid #3a4252;color:#63f5ff;font-size:8px;outline:none;}
+.game-top-bgm button{width:28px;height:28px;padding:0;background:#101722;border:1px solid #3a4252;color:#63f5ff;font-size:10px;}
+.game-abandon{height:28px;padding:0 8px;background:#17111a;border:1px solid #ff3c91;color:#ff78ae;font-size:8px;font-weight:bold;white-space:nowrap;}
+@media(max-width:430px){.game-top-panel{gap:4px;padding:5px 6px}.game-top-chip{padding:6px 5px}.game-top-bgm button{width:25px}.game-abandon{padding:0 6px}}
 
 /* =====================================================
    HUD
@@ -581,42 +852,56 @@ button{
 .hud{
     position:absolute;
 
+
     top:0;
     left:0;
     right:0;
 
+
     padding:8px;
 
+
     pointer-events:none;
+
 
     z-index:10;
 }
 
+
 .hud-inner{
     background:rgba(5,7,14,.94);
 
+
     border:1px solid #303847;
+
 
     padding:9px;
 
+
     display:flex;
+
 
     justify-content:space-between;
 
+
     font-size:10px;
 }
+
 
 .hud-item span{
     color:#63f5ff;
 }
 
+
 .hud-item.damage span{
     color:#ff648d;
 }
 
+
 /* =====================================================
    BGM PLAYER
 ===================================================== */
+
 
 .bgm-player{
     position:absolute;
@@ -632,12 +917,14 @@ button{
     box-shadow:0 0 12px rgba(99,245,255,.08);
 }
 
+
 .bgm-label{
     color:#63f5ff;
     font-size:8px;
     letter-spacing:1px;
     white-space:nowrap;
 }
+
 
 .bgm-title{
     min-width:92px;
@@ -649,6 +936,7 @@ button{
     font-size:8px;
 }
 
+
 .bgm-btn{
     width:25px;
     height:22px;
@@ -659,6 +947,7 @@ button{
     font-size:10px;
 }
 
+
 .bgm-select{
     max-width:105px;
     background:#101722;
@@ -668,6 +957,7 @@ button{
     padding:4px 2px;
     outline:none;
 }
+
 
 @media(max-width:430px){
     .bgm-player{
@@ -681,32 +971,46 @@ button{
 }
 
 
+
+
 /* =====================================================
    MESSAGE
 ===================================================== */
 
+
 .mode-message{
     position:absolute;
 
+
     top:54px;
+
 
     left:10px;
     right:10px;
 
+
     text-align:center;
+
 
     padding:7px;
 
+
     background:rgba(5,7,14,.82);
+
 
     color:#aeb4c0;
 
+
     font-size:10px;
+
 
     pointer-events:none;
 
+
     z-index:10;
 }
+
+
 
 
 /* =====================================================
@@ -716,58 +1020,79 @@ button{
 .delivery-status{
     display:none;
 
+
     position:absolute;
+
 
     top:83px;
     left:50%;
 
+
     transform:translateX(-50%);
 
+
     background:rgba(5,7,14,.94);
+
 
     border:1px solid #63f5ff;
 
     color:#63f5ff;
 
+
     padding:7px 13px;
+
 
     font-size:10px;
 
+
     white-space:nowrap;
+
 
     z-index:10;
 
+
     pointer-events:none;
 }
+
 
 
 /* =====================================================
    CARGO HUD
 ===================================================== */
 
+
 .cargo-hud{
     position:absolute;
+
 
     top:107px;
     left:9px;
 
+
     width:160px;
 
+
     background:rgba(5,7,14,.86);
+
 
     border:1px solid #303847;
 
     padding:8px;
 
+
     z-index:8;
+
 
     pointer-events:none;
 }
 
+
 .cargo-hud-title{
     color:#63f5ff;
 
+
     font-size:9px;
+
 
     margin-bottom:5px;
 }
@@ -775,60 +1100,143 @@ button{
 .cargo-hud-item{
     color:#888f9d;
 
+
     font-size:8px;
+
 
     margin:4px 0;
 }
+
 
 .cargo-hud-item.delivered{
     color:#5cff9a;
 }
 
 
+
+
 /* =====================================================
-   CONTROLS
+   GAME BOTTOM PANEL
 ===================================================== */
 
-.controls{
-    position:absolute;
-
-    left:10px;
-    right:10px;
-    bottom:10px;
-
+.game-bottom-panel{
+    height:150px;
+    flex:0 0 150px;
+    padding:9px 10px 10px;
+    background:linear-gradient(180deg,#0b1019 0%,#070910 100%);
+    border-top:1px solid #2b3443;
+    box-shadow:0 -8px 22px rgba(0,0,0,.28);
     display:flex;
-
-    gap:8px;
-
-    z-index:20;
+    justify-content:space-between;
+    gap:10px;
+    z-index:30;
 }
 
-.control{
-    flex:1;
+.game-control-group{
+    display:flex;
+    gap:7px;
+    align-items:center;
+}
+.game-control-group.left{width:40%;}
+.game-control-group.right{width:60%; justify-content:flex-end;}
 
-    padding:14px 5px;
-
-    background:rgba(10,13,21,.96);
-
+.game-control{
+    min-width:72px;
+    height:62px;
+    padding:6px 5px;
+    background:#101722;
     border:1px solid #3a4252;
-
-    color:#bbb;
-
-    font-size:12px;
-
+    color:#c4cad3;
+    font-size:8px;
     font-weight:bold;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
 }
 
-.control.deliver{
+.game-control .control-icon{font-size:19px; line-height:1;}
+.game-control.deliver{color:#63f5ff; border-color:#63f5ff; box-shadow:0 0 14px rgba(99,245,255,.08);}
+.game-control:active:not(:disabled){transform:translateY(1px);}
+.game-control:disabled{color:#555; border-color:#292e38; opacity:.65;}
+
+@media(max-width:430px){
+    .game-control-group.left{width:38%;}
+    .game-control-group.right{width:62%;}
+    .game-control{min-width:0; flex:1; height:60px; font-size:8px;}
+}
+
+/* =====================================================
+   GAME MODALS
+===================================================== */
+
+.game-modal{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(2,4,8,.64);
+    z-index:60;
+}
+
+.game-modal-box{
+    width:min(92vw,390px);
+    max-height:72vh;
+    overflow:auto;
+    padding:18px;
+    background:#10141e;
+    border:1px solid #63f5ff;
+    box-shadow:0 0 28px rgba(99,245,255,.12);
+}
+
+.game-modal-title{
+    margin:0 0 12px;
     color:#63f5ff;
-    border-color:#63f5ff;
+    font-size:15px;
+    letter-spacing:2px;
 }
 
-.control:disabled{
-    color:#555;
-    border-color:#292e38;
+.game-modal-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin:12px 0;
+    padding-bottom:10px;
+    border-bottom:1px solid #29303c;
+    color:#c4cad3;
+    font-size:10px;
 }
 
+.game-modal-row input[type="range"]{width:58%; accent-color:#63f5ff;}
+
+.game-modal-close{
+    width:100%;
+    margin-top:8px;
+    padding:11px;
+    background:#111722;
+    border:1px solid #63f5ff;
+    color:#63f5ff;
+    font-weight:bold;
+    font-size:10px;
+}
+
+.cargo-info-item{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px solid #252c38;
+    color:#c2c8d2;
+    font-size:10px;
+}
+
+.cargo-info-item.done{color:#5cff9a;}
+
+.help-list{color:#aeb4c0; font-size:10px; line-height:1.8;}
 
 /* =====================================================
    EVENT
@@ -837,45 +1245,61 @@ button{
 #event{
     display:none;
 
+
     position:absolute;
+
 
     left:50%;
     top:50%;
 
+
     transform:translate(-50%,-50%);
 
+
     width:min(88%,360px);
+
 
     padding:20px;
 
     background:#11141e;
 
+
     border:2px solid #ffcf55;
+
 
     text-align:center;
 
+
     z-index:40;
 }
+
 
 #event h2{
     color:#ffcf55;
     font-size:17px;
 }
 
+
 #event p{
     color:#aaa;
 
+
     font-size:11px;
+
 
     line-height:1.6;
 }
 
+
 .event-button{
     width:100%;
 
+
     padding:12px;
 
+
     background:#181c27;
+
 
     border:1px solid #ffcf55;
 
@@ -883,58 +1307,78 @@ button{
 }
 
 
+
+
 /* =====================================================
    RESULT
 ===================================================== */
 
+
 #resultScreen{
     background:#080910;
+
 
     align-items:center;
     justify-content:center;
 
+
     padding:20px;
 }
+
 
 .result-box{
     width:100%;
     max-width:400px;
 
+
     background:#11141e;
+
 
     border:2px solid #63f5ff;
 
+
     padding:21px;
 }
+
 
 .result-box h1{
     margin:0;
 
     text-align:center;
 
+
     color:#63f5ff;
+
 
     font-size:20px;
 }
 
+
 .grade{
     text-align:center;
 
+
     font-size:62px;
+
 
     color:#ffd75a;
 
     margin:13px 0 18px;
 }
 
+
 .result-row{
     display:flex;
 
+
     justify-content:space-between;
+
 
     padding:10px 0;
 
+
     border-bottom:1px solid #292f3a;
+
 
     font-size:12px;
 }
@@ -943,26 +1387,36 @@ button{
     color:#63f5ff;
 }
 
+
 .restart{
     width:100%;
 
+
     margin-top:19px;
+
 
     padding:14px;
 
+
     background:#111722;
+
 
     border:2px solid #63f5ff;
 
     color:#63f5ff;
 
+
     font-weight:bold;
 }
+
 
 </style>
 </head>
 
+
 <body>
+
+
 
 
 <!-- =====================================================
@@ -970,31 +1424,28 @@ button{
 ===================================================== -->
 
 <section id="titleScreen" class="screen active">
-    <div class="title-screen-overlay"></div>
+
 
     <div class="logo-small">
         NIGHT CITY LOGISTICS
     </div>
 
+
     <div class="logo">
         CYBER<br>DELIVERY
     </div>
 
+
     <div class="logo-sub">
         ROUTE • RISK • REWARD
     </div>
-<div class="screen-bgm" data-bgm="title">
-    <span class="bgm-label">♫ <span class="bgm-name">NIGHT DRIVE</span></span>
-    <button class="bgm-prev">◀</button>
-    <button class="bgm-play">▶</button>
-    <button class="bgm-next">▶</button>
-</div>
 
 
     <div class="title-city" aria-label="픽셀 스타일의 사이버펑크 도시 풍경">
 
         <div class="city-stars"></div>
         <div class="title-moon"></div>
+
 
         <div class="title-buildings">
             <div class="building b1"></div>
@@ -1005,86 +1456,85 @@ button{
             <div class="building b6"></div>
             <div class="building b7"></div>
 
+
             <div class="neon-sign neon-pink">NIGHT</div>
             <div class="neon-sign neon-blue">N-01</div>
             <div class="neon-sign neon-yellow">24H</div>
         </div>
 
+
         <div class="title-road"></div>
         <div class="title-car"></div>
         <div class="title-ground"></div>
 
+
     </div>
+
 
     <button
         class="start-button"
         onclick="playSound('click'); showPadScreen()">
 
+
         START DELIVERY
 
+
     </button>
+
 
     <div class="version">
         MOBILE PROTOTYPE v0.5
     </div>
 
+
 </section>
+
+
 
 
 <!-- =====================================================
      CARGO
 ===================================================== -->
 
-<section id="requestScreen" class="screen">
-    <div class="request-header">
-        <h1>SELECT DELIVERY REQUEST</h1>
-        <p>의뢰를 선택하면 해당 의뢰의 지도와 배송품이 결정됩니다</p>
-        <div class="screen-bgm" data-bgm="request">
-            <span class="bgm-label">♫ <span class="bgm-name">NIGHT DRIVE</span></span>
-            <button class="bgm-prev">◀</button><button class="bgm-play">▶</button><button class="bgm-next">▶</button>
-        </div>
-    </div>
-    <div class="request-grid" id="requestGrid"></div>
-    <div class="request-footer">
-        <button class="request-back" onclick="playSound('back'); showPadScreen()">← BACK TO PAD</button>
-    </div>
-</section>
 
 <section id="cargoScreen" class="screen">
 
+
     <div class="cargo-header">
+
 
         <h1>
             SELECT CARGO
         </h1>
 
+
         <p>
             배달할 물품을 선택하세요
         </p>
-<div class="screen-bgm" data-bgm="cargo">
-    <span class="bgm-label">♫ <span class="bgm-name">NIGHT DRIVE</span></span>
-    <button class="bgm-prev">◀</button>
-    <button class="bgm-play">▶</button>
-    <button class="bgm-next">▶</button>
-</div>
 
 
     </div>
+
 
     <div
         class="cargo-grid"
         id="cargoGrid">
     </div>
 
+
     <div class="cargo-footer">
+
 
         <div
             class="selected-count"
             id="selectedCount">
 
+
             선택된 물품: 0개
 
+
         </div>
+
 
         <button
             class="cargo-start"
@@ -1092,13 +1542,19 @@ button{
             onclick="playSound('click'); startRoutePlanning()"
             disabled>
 
+
             BEGIN ROUTE PLANNING
+
 
         </button>
 
     </div>
 
+
 </section>
+
+
+
 
 
 
@@ -1106,30 +1562,30 @@ button{
      PAD INTERFACE
 ===================================================== -->
 
+
 <section id="padScreen" class="screen">
-<div class="screen-bgm" data-bgm="pad">
-    <span class="bgm-label">♫ <span class="bgm-name">NIGHT DRIVE</span></span>
-    <button class="bgm-prev">◀</button>
-    <button class="bgm-play">▶</button>
-    <button class="bgm-next">▶</button>
-</div>
 
 
     <div class="pad-device">
 
         <div class="pad-camera"></div>
 
+
         <div class="pad-screen">
+
 
             <div class="pad-status">
                 <strong>NIGHT CITY // PAD</strong>
                 <span><span id="padDay">DAY 01</span> · <span class="pad-clock" id="padClock">00:00</span></span>
             </div>
 
+
             <div class="pad-title">NEXUS PAD</div>
             <div class="pad-subtitle">PERSONAL OPERATIONS INTERFACE</div>
 
+
             <div class="pad-apps">
+
 
                 <button class="pad-app active-app" onclick="openDeliveryApp()">
                     <span class="app-status">READY</span>
@@ -1138,12 +1594,14 @@ button{
                     <div class="pad-app-desc">배달 의뢰 확인 및 배송 경로를 계획합니다.</div>
                 </button>
 
+
                 <button class="pad-app" onclick="showPadNotice('설정 기능은 아직 개발 중입니다.')">
                     <span class="app-status">LOCKED</span>
                     <div class="pad-app-icon">⚙</div>
                     <div class="pad-app-name">SETTINGS</div>
                     <div class="pad-app-desc">시스템 및 인터페이스 설정</div>
                 </button>
+
 
                 <button class="pad-app" onclick="showPadNotice('업그레이드 기능은 아직 개발 중입니다.')">
                     <span class="app-status">LOCKED</span>
@@ -1152,6 +1610,7 @@ button{
                     <div class="pad-app-desc">배달 장비와 바이크 업그레이드</div>
                 </button>
 
+
                 <button class="pad-app" onclick="exitToTitle()">
                     <span class="app-status">SYSTEM</span>
                     <div class="pad-app-icon">↯</div>
@@ -1159,20 +1618,27 @@ button{
                     <div class="pad-app-desc">NEXUS PAD를 종료하고 타이틀로 돌아갑니다.</div>
                 </button>
 
+
             </div>
+
 
             <div class="pad-footer">
                 <span>USER TERMINAL // ONLINE</span>
                 <span>v0.5</span>
             </div>
 
+
         </div>
 
         <div class="pad-home"></div>
 
+
     </div>
 
+
 </section>
+
+
 
 
 <!-- =====================================================
@@ -1181,136 +1647,129 @@ button{
 
 <section id="gameScreen" class="screen">
 
-    <canvas id="gameCanvas"></canvas>
+    <div class="game-top-panel">
+        <div class="game-top-info">
+            <div class="game-top-chip">DAY <strong id="gameDayDisplay">01</strong></div>
+            <div class="game-top-chip money">¥ <strong id="moneyDisplay">10,000</strong></div>
+        </div>
+        <div class="game-top-bgm">
+            <select id="bgmSelect" aria-label="BGM 선택">
+                <option value="night">NIGHT DRIVE</option>
+                <option value="rush">NEON RUSH</option>
+                <option value="rain">RAIN CIRCUIT</option>
+            </select>
+            <button id="bgmToggle" onclick="toggleBgm()">▶</button>
+        </div>
+        <button class="game-abandon" onclick="abandonDelivery()">ABANDON</button>
+    </div>
 
+    <div id="gameMapArea">
+        <canvas id="gameCanvas"></canvas>
 
-    <div class="hud">
-
-        <div class="hud-inner">
-
-            <div class="hud-item">
-                DIST
-                <span id="distance">0m</span>
+        <div class="hud">
+            <div class="hud-inner">
+                <div class="hud-item">DIST <span id="distance">0m</span></div>
+                <div class="hud-item">CARGO <span id="cargoCount">0/0</span></div>
+                <div class="hud-item damage">DAMAGE <span id="damage">0%</span></div>
             </div>
-
-            <div class="hud-item">
-                CARGO
-                <span id="cargoCount">0/0</span>
-            </div>
-
-            <div class="hud-item damage">
-                DAMAGE
-                <span id="damage">0%</span>
-            </div>
-
+        </div>
+        <div class="mode-message" id="modeMessage">
+            출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요
         </div>
 
+        <div class="delivery-status" id="deliveryStatus">
+            ● DELIVERING...
+        </div>
     </div>
 
-    <div class="bgm-player">
-        <span class="bgm-label">BGM</span>
-        <span class="bgm-title" id="bgmTitle">NIGHT DRIVE</span>
-        <select class="bgm-select" id="bgmSelect" aria-label="BGM 선택">
-            <option value="night">NIGHT DRIVE</option>
-            <option value="rush">NEON RUSH</option>
-            <option value="rain">RAIN CIRCUIT</option>
-        </select>
-        <button class="bgm-btn" id="bgmToggle" onclick="toggleBgm()">▶</button>
-    </div>
-
-
-    <div
-        class="mode-message"
-        id="modeMessage">
-
-        출발점에서 손가락을 누르고
-        도로를 따라 경로를 그리세요
-
-    </div>
-
-
-    <div
-        class="delivery-status"
-        id="deliveryStatus">
-
-        ● DELIVERING...
-
-    </div>
-
-
-    <div
-        class="cargo-hud"
-        id="cargoHud">
-
-        <div class="cargo-hud-title">
-            DELIVERY LIST
+    <div class="game-bottom-panel">
+        <div class="game-control-group left">
+            <button class="game-control" id="clearButton" onclick="clearRoute(); playSound('clear')">
+                <span class="control-icon">⌫</span>
+                <span>CLEAR</span>
+            </button>
+            <button class="game-control deliver" id="deliverButton" onclick="startDelivery()" disabled>
+                <span class="control-icon">➤</span>
+                <span>DELIVER</span>
+            </button>
         </div>
 
+        <div class="game-control-group right">
+            <button class="game-control" onclick="playSound('click'); openCargoModal()">
+                <span class="control-icon">▣</span>
+                <span>CARGO</span>
+            </button>
+            <button class="game-control" onclick="playSound('click'); openGameSettings()">
+                <span class="control-icon">⚙</span>
+                <span>SETTINGS</span>
+            </button>
+            <button class="game-control" onclick="playSound('click'); openHelp()">
+                <span class="control-icon">?</span>
+                <span>HELP</span>
+            </button>
+        </div>
     </div>
-
-
-    <div class="controls">
-
-        <button
-            class="control"
-            id="clearButton"
-            onclick="clearRoute()">
-
-            CLEAR
-
-        </button>
-
-        <button
-            class="control deliver"
-            id="deliverButton"
-            onclick="startDelivery()"
-            disabled>
-
-            DELIVER
-
-        </button>
-
-    </div>
-
 
     <div id="event">
-
-        <h2 id="eventTitle">
-            EVENT
-        </h2>
-
+        <h2 id="eventTitle">EVENT</h2>
         <p id="eventText"></p>
+        <button class="event-button" onclick="closeEvent()">CONTINUE</button>
+    </div>
 
-        <button
-            class="event-button"
-            onclick="closeEvent()">
+    <div class="game-modal" id="cargoModal">
+        <div class="game-modal-box">
+            <h2 class="game-modal-title">DELIVERY CARGO</h2>
+            <div id="cargoModalList"></div>
+            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('cargoModal')">CLOSE</button>
+        </div>
+    </div>
 
-            CONTINUE
+    <div class="game-modal" id="gameSettingsModal">
+        <div class="game-modal-box">
+            <h2 class="game-modal-title">GAME SETTINGS</h2>
+            <div class="game-modal-row">
+                <label for="sfxVolume">SFX VOLUME</label>
+                <input id="sfxVolume" type="range" min="0" max="100" value="100">
+            </div>
+            <div class="game-modal-row">
+                <label for="bgmVolume">BGM VOLUME</label>
+                <input id="bgmVolume" type="range" min="0" max="100" value="70">
+            </div>
+            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('gameSettingsModal')">CLOSE</button>
+        </div>
+    </div>
 
-        </button>
-
+    <div class="game-modal" id="helpModal">
+        <div class="game-modal-box">
+            <h2 class="game-modal-title">HOW TO PLAY</h2>
+            <div class="help-list">
+                1. 손가락을 출발점에 대고 도로를 따라 경로를 그리세요.<br>
+                2. 이미 지나간 도로는 다시 사용할 수 없습니다.<br>
+                3. 손가락을 떼어도 현재 경로는 유지됩니다.<br>
+                4. 교차로에서는 연결된 다른 도로로 이동할 수 있습니다.<br>
+                5. 모든 배송품의 목적지를 포함하면 DELIVER가 활성화됩니다.<br>
+                6. 이벤트 발생 시 CONTINUE를 눌러 배송을 재개합니다.
+            </div>
+            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('helpModal')">CLOSE</button>
+        </div>
     </div>
 
 </section>
-
 
 <!-- =====================================================
      RESULT
 ===================================================== -->
 
+
 <section id="resultScreen" class="screen">
 
+
     <div class="result-box">
+
 
         <h1>
             DELIVERY COMPLETE
         </h1>
-<div class="screen-bgm" data-bgm="result">
-    <span class="bgm-label">♫ <span class="bgm-name">NIGHT DRIVE</span></span>
-    <button class="bgm-prev">◀</button>
-    <button class="bgm-play">▶</button>
-    <button class="bgm-next">▶</button>
-</div>
 
 
         <div
@@ -1319,32 +1778,39 @@ button{
 
             A
 
+
         </div>
+
 
         <div class="result-row">
             <span>이동거리</span>
             <strong id="resultDistance">0m</strong>
         </div>
 
+
         <div class="result-row">
             <span>배송시간</span>
             <strong id="resultTime">0s</strong>
         </div>
+
 
         <div class="result-row">
             <span>배송품 손상</span>
             <strong id="resultDamage">0%</strong>
         </div>
 
+
         <div class="result-row">
             <span>경로 효율</span>
             <strong id="resultEfficiency">0%</strong>
         </div>
 
+
         <div class="result-row">
             <span>보상</span>
             <strong id="resultReward">¥0</strong>
         </div>
+
 
         <button
             class="restart"
@@ -1352,21 +1818,29 @@ button{
 
             NEXT DELIVERY
 
+
         </button>
 
+
     </div>
+
 
 </section>
 
 
+
+
 <script>
+
 
 /* =====================================================
    GAME DAY + SYNTHETIC UI SOUNDS + BGM
 ===================================================== */
 
 let gameDay = 1;
+let playerMoney = 10000;
 let audioCtx = null;
+
 
 function initAudio(){
     if(!audioCtx){
@@ -1375,6 +1849,7 @@ function initAudio(){
     }
     if(audioCtx && audioCtx.state === "suspended") audioCtx.resume();
 }
+
 
 function tone(freq=440, duration=.07, type="square", volume=.035, slide=0){
     initAudio();
@@ -1385,12 +1860,13 @@ function tone(freq=440, duration=.07, type="square", volume=.035, slide=0){
     osc.type=type;
     osc.frequency.setValueAtTime(freq,now);
     if(slide) osc.frequency.exponentialRampToValueAtTime(Math.max(40,freq+slide),now+duration);
-    gain.gain.setValueAtTime(volume,now);
+    gain.gain.setValueAtTime(volume*(window.sfxMasterVolume??1),now);
     gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
     osc.connect(gain).connect(audioCtx.destination);
     osc.start(now);
     osc.stop(now+duration+.01);
 }
+
 
 function playSound(name){
     initAudio();
@@ -1410,6 +1886,7 @@ function playSound(name){
     }
 }
 
+
 /*
    3곡의 BGM을 외부 파일 없이 Web Audio로 생성한다.
    - NIGHT DRIVE : PAD / 결과 화면용, 느긋한 신스웨이브
@@ -1428,6 +1905,7 @@ let bgmTimer=null;
 let bgmStep=0;
 let bgmNodes=[];
 
+
 function bgmNote(freq, duration, when, volume=.018, type="triangle"){
     if(!audioCtx) return;
     const osc=audioCtx.createOscillator();
@@ -1435,13 +1913,14 @@ function bgmNote(freq, duration, when, volume=.018, type="triangle"){
     osc.type=type;
     osc.frequency.setValueAtTime(freq,when);
     gain.gain.setValueAtTime(.0001,when);
-    gain.gain.linearRampToValueAtTime(volume,when+.015);
+    gain.gain.linearRampToValueAtTime(volume*(window.bgmMasterVolume??.7),when+.015);
     gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
     osc.connect(gain).connect(audioCtx.destination);
     osc.start(when);
     osc.stop(when+duration+.02);
     bgmNodes.push(osc);
 }
+
 
 function scheduleBgmStep(){
     if(!bgmPlaying || !audioCtx) return;
@@ -1471,6 +1950,7 @@ function startBgm(){
     updateBgmUI();
 }
 
+
 function stopBgm(){
     bgmPlaying=false;
     clearTimeout(bgmTimer);
@@ -1487,6 +1967,7 @@ function toggleBgm(){
     else startBgm();
 }
 
+
 function setBgm(name, autoStart=true){
     if(!bgmTracks[name]) return;
     currentBgm=name;
@@ -1497,18 +1978,26 @@ function setBgm(name, autoStart=true){
     updateBgmUI();
 }
 
+
 function updateBgmUI(){
-    const title=$("bgmTitle");
     const select=$("bgmSelect");
     const toggle=$("bgmToggle");
-    if(title) title.textContent=bgmTracks[currentBgm].name;
     if(select) select.value=currentBgm;
     if(toggle) toggle.textContent=bgmPlaying?"Ⅱ":"▶";
 }
 
+
 function autoBgmForScreen(screen){
     if(screen===gameScreen) setBgm("rush",true);
     else if(screen===padScreen || screen===resultScreen) setBgm("night",true);
+}
+
+
+function updateTopGameUI(){
+    const day=$("gameDayDisplay");
+    const money=$("moneyDisplay");
+    if(day) day.textContent=String(gameDay).padStart(2,"0");
+    if(money) money.textContent=Math.max(0,Math.floor(playerMoney)).toLocaleString();
 }
 
 function updatePadDay(){
@@ -1516,11 +2005,14 @@ function updatePadDay(){
     if(el) el.textContent="DAY "+String(gameDay).padStart(2,"0");
 }
 
+
 /* =====================================================
    CARGO DATA
 ===================================================== */
 
+
 const cargoData=[
+
 
     {
         id:"ramen",
@@ -1533,6 +2025,7 @@ const cargoData=[
         reward:1200
     },
 
+
     {
         id:"medicine",
         icon:"💊",
@@ -1543,6 +2036,7 @@ const cargoData=[
         damageRate:1.4,
         reward:2200
     },
+
 
     {
         id:"component",
@@ -1555,6 +2049,7 @@ const cargoData=[
         reward:1500
     },
 
+
     {
         id:"data",
         icon:"💾",
@@ -1566,6 +2061,7 @@ const cargoData=[
         reward:3000
     },
 
+
     {
         id:"bio",
         icon:"🧬",
@@ -1576,6 +2072,7 @@ const cargoData=[
         damageRate:1.8,
         reward:2800
     },
+
 
     {
         id:"luxury",
@@ -1590,111 +2087,41 @@ const cargoData=[
 
 ];
 
-/* =====================================================
-   DELIVERY REQUESTS
-===================================================== */
-const requestData=[
-    {
-        id:"midnight",
-        name:"MIDNIGHT EXPRESS",
-        level:"STANDARD",
-        desc:"야간 시간대의 일반 배송. 가장 기본적인 도시 구간을 통과합니다.",
-        map:"city",
-        cargo:["ramen","data"],
-        positions:{ramen:[.80,.20],data:[.20,.20]}
-    },
-    {
-        id:"medrun",
-        name:"EMERGENCY MEDRUN",
-        level:"HIGH RISK",
-        desc:"의료 구역까지 긴급 의약품을 운송합니다. 우회로가 많은 위험한 구간입니다.",
-        map:"medical",
-        cargo:["medicine","bio"],
-        positions:{medicine:[.80,.80],bio:[.50,.20]}
-    },
-    {
-        id:"blackbox",
-        name:"BLACK BOX TRANSFER",
-        level:"CRITICAL",
-        desc:"정체불명의 암호 데이터를 기업 보안구역으로 운송합니다.",
-        map:"corporate",
-        cargo:["data","luxury","component"],
-        positions:{data:[.80,.20],luxury:[.50,.80],component:[.20,.80]}
-    },
-    {
-        id:"industrial",
-        name:"INDUSTRIAL SUPPLY",
-        level:"STANDARD",
-        desc:"산업지구에 사이버 부품을 공급합니다. 긴 직선 도로가 많은 의뢰입니다.",
-        map:"industrial",
-        cargo:["component","ramen","medicine"],
-        positions:{component:[.20,.80],ramen:[.80,.50],medicine:[.50,.20]}
-    }
-];
-let selectedRequest=null;
-const baseCargoPositions={};
-for(const c of cargoData) baseCargoPositions[c.id]={x:c.x,y:c.y,destination:c.destination};
-
-function renderRequests(){
-    requestGrid.innerHTML="";
-    requestData.forEach(req=>{
-        const card=document.createElement("button");
-        card.className="request-card"+(selectedRequest?.id===req.id?" selected":"");
-        card.innerHTML=`<div class="request-top"><span class="request-name">${req.name}</span><span class="request-level">${req.level}</span></div><div class="request-desc">${req.desc}</div><div class="request-meta"><span>MAP // ${req.map.toUpperCase()}</span><span class="request-cargo">${req.cargo.length} CARGO ITEMS</span></div>`;
-        card.onclick=()=>selectRequest(req.id);
-        requestGrid.appendChild(card);
-    });
-}
-function showRequestScreen(){
-    showScreen(requestScreen);
-    renderRequests();
-}
-function selectRequest(id){
-    playSound("select");
-    const req=requestData.find(r=>r.id===id);
-    if(!req) return;
-    selectedRequest=req;
-    selectedCargo=[];
-    for(const c of cargoData){
-        const base=baseCargoPositions[c.id];
-        if(base){c.x=base.x;c.y=base.y;c.destination=base.destination;}
-    }
-    for(const id2 of req.cargo){
-        const c=cargoData.find(x=>x.id===id2);
-        const pos=req.positions[id2];
-        if(c && pos){c.x=pos[0];c.y=pos[1];c.destination=req.name;}
-    }
-    showCargoScreen();
-}
 
 let selectedCargo=[];
+
+
 
 
 /* =====================================================
    DOM CACHE
 ===================================================== */
 
+
 const $=id=>document.getElementById(id);
+
 
 const titleScreen=$("titleScreen");
 const cargoScreen=$("cargoScreen");
-const requestScreen=$("requestScreen");
-const requestGrid=$("requestGrid");
 const padScreen=$("padScreen");
 const gameScreen=$("gameScreen");
 const resultScreen=$("resultScreen");
+
 
 const cargoGrid=$("cargoGrid");
 const selectedCount=$("selectedCount");
 const cargoStart=$("cargoStart");
 
+
 const distanceEl=$("distance");
 const cargoCountEl=$("cargoCount");
 const damageEl=$("damage");
 
+
 const modeMessage=$("modeMessage");
 const deliveryStatus=$("deliveryStatus");
 const cargoHud=$("cargoHud");
+
 
 const clearButton=$("clearButton");
 const deliverButton=$("deliverButton");
@@ -1702,6 +2129,7 @@ const deliverButton=$("deliverButton");
 const eventBox=$("event");
 const eventTitle=$("eventTitle");
 const eventText=$("eventText");
+
 
 const bgmSelect=$("bgmSelect");
 if(bgmSelect){
@@ -1712,27 +2140,89 @@ if(bgmSelect){
 }
 
 
+
+
+
+
+/* =====================================================
+   GAME BOTTOM PANEL MODALS
+===================================================== */
+
+function closeGameModal(id){
+    const el=document.getElementById(id);
+    if(el) el.style.display="none";
+}
+
+function openCargoModal(){
+    const list=document.getElementById("cargoModalList");
+    if(!list) return;
+    let html="";
+    if(selectedCargo.length===0){
+        html='<div class="help-list">현재 선택된 배송품이 없습니다.</div>';
+    }else{
+        for(const id of selectedCargo){
+            const item=cargoData.find(x=>x.id===id);
+            if(!item) continue;
+            const done=deliveredCargo.has(id);
+            html+=`<div class="cargo-info-item ${done?"done":""}"><span>${done?"✓":"○"} ${item.name}</span><span>${item.destination}</span></div>`;
+        }
+    }
+    list.innerHTML=html;
+    document.getElementById("cargoModal").style.display="flex";
+}
+
+function openGameSettings(){
+    const el=document.getElementById("gameSettingsModal");
+    if(el) el.style.display="flex";
+}
+
+function openHelp(){
+    const el=document.getElementById("helpModal");
+    if(el) el.style.display="flex";
+}
+
+function applyGameVolumes(){
+    const s=document.getElementById("sfxVolume");
+    const b=document.getElementById("bgmVolume");
+    window.sfxMasterVolume=s?Number(s.value)/100:1;
+    window.bgmMasterVolume=b?Number(b.value)/100:.7;
+}
+document.addEventListener("input",e=>{
+    if(e.target && (e.target.id==="sfxVolume" || e.target.id==="bgmVolume")){
+        applyGameVolumes();
+    }
+});
+
+applyGameVolumes();
+
 /* =====================================================
    SCREEN
 ===================================================== */
 
+
 function showScreen(screen){
+
 
     titleScreen.classList.remove("active");
     cargoScreen.classList.remove("active");
-    requestScreen.classList.remove("active");
     padScreen.classList.remove("active");
     gameScreen.classList.remove("active");
     resultScreen.classList.remove("active");
 
+
     screen.classList.add("active");
+    updateTopGameUI();
     autoBgmForScreen(screen);
 }
+
+
 
 
 /* =====================================================
    CARGO
 ===================================================== */
+
+
 
 
 /* =====================================================
@@ -1743,29 +2233,37 @@ function showPadScreen(){
     showScreen(padScreen);
     updatePadDay();
 
+
     const clock = $("padClock");
+
 
     function updatePadClock(){
         if(!padScreen.classList.contains("active"))
             return;
 
+
         const now = new Date();
+
 
         clock.textContent =
             String(now.getHours()).padStart(2,"0") +
             ":" +
             String(now.getMinutes()).padStart(2,"0");
 
+
         requestAnimationFrame(updatePadClock);
     }
+
 
     requestAnimationFrame(updatePadClock);
 }
 
+
 function openDeliveryApp(){
     playSound("click");
-    showRequestScreen();
+    showCargoScreen();
 }
+
 
 function showPadNotice(message){
     playSound("error");
@@ -1773,10 +2271,13 @@ function showPadNotice(message){
 
     if(old) old.remove();
 
+
     const notice = document.createElement("div");
+
 
     notice.id = "padNotice";
     notice.textContent = message;
+
 
     notice.style.cssText = `
         position:absolute;
@@ -1794,7 +2295,9 @@ function showPadNotice(message){
         box-shadow:0 0 18px rgba(99,245,255,.15);
     `;
 
+
     padScreen.appendChild(notice);
+
 
     setTimeout(()=>{
         if(notice.parentNode)
@@ -1802,36 +2305,49 @@ function showPadNotice(message){
     },1800);
 }
 
+
 function exitToTitle(){
     playSound("back");
     showScreen(titleScreen);
 }
 
 
+
 function showCargoScreen(){
+
+
     showScreen(cargoScreen);
-    const p=cargoScreen.querySelector(".cargo-header p");
-    if(p) p.textContent=selectedRequest ? selectedRequest.name+" // 배송품을 선택하세요" : "배달할 물품을 선택하세요";
+
+
     renderCargo();
 }
 
 
+
+
 function renderCargo(){
+
 
     cargoGrid.innerHTML="";
 
     const selectedSet=new Set(selectedCargo);
 
-    cargoData.filter(item=>!selectedRequest || selectedRequest.cargo.includes(item.id)).forEach(item=>{
+
+    cargoData.forEach(item=>{
+
 
         const card=document.createElement("div");
 
+
         card.className="cargo-card";
+
 
         if(selectedSet.has(item.id))
             card.classList.add("selected");
 
+
         card.innerHTML=`
+
 
             <div class="check">✓</div>
 
@@ -1839,13 +2355,16 @@ function renderCargo(){
                 ${item.icon}
             </div>
 
+
             <div class="cargo-name">
                 ${item.name}
             </div>
 
+
             <div class="cargo-destination">
                 → ${item.destination}
             </div>
+
 
             <div class="cargo-reward">
                 ¥${item.reward.toLocaleString()}
@@ -1853,44 +2372,58 @@ function renderCargo(){
 
         `;
 
+
         card.addEventListener(
             "click",
             ()=>toggleCargo(item.id)
         );
 
+
         cargoGrid.appendChild(card);
 
+
     });
+
 
     updateCargoSelection();
 }
 
 
+
 function toggleCargo(id){
+
 
     playSound("select");
 
+
     const index=selectedCargo.indexOf(id);
+
 
     if(index>=0)
         selectedCargo.splice(index,1);
     else
         selectedCargo.push(id);
 
+
     renderCargo();
 }
 
 
+
 function updateCargoSelection(){
+
 
     selectedCount.textContent=
         "선택된 물품: "+
         selectedCargo.length+
         "개";
 
+
     cargoStart.disabled=
         selectedCargo.length===0;
 }
+
+
 
 
 /* =====================================================
@@ -1902,40 +2435,27 @@ function updateCargoSelection(){
    road:
    x1,y1 -> x2,y2
 
+
    type:
    horizontal / vertical
 */
 
-let roads=[
+
+const roads=[
+
 
     {id:0,x1:.08,y1:.20,x2:.92,y2:.20,type:"h"},
     {id:1,x1:.08,y1:.50,x2:.92,y2:.50,type:"h"},
     {id:2,x1:.08,y1:.80,x2:.92,y2:.80,type:"h"},
 
+
     {id:3,x1:.20,y1:.08,x2:.20,y2:.92,type:"v"},
     {id:4,x1:.50,y1:.08,x2:.50,y2:.92,type:"v"},
     {id:5,x1:.80,y1:.08,x2:.80,y2:.92,type:"v"}
 
+
 ];
 
-const mapLayouts={
-    city:roads,
-    medical:[
-        {id:0,x1:.08,y1:.20,x2:.92,y2:.20,type:"h"},{id:1,x1:.08,y1:.50,x2:.92,y2:.50,type:"h"},{id:2,x1:.08,y1:.80,x2:.92,y2:.80,type:"h"},
-        {id:3,x1:.20,y1:.08,x2:.20,y2:.92,type:"v"},{id:4,x1:.50,y1:.08,x2:.50,y2:.92,type:"v"},{id:5,x1:.80,y1:.08,x2:.80,y2:.92,type:"v"},
-        {id:6,x1:.35,y1:.20,x2:.35,y2:.50,type:"v"},{id:7,x1:.65,y1:.50,x2:.65,y2:.80,type:"v"}
-    ],
-    corporate:[
-        {id:0,x1:.08,y1:.20,x2:.92,y2:.20,type:"h"},{id:1,x1:.08,y1:.50,x2:.92,y2:.50,type:"h"},{id:2,x1:.08,y1:.80,x2:.92,y2:.80,type:"h"},
-        {id:3,x1:.20,y1:.08,x2:.20,y2:.92,type:"v"},{id:4,x1:.50,y1:.08,x2:.50,y2:.92,type:"v"},{id:5,x1:.80,y1:.08,x2:.80,y2:.92,type:"v"},
-        {id:6,x1:.35,y1:.08,x2:.35,y2:.20,type:"v"},{id:7,x1:.65,y1:.80,x2:.65,y2:.92,type:"v"}
-    ],
-    industrial:[
-        {id:0,x1:.08,y1:.20,x2:.92,y2:.20,type:"h"},{id:1,x1:.08,y1:.50,x2:.92,y2:.50,type:"h"},{id:2,x1:.08,y1:.80,x2:.92,y2:.80,type:"h"},
-        {id:3,x1:.20,y1:.08,x2:.20,y2:.92,type:"v"},{id:4,x1:.50,y1:.08,x2:.50,y2:.92,type:"v"},{id:5,x1:.80,y1:.08,x2:.80,y2:.92,type:"v"},
-        {id:6,x1:.35,y1:.50,x2:.35,y2:.80,type:"v"},{id:7,x1:.65,y1:.20,x2:.65,y2:.50,type:"v"}
-    ]
-};
 
 
 
@@ -1945,17 +2465,21 @@ const startPoint={
 };
 
 
+
+
 /* =====================================================
    GAME STATE
 ===================================================== */
 
 let route=[];
 
+
 /*
    routeRoads:
    실제로 선택된 도로의 순서
 */
 let routeRoads=[];
+
 
 /*
    visitedRoads:
@@ -1964,9 +2488,11 @@ let routeRoads=[];
 */
 let visitedRoads=new Set();
 
+
 let routeDistance=0;
 
 let drawing=false;
+
 
 /*
    현재 드래그 중인 도로와 진행 방향.
@@ -1976,24 +2502,33 @@ let activeRoadId=null;
 let activeRoadDirection=0;
 let lastPointer=null;
 
+
 const ROUTE_POINT_MIN_DISTANCE=4;
 const INTERSECTION_TOUCH_DISTANCE=52;
 
+
 let planning=false;
+
 
 let delivering=false;
 
 let pausedByEvent=false;
 
+
 let deliveryProgress=0;
+
 
 let deliveryStart=0;
 
+
 let deliveryElapsed=0;
+
 
 let damage=0;
 
+
 let deliveredCargo=new Set();
+
 
 let triggeredEvents=new Set();
 
@@ -2001,28 +2536,38 @@ let W=0;
 let H=0;
 
 
+
+
 /* =====================================================
    CANVAS
 ===================================================== */
 
+
 const canvas=$("gameCanvas");
 const ctx=canvas.getContext("2d");
 
+
 function resize(){
+
 
     const dpr=Math.min(
         window.devicePixelRatio||1,
         2
     );
 
+
     W=window.innerWidth;
-    H=window.innerHeight;
+    const mapArea=document.getElementById("gameMapArea");
+    H=mapArea ? mapArea.clientHeight : window.innerHeight;
+
 
     canvas.width=W*dpr;
     canvas.height=H*dpr;
 
+
     canvas.style.width=W+"px";
     canvas.style.height=H+"px";
+
 
     ctx.setTransform(
         dpr,0,0,dpr,0,0
@@ -2031,15 +2576,19 @@ function resize(){
     draw();
 }
 
+
 window.addEventListener(
     "resize",
     resize
 );
 
 
+
+
 /* =====================================================
    ROAD HELPERS
 ===================================================== */
+
 
 function getRoadPoint(road,t){
 
@@ -2051,7 +2600,9 @@ function getRoadPoint(road,t){
     };
 }
 
+
 function roadLength(road){
+
 
     return Math.hypot(
         (road.x2-road.x1)*W,
@@ -2059,30 +2610,39 @@ function roadLength(road){
     );
 }
 
+
 function clamp01(v){
     return Math.max(0,Math.min(1,v));
 }
 
+
 function projectToRoad(road,x,y){
+
 
     const ax=road.x1*W;
     const ay=road.y1*H;
     const bx=road.x2*W;
     const by=road.y2*H;
 
+
     const dx=bx-ax;
     const dy=by-ay;
     const len2=dx*dx+dy*dy;
 
+
     let t=0;
+
 
     if(len2>0){
         t=((x-ax)*dx+(y-ay)*dy)/len2;
     }
 
+
     t=clamp01(t);
 
+
     const point=getRoadPoint(road,t);
+
 
     return{
         road,
@@ -2100,12 +2660,16 @@ function projectToRoad(road,x,y){
 */
 function findRoad(x,y){
 
+
     let best=null;
     let bestDistance=Infinity;
 
+
     for(const road of roads){
 
+
         const hit=projectToRoad(road,x,y);
+
 
         if(
             road.id===activeRoadId &&
@@ -2116,25 +2680,32 @@ function findRoad(x,y){
             continue;
         }
 
+
         if(hit.distance<bestDistance){
             best=hit;
             bestDistance=hit.distance;
         }
     }
 
+
     return best && best.distance<=78 ? best : null;
 }
 
+
 function roadsConnected(a,b){
+
 
     if(!a || !b || a.id===b.id)
         return false;
 
+
     if(a.type===b.type)
         return false;
 
+
     const h=a.type==="h" ? a : b;
     const v=a.type==="v" ? a : b;
+
 
     return(
         v.x1>=h.x1 &&
@@ -2144,13 +2715,17 @@ function roadsConnected(a,b){
     );
 }
 
+
 function getIntersection(a,b){
+
 
     if(!roadsConnected(a,b))
         return null;
 
+
     const h=a.type==="h" ? a : b;
     const v=a.type==="v" ? a : b;
+
 
     return{
         x:v.x1,
@@ -2158,7 +2733,9 @@ function getIntersection(a,b){
     };
 }
 
+
 function normalizedDistance(a,b){
+
 
     return Math.hypot(
         (a.x-b.x)*W,
@@ -2166,40 +2743,52 @@ function normalizedDistance(a,b){
     );
 }
 
+
 function pushRoutePoint(p){
+
 
     if(!p)
         return false;
 
+
     const last=route[route.length-1];
+
 
     if(last && normalizedDistance(last,p)<ROUTE_POINT_MIN_DISTANCE)
         return false;
+
 
     route.push({
         x:clamp01(p.x),
         y:clamp01(p.y)
     });
 
+
     routeDistance=calculateRouteDistance();
     return true;
 }
+
 
 function getRoadById(id){
     return roads.find(r=>r.id===id)||null;
 }
 
+
 function getLastRoadT(){
+
 
     if(route.length===0)
         return null;
 
     const road=getRoadById(activeRoadId);
 
+
     if(!road)
         return null;
 
+
     const p=route[route.length-1];
+
 
     if(road.type==="h"){
         return clamp01(
@@ -2207,25 +2796,33 @@ function getLastRoadT(){
         );
     }
 
+
     return clamp01(
         (p.y-road.y1)/(road.y2-road.y1)
     );
 }
 
+
 function directionFromT(previousT,currentT){
 
+
     const delta=currentT-previousT;
+
 
     if(Math.abs(delta)<0.002)
         return 0;
 
+
     return delta>0 ? 1 : -1;
 }
 
+
 function isNearStart(hit){
+
 
     const sx=startPoint.x*W;
     const sy=startPoint.y*H;
+
 
     return Math.hypot(
         hit.x-sx,
@@ -2233,14 +2830,19 @@ function isNearStart(hit){
     )<=90;
 }
 
+
 function continueOnCurrentRoad(hit){
 
+
     const lastT=getLastRoadT();
+
 
     if(lastT===null)
         return false;
 
+
     const newDirection=directionFromT(lastT,hit.t);
+
 
     if(
         activeRoadDirection===0 &&
@@ -2248,6 +2850,7 @@ function continueOnCurrentRoad(hit){
     ){
         activeRoadDirection=newDirection;
     }
+
 
     /*
        같은 도로를 이미 방문했으므로
@@ -2264,10 +2867,13 @@ function continueOnCurrentRoad(hit){
         return false;
     }
 
+
     return pushRoutePoint(hit.point);
 }
 
+
 function beginFirstRoad(hit){
+
 
     if(!isNearStart(hit)){
         showTemporaryMessage(
@@ -2276,19 +2882,24 @@ function beginFirstRoad(hit){
         return false;
     }
 
+
     activeRoadId=hit.road.id;
     routeRoads=[hit.road];
     visitedRoads.add(hit.road.id);
     activeRoadDirection=0;
+
 
     route=[{
         x:startPoint.x,
         y:startPoint.y
     }];
 
+
     pushRoutePoint(hit.point);
 
+
     lastPointer={x:hit.x,y:hit.y};
+
 
     checkDestinationsOnRoute();
     updateAll();
@@ -2297,12 +2908,16 @@ function beginFirstRoad(hit){
     return true;
 }
 
+
 function switchToNextRoad(hit){
+
 
     const previous=getRoadById(activeRoadId);
 
+
     if(!previous || hit.road.id===previous.id)
         return false;
+
 
     if(!roadsConnected(previous,hit.road)){
         showTemporaryMessage(
@@ -2311,6 +2926,7 @@ function switchToNextRoad(hit){
         return false;
     }
 
+
     if(visitedRoads.has(hit.road.id)){
         showTemporaryMessage(
             "이미 지나간 도로입니다"
@@ -2318,10 +2934,13 @@ function switchToNextRoad(hit){
         return false;
     }
 
+
     const corner=getIntersection(previous,hit.road);
+
 
     if(!corner)
         return false;
+
 
     const cx=corner.x*W;
     const cy=corner.y*H;
@@ -2340,12 +2959,15 @@ function switchToNextRoad(hit){
         return false;
     }
 
+
     pushRoutePoint(corner);
+
 
     routeRoads.push(hit.road);
     visitedRoads.add(hit.road.id);
     activeRoadId=hit.road.id;
     activeRoadDirection=0;
+
 
     /*
        교차로에서 어느 방향으로 출발했는지 결정.
@@ -2361,19 +2983,24 @@ function switchToNextRoad(hit){
                 (hit.road.y2-hit.road.y1)
             );
 
+
     activeRoadDirection=
         directionFromT(cornerT,hit.t);
 
     pushRoutePoint(hit.point);
 
+
     lastPointer={x:hit.x,y:hit.y};
+
 
     checkDestinationsOnRoute();
     updateAll();
     draw();
 
+
     return true;
 }
+
 
 /* =====================================================
    START PLANNING
@@ -2381,36 +3008,42 @@ function switchToNextRoad(hit){
 
 function startRoutePlanning(){
 
-    if(selectedRequest && mapLayouts[selectedRequest.map]){
-        roads=mapLayouts[selectedRequest.map];
-    }
 
     showScreen(gameScreen);
+
 
     planning=true;
     delivering=false;
     pausedByEvent=false;
     drawing=false;
 
+
     route=[];
     routeRoads=[];
     visitedRoads.clear();
 
+
     routeDistance=0;
+
 
     damage=0;
 
+
     deliveredCargo.clear();
     triggeredEvents.clear();
+
 
     activeRoadId=null;
     activeRoadDirection=0;
     lastPointer=null;
 
+
     modeMessage.textContent=
         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
+
     deliveryStatus.style.display="none";
+
 
     clearButton.disabled=false;
 
@@ -2418,16 +3051,21 @@ function startRoutePlanning(){
     updateHUD();
     updateDeliverButton();
 
+
     resize();
 }
+
 
 /* =====================================================
    POINTER DOWN
 ===================================================== */
 
+
 function pointerDown(e){
 
+
     e.preventDefault();
+
 
     if(
         !planning ||
@@ -2436,17 +3074,22 @@ function pointerDown(e){
     )
         return;
 
+
     const rect=canvas.getBoundingClientRect();
+
 
     const x=e.clientX-rect.left;
     const y=e.clientY-rect.top;
 
+
     const hit=findRoad(x,y);
+
 
     if(!hit)
         return;
 
     if(routeRoads.length===0){
+
 
         if(beginFirstRoad(hit)){
             drawing=true;
@@ -2454,8 +3097,10 @@ function pointerDown(e){
             draw();
         }
 
+
         return;
     }
+
 
     /*
        드래그를 다시 시작할 때는 반드시
@@ -2475,27 +3120,34 @@ function pointerDown(e){
         return;
     }
 
+
     drawing=true;
     lastPointer={x,y};
     canvas.setPointerCapture?.(e.pointerId);
+
 
     if(hit.road.id===activeRoadId)
         continueOnCurrentRoad(hit);
     else
         switchToNextRoad(hit);
 
+
     checkDestinationsOnRoute();
     updateAll();
     draw();
 }
 
+
 /* =====================================================
    POINTER MOVE
 ===================================================== */
 
+
 function pointerMove(e){
 
+
     e.preventDefault();
+
 
     if(
         !drawing ||
@@ -2505,19 +3157,25 @@ function pointerMove(e){
     )
         return;
 
+
     const rect=canvas.getBoundingClientRect();
+
 
     const x=e.clientX-rect.left;
     const y=e.clientY-rect.top;
 
+
     lastPointer={x,y};
+
 
     const hit=findRoad(x,y);
 
     if(!hit)
         return;
 
+
     if(hit.road.id===activeRoadId){
+
 
         if(continueOnCurrentRoad(hit)){
             checkDestinationsOnRoute();
@@ -2525,8 +3183,10 @@ function pointerMove(e){
             draw();
         }
 
+
         return;
     }
+
 
     if(switchToNextRoad(hit)){
         checkDestinationsOnRoute();
@@ -2535,14 +3195,18 @@ function pointerMove(e){
     }
 }
 
+
 /* =====================================================
    POINTER UP
 ===================================================== */
 
+
 function pointerUp(e){
+
 
     if(e)
         e.preventDefault();
+
 
     if(e?.pointerId!==undefined){
         try{
@@ -2550,24 +3214,31 @@ function pointerUp(e){
         }catch(_){}
     }
 
+
     drawing=false;
     lastPointer=null;
+
 
     updateDeliverButton();
     draw();
 }
 
 
+
+
 /* =====================================================
    DESTINATION
 ===================================================== */
+
 
 function checkDestinationsOnRoute(){
 
     if(route.length===0)
         return;
 
+
     for(const item of cargoData){
+
 
         if(
             !selectedCargo.includes(
@@ -2576,6 +3247,7 @@ function checkDestinationsOnRoute(){
         )
             continue;
 
+
         if(
             deliveredCargo.has(
                 item.id
@@ -2583,7 +3255,9 @@ function checkDestinationsOnRoute(){
         )
             continue;
 
+
         for(const p of route){
+
 
             if(
                 Math.hypot(
@@ -2592,9 +3266,11 @@ function checkDestinationsOnRoute(){
                 )<.065
             ){
 
+
                 deliveredCargo.add(
                     item.id
                 );
+
 
                 break;
             }
@@ -2603,27 +3279,37 @@ function checkDestinationsOnRoute(){
 }
 
 
+
+
 /* =====================================================
    CLEAR
 ===================================================== */
 
+
 function clearRoute(){
+
 
     if(!planning)
         return;
 
+
     route=[];
     routeRoads=[];
+
 
     /*
        여기서만 방문 기록을 초기화한다.
     */
 
+
     visitedRoads.clear();
+
 
     routeDistance=0;
 
+
     deliveredCargo.clear();
+
 
     drawing=false;
     activeRoadId=null;
@@ -2633,18 +3319,24 @@ function clearRoute(){
     modeMessage.textContent=
         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
+
     updateAll();
     draw();
 }
+
+
 
 
 /* =====================================================
    ROUTE DISTANCE
 ===================================================== */
 
+
 function calculateRouteDistance(){
 
+
     let total=0;
+
 
     for(
         let i=1;
@@ -2652,11 +3344,13 @@ function calculateRouteDistance(){
         i++
     ){
 
+
         total+=Math.hypot(
             (
                 route[i].x-
                 route[i-1].x
             )*W,
+
 
             (
                 route[i].y-
@@ -2665,20 +3359,26 @@ function calculateRouteDistance(){
         );
     }
 
+
     return total;
 }
+
+
 
 
 /* =====================================================
    DELIVER BUTTON
 ===================================================== */
 
+
 function updateDeliverButton(){
+
 
     const complete=
         selectedCargo.length>0 &&
         deliveredCargo.size===
         selectedCargo.length;
+
 
     deliverButton.disabled=
         !complete ||
@@ -2687,11 +3387,15 @@ function updateDeliverButton(){
 }
 
 
+
+
 /* =====================================================
    UPDATE
 ===================================================== */
 
+
 function updateAll(){
+
 
     updateHUD();
     updateCargoHud();
@@ -2699,13 +3403,18 @@ function updateAll(){
 }
 
 
+
+
 /* =====================================================
    START DELIVERY
 ===================================================== */
 
+
 function startDelivery(){
 
+
     playSound("deliver");
+
 
     if(
         !planning ||
@@ -2713,39 +3422,50 @@ function startDelivery(){
     )
         return;
 
+
     if(
         deliveredCargo.size!==
         selectedCargo.length
     )
         return;
 
+
     planning=false;
     delivering=true;
     pausedByEvent=false;
 
+
     damage=0;
+
 
     deliveryProgress=0;
 
     deliveryStart=
         performance.now();
 
+
     deliveryElapsed=0;
 
+
     deliveredCargo.clear();
+
 
     clearButton.disabled=true;
     deliverButton.disabled=true;
 
+
     modeMessage.textContent=
         "계획한 경로를 따라 배송 중";
+
 
     deliveryStatus.style.display=
         "block";
 
     updateCargoHud();
 
+
     deliveryLoop.lastTime=null;
+
 
     requestAnimationFrame(
         deliveryLoop
@@ -2753,14 +3473,20 @@ function startDelivery(){
 }
 
 
+
+
 /* =====================================================
    DELIVERY LOOP
 ===================================================== */
 
+
 function deliveryLoop(now){
+
 
     if(!delivering)
         return;
+
+
 
 
     /*
@@ -2768,24 +3494,32 @@ function deliveryLoop(now){
        캐릭터는 완전히 정지한다.
     */
 
+
     if(pausedByEvent){
 
+
         deliveryLoop.lastTime=now;
+
 
         requestAnimationFrame(
             deliveryLoop
         );
 
+
         return;
     }
+
+
 
 
     if(
         deliveryLoop.lastTime===null
     ){
 
+
         deliveryLoop.lastTime=now;
     }
+
 
 
     const dt=
@@ -2797,7 +3531,9 @@ function deliveryLoop(now){
             )/1000
         );
 
+
     deliveryLoop.lastTime=now;
+
 
     deliveryElapsed=
         (
@@ -2806,14 +3542,19 @@ function deliveryLoop(now){
         )/1000;
 
 
+
     /*
        빠른 배송 속도
     */
 
+
     const speed=500;
+
 
     let remaining=
         speed*dt;
+
+
 
 
     while(
@@ -2827,14 +3568,18 @@ function deliveryLoop(now){
                 deliveryProgress
             );
 
+
         const fraction=
             deliveryProgress-index;
+
 
         const a=
             route[index];
 
+
         const b=
             route[index+1];
+
 
         const segmentLength=
             Math.hypot(
@@ -2842,19 +3587,26 @@ function deliveryLoop(now){
                     b.x-a.x
                 )*W,
 
+
                 (
                     b.y-a.y
                 )*H
             );
 
 
+
+
         if(segmentLength<=0){
+
 
             deliveryProgress=
                 index+1;
 
+
             continue;
         }
+
+
 
 
         const remainingOnSegment=
@@ -2862,21 +3614,28 @@ function deliveryLoop(now){
             (1-fraction);
 
 
+
+
         if(
             remaining<
             remainingOnSegment
         ){
 
+
             deliveryProgress+=
                 remaining/
                 segmentLength;
 
+
             remaining=0;
+
 
         }else{
 
+
             remaining-=
                 remainingOnSegment;
+
 
             deliveryProgress=
                 index+1;
@@ -2884,11 +3643,17 @@ function deliveryLoop(now){
     }
 
 
+
+
     checkDeliveryDestinations();
+
+
 
 
     const rate=
         getDamageRate();
+
+
 
 
     damage+=
@@ -2898,18 +3663,26 @@ function deliveryLoop(now){
         rate;
 
 
+
+
     damage=Math.min(
         100,
         damage
     );
 
 
+
+
     checkEvent();
+
 
     updateHUD();
     updateCargoHud();
 
+
     drawDelivery();
+
+
 
 
     if(
@@ -2917,10 +3690,14 @@ function deliveryLoop(now){
         route.length-1
     ){
 
+
         finishDelivery();
+
 
         return;
     }
+
+
 
 
     requestAnimationFrame(
@@ -2929,14 +3706,19 @@ function deliveryLoop(now){
 }
 
 
+
+
 /* =====================================================
    DELIVERY POSITION
 ===================================================== */
 
+
 function getDeliveryPosition(){
+
 
     if(route.length===0)
         return startPoint;
+
 
     const index=
         Math.floor(
@@ -2944,9 +3726,12 @@ function getDeliveryPosition(){
         );
 
 
+
+
     if(
         index>=route.length-1
     ){
+
 
         return route[
             route.length-1
@@ -2954,23 +3739,31 @@ function getDeliveryPosition(){
     }
 
 
+
+
     const fraction=
         deliveryProgress-index;
 
+
     const a=
         route[index];
+
 
     const b=
         route[index+1];
 
 
+
+
     return{
+
 
         x:
             a.x+
             (
                 b.x-a.x
             )*fraction,
+
 
         y:
             a.y+
@@ -2982,14 +3775,19 @@ function getDeliveryPosition(){
 }
 
 
+
+
 /* =====================================================
    DELIVERY DESTINATIONS
 ===================================================== */
 
+
 function checkDeliveryDestinations(){
+
 
     const p=
         getDeliveryPosition();
+
 
     for(const item of cargoData){
 
@@ -3000,6 +3798,7 @@ function checkDeliveryDestinations(){
         )
             continue;
 
+
         if(
             deliveredCargo.has(
                 item.id
@@ -3007,13 +3806,16 @@ function checkDeliveryDestinations(){
         )
             continue;
 
+
         const d=
             Math.hypot(
                 p.x-item.x,
                 p.y-item.y
             );
 
+
         if(d<.065){
+
 
             deliveredCargo.add(
                 item.id
@@ -3023,28 +3825,37 @@ function checkDeliveryDestinations(){
 }
 
 
+
+
 /* =====================================================
    DAMAGE
 ===================================================== */
 
+
 function getDamageRate(){
+
 
     let total=0;
     let count=0;
 
+
     for(const id of selectedCargo){
+
 
         const item=
             cargoData.find(
                 x=>x.id===id
             );
 
+
         if(item){
+
 
             total+=item.damageRate;
             count++;
         }
     }
+
 
     return count
         ? total/count
@@ -3052,11 +3863,15 @@ function getDamageRate(){
 }
 
 
+
+
 /* =====================================================
    EVENT
 ===================================================== */
 
+
 function checkEvent(){
+
 
     if(
         triggeredEvents.has(
@@ -3066,8 +3881,12 @@ function checkEvent(){
         return;
 
 
+
+
     const p=
         getDeliveryPosition();
+
+
 
 
     if(
@@ -3081,19 +3900,25 @@ function checkEvent(){
             "center"
         );
 
+
         playSound("event");
 
+
         damage+=5;
+
 
         /*
            배송 차량 즉시 정지
         */
 
+
         pausedByEvent=true;
+
 
 
         showEvent(
             "⚡ ELECTROMAGNETIC STORM",
+
 
             "도시 중앙을 지나던 중 강한<br>"+
             "전자기 폭풍이 발생했습니다.<br><br>"+
@@ -3101,6 +3926,8 @@ function checkEvent(){
         );
     }
 }
+
+
 
 
 function showEvent(
@@ -3111,31 +3938,41 @@ function showEvent(
     eventTitle.textContent=
         title;
 
+
     eventText.innerHTML=
         text;
+
 
     eventBox.style.display=
         "block";
 }
 
 
+
+
 function closeEvent(){
+
 
     playSound("continue");
 
     eventBox.style.display=
         "none";
 
+
     /*
        확인 버튼을 누른 뒤에만 재개
     */
 
+
     pausedByEvent=false;
+
 
     deliveryLoop.lastTime=
         performance.now();
 
+
     if(delivering){
+
 
         requestAnimationFrame(
             deliveryLoop
@@ -3144,21 +3981,28 @@ function closeEvent(){
 }
 
 
+
+
 /* =====================================================
    FINISH
 ===================================================== */
 
+
 function finishDelivery(){
 
+
     playSound("complete");
+
 
     delivering=false;
     pausedByEvent=false;
 
     deliveryLoop.lastTime=null;
 
+
     deliveryStatus.style.display=
         "none";
+
 
     damage=Math.min(
         100,
@@ -3166,8 +4010,11 @@ function finishDelivery(){
     );
 
 
+
+
     const ideal=
         getIdealDistance();
+
 
 
     const efficiency=
@@ -3175,6 +4022,7 @@ function finishDelivery(){
             0,
             Math.min(
                 100,
+
 
                 100-
                 Math.max(
@@ -3186,19 +4034,27 @@ function finishDelivery(){
         );
 
 
+
+
     let reward=0;
 
 
+
+
     for(const id of selectedCargo){
+
 
         const item=
             cargoData.find(
                 x=>x.id===id
             );
 
+
         if(item)
             reward+=item.reward;
     }
+
+
 
 
     reward*=
@@ -3208,8 +4064,12 @@ function finishDelivery(){
         );
 
 
+
+
     reward*=
         efficiency/100;
+
+
 
 
     const score=
@@ -3217,33 +4077,44 @@ function finishDelivery(){
         (100-damage)*.45;
 
 
+
     let grade="D";
+
+
 
 
     if(score>=92)
         grade="S";
 
+
     else if(score>=82)
         grade="A";
 
+
     else if(score>=68)
         grade="B";
+
 
     else if(score>=52)
         grade="C";
 
 
+
     $("resultDistance").textContent=
         Math.round(routeDistance)+"m";
+
 
     $("resultTime").textContent=
         deliveryElapsed.toFixed(1)+"s";
 
+
     $("resultDamage").textContent=
         damage.toFixed(1)+"%";
 
+
     $("resultEfficiency").textContent=
         Math.round(efficiency)+"%";
+
 
     $("resultReward").textContent=
         "¥ "+
@@ -3251,30 +4122,56 @@ function finishDelivery(){
             reward
         ).toLocaleString();
 
+
     $("grade").textContent=
         grade;
+
+
 
 
     showScreen(resultScreen);
 }
 
 
+
+
+function abandonDelivery(){
+    if(!gameScreen.classList.contains("active")) return;
+    playSound("back");
+    if(delivering){
+        delivering=false;
+        pausedByEvent=false;
+        deliveryLoop.lastTime=null;
+        deliveryStatus.style.display="none";
+    }
+    clearTimeout(messageTimer);
+    closeGameModal("cargoModal");
+    closeGameModal("gameSettingsModal");
+    closeGameModal("helpModal");
+    showPadScreen();
+}
+
 /* =====================================================
    NEXT DELIVERY / NEW DAY
 ===================================================== */
+
 
 function nextDelivery(){
     playSound("newday");
     gameDay++;
     updatePadDay();
+    updateTopGameUI();
     showPadScreen();
 }
+
 
 /* =====================================================
    IDEAL DISTANCE
 ===================================================== */
 
+
 function getIdealDistance(){
+
 
     return(
         750+
@@ -3283,21 +4180,26 @@ function getIdealDistance(){
 }
 
 
+
 /* =====================================================
    HUD
 ===================================================== */
 
+
 function updateHUD(){
+
 
     distanceEl.textContent=
         Math.round(
             routeDistance
         )+"m";
 
+
     cargoCountEl.textContent=
         deliveredCargo.size+
         "/"+
         selectedCargo.length;
+
 
     damageEl.textContent=
         damage.toFixed(1)+
@@ -3305,30 +4207,41 @@ function updateHUD(){
 }
 
 
+
+
 /* =====================================================
    CARGO HUD
 ===================================================== */
 
+
 function updateCargoHud(){
 
+
     let html=`
+
 
         <div class="cargo-hud-title">
             DELIVERY LIST
         </div>
 
+
     `;
 
 
+
+
     for(const id of selectedCargo){
+
 
         const item=
             cargoData.find(
                 x=>x.id===id
             );
 
+
         if(!item)
             continue;
+
 
 
         const done=
@@ -3337,54 +4250,74 @@ function updateCargoHud(){
             );
 
 
+
+
         html+=`
+
 
             <div class="cargo-hud-item
                 ${done?"delivered":""}">
 
+
                 ${done?"✓":"○"}
                 ${item.name}
 
+
             </div>
+
 
         `;
     }
+
+
 
 
     cargoHud.innerHTML=html;
 }
 
 
+
+
 /* =====================================================
    TEMPORARY MESSAGE
 ===================================================== */
 
+
 let messageTimer=null;
+
 
 
 function showTemporaryMessage(text){
 
+
     modeMessage.textContent=text;
+
 
     clearTimeout(
         messageTimer
     );
 
+
     messageTimer=
         setTimeout(
             ()=>{
+
 
                 if(planning){
 
                     modeMessage.textContent=
                         "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
 
+
                 }
+
 
             },
             1400
         );
 }
+
+
 
 
 /* =====================================================
@@ -3393,8 +4326,11 @@ function showTemporaryMessage(text){
 
 function draw(){
 
+
     if(!W || !H)
         return;
+
+
 
 
     ctx.clearRect(
@@ -3405,11 +4341,15 @@ function draw(){
     );
 
 
+
+
     /*
        BACKGROUND
     */
 
+
     ctx.fillStyle="#070910";
+
 
     ctx.fillRect(
         0,
@@ -3417,6 +4357,8 @@ function draw(){
         W,
         H
     );
+
+
 
 
     /*
@@ -3429,11 +4371,13 @@ function draw(){
         x+=42
     ){
 
+
         for(
             let y=0;
             y<H;
             y+=42
         ){
+
 
             const roadX=
                 roads.some(
@@ -3444,6 +4388,7 @@ function draw(){
                         )<.07
                 );
 
+
             const roadY=
                 roads.some(
                     r=>
@@ -3453,11 +4398,13 @@ function draw(){
                         )<.07
                 );
 
+
             if(
                 roadX||
                 roadY
             )
                 continue;
+
 
 
             ctx.fillStyle=
@@ -3466,6 +4413,8 @@ function draw(){
                 )%2===0
                 ? "#111521"
                 : "#0d111a";
+
+
 
 
             ctx.fillRect(
@@ -3478,55 +4427,75 @@ function draw(){
     }
 
 
+
     /*
        ROADS
     */
 
+
     for(const road of roads){
 
+
         ctx.beginPath();
+
 
         ctx.moveTo(
             road.x1*W,
             road.y1*H
         );
 
+
         ctx.lineTo(
             road.x2*W,
             road.y2*H
         );
 
+
         ctx.lineWidth=31;
 
+
         ctx.strokeStyle="#252a36";
+
 
         ctx.stroke();
 
 
+
+
         ctx.lineWidth=2;
+
 
         ctx.strokeStyle="#4a5060";
 
         ctx.stroke();
 
 
+
+
         ctx.setLineDash(
             [8,9]
         );
 
+
         ctx.lineWidth=1;
+
 
         ctx.strokeStyle=
             "rgba(130,140,155,.35)";
 
+
         ctx.stroke();
 
+
         ctx.setLineDash([]);
+
+
 
 
         /*
            이미 방문한 도로 표시
         */
+
 
         if(
             planning &&
@@ -3535,27 +4504,36 @@ function draw(){
             )
         ){
 
+
             ctx.lineWidth=4;
+
 
             ctx.strokeStyle=
                 "rgba(99,245,255,.12)";
+
 
             ctx.stroke();
         }
     }
 
 
+
+
     /*
        EVENT MARKER
     */
 
+
     ctx.fillStyle="#ffcf55";
+
 
     ctx.shadowColor="#ffcf55";
 
     ctx.shadowBlur=10;
 
+
     ctx.beginPath();
+
 
     ctx.arc(
         W*.50,
@@ -3565,16 +4543,21 @@ function draw(){
         Math.PI*2
     );
 
+
     ctx.fill();
 
+
     ctx.shadowBlur=0;
+
 
 
     /*
        DESTINATIONS
     */
 
+
     for(const item of cargoData){
+
 
         if(
             !selectedCargo.includes(
@@ -3584,8 +4567,11 @@ function draw(){
             continue;
 
 
+
+
         const x=item.x*W;
         const y=item.y*H;
+
 
         const done=
             deliveredCargo.has(
@@ -3593,15 +4579,20 @@ function draw(){
             );
 
 
+
+
         ctx.strokeStyle=
             done
             ? "#5cff9a"
             : "#ffcf55";
 
+
         ctx.lineWidth=2;
 
 
+
         ctx.beginPath();
+
 
         ctx.arc(
             x,
@@ -3611,7 +4602,10 @@ function draw(){
             Math.PI*2
         );
 
+
         ctx.stroke();
+
+
 
 
         ctx.fillStyle=
@@ -3620,7 +4614,10 @@ function draw(){
             : "#ffcf55";
 
 
+
+
         ctx.beginPath();
+
 
         ctx.arc(
             x,
@@ -3630,16 +4627,22 @@ function draw(){
             Math.PI*2
         );
 
+
         ctx.fill();
+
 
 
         ctx.fillStyle="#080910";
 
+
         ctx.font=
             "bold 10px Arial";
 
+
         ctx.textAlign="center";
         ctx.textBaseline="middle";
+
+
 
 
         ctx.fillText(
@@ -3650,17 +4653,22 @@ function draw(){
     }
 
 
+
     /*
        ROUTE
     */
+
 
     if(
         route.length>1
     ){
 
+
         ctx.save();
 
+
         ctx.beginPath();
+
 
         for(
             let i=0;
@@ -3668,74 +4676,102 @@ function draw(){
             i++
         ){
 
+
             const x=
                 route[i].x*W;
+
 
             const y=
                 route[i].y*H;
 
 
+
+
             if(i===0)
                 ctx.moveTo(x,y);
+
 
             else
                 ctx.lineTo(x,y);
         }
 
 
+
+
         ctx.lineJoin="miter";
         ctx.lineCap="square";
 
 
+
+
         ctx.lineWidth=12;
+
 
         ctx.strokeStyle=
             delivering
             ? "rgba(255,60,145,.18)"
             : "rgba(99,245,255,.20)";
 
+
         ctx.stroke();
 
 
+
+
         ctx.lineWidth=5;
+
 
         ctx.strokeStyle=
             delivering
             ? "#ff3c91"
             : "#63f5ff";
 
+
         ctx.shadowColor=
             delivering
             ? "#ff3c91"
             : "#63f5ff";
 
+
         ctx.shadowBlur=10;
 
         ctx.stroke();
 
+
         ctx.restore();
     }
+
+
 
 
     /*
        START
     */
 
+
     const sx=
         startPoint.x*W;
+
 
     const sy=
         startPoint.y*H;
 
 
+
+
     ctx.fillStyle="#63f5ff";
 
+
     ctx.shadowColor="#63f5ff";
+
 
     ctx.shadowBlur=12;
 
 
+
+
     ctx.beginPath();
+
 
     ctx.arc(
         sx,
@@ -3745,18 +4781,25 @@ function draw(){
         Math.PI*2
     );
 
+
     ctx.fill();
+
 
     ctx.shadowBlur=0;
 
 
+
+
     ctx.fillStyle="#071016";
+
 
     ctx.font=
         "bold 10px Arial";
 
     ctx.textAlign="center";
     ctx.textBaseline="middle";
+
+
 
 
     ctx.fillText(
@@ -3766,22 +4809,30 @@ function draw(){
     );
 
 
+
+
     /*
        START HIGHLIGHT
     */
+
 
     if(
         planning &&
         routeRoads.length===0
     ){
 
+
         ctx.strokeStyle=
             "rgba(99,245,255,.35)";
+
 
         ctx.lineWidth=2;
 
 
+
+
         ctx.beginPath();
+
 
         ctx.arc(
             sx,
@@ -3791,13 +4842,17 @@ function draw(){
             Math.PI*2
         );
 
+
         ctx.stroke();
     }
+
+
 
 
     /*
        CURRENT END
     */
+
 
     if(
         planning &&
@@ -3810,14 +4865,21 @@ function draw(){
             ];
 
 
+
+
         ctx.fillStyle="#fff";
 
+
         ctx.shadowColor="#63f5ff";
+
 
         ctx.shadowBlur=12;
 
 
+
+
         ctx.beginPath();
+
 
         ctx.arc(
             last.x*W,
@@ -3827,7 +4889,10 @@ function draw(){
             Math.PI*2
         );
 
+
         ctx.fill();
+
+
 
 
         ctx.shadowBlur=0;
@@ -3835,30 +4900,43 @@ function draw(){
 }
 
 
+
 /* =====================================================
    DELIVERY DRAW
 ===================================================== */
 
+
 function drawDelivery(){
 
+
     draw();
+
+
 
 
     const p=
         getDeliveryPosition();
 
 
+
     ctx.save();
+
+
 
 
     ctx.shadowColor="#ff3c91";
 
+
     ctx.shadowBlur=20;
+
 
     ctx.fillStyle="#ff3c91";
 
 
+
+
     ctx.beginPath();
+
 
     ctx.arc(
         p.x*W,
@@ -3868,16 +4946,23 @@ function drawDelivery(){
         Math.PI*2
     );
 
+
     ctx.fill();
+
+
 
 
     ctx.shadowBlur=0;
 
 
+
+
     ctx.fillStyle="#fff";
 
 
+
     ctx.beginPath();
+
 
     ctx.arc(
         p.x*W+5,
@@ -3887,22 +4972,28 @@ function drawDelivery(){
         Math.PI*2
     );
 
+
     ctx.fill();
+
+
 
 
     ctx.restore();
 }
 
 
+
 /* =====================================================
    INPUT
 ===================================================== */
+
 
 canvas.addEventListener(
     "pointerdown",
     pointerDown,
     {passive:false}
 );
+
 
 canvas.addEventListener(
     "pointermove",
@@ -3916,11 +5007,14 @@ canvas.addEventListener(
     {passive:false}
 );
 
+
 canvas.addEventListener(
     "pointercancel",
     pointerUp,
     {passive:false}
 );
+
+
 
 
 /* =====================================================
@@ -3929,7 +5023,9 @@ canvas.addEventListener(
 
 resize();
 
+
 </script>
 
+
 </body>
-</html>
+      </html>

@@ -2505,6 +2505,7 @@ let visitedRoads=new Set();
 
 
 let routeDistance=0;
+let destinationCheckIndex=0;
 
 let drawing=false;
 
@@ -2770,24 +2771,30 @@ function normalizedDistance(a,b){
 
 function pushRoutePoint(p){
 
-
     if(!p)
         return false;
 
     const last=route[route.length-1];
 
-
     if(last && normalizedDistance(last,p)<ROUTE_POINT_MIN_DISTANCE)
         return false;
 
-
-    route.push({
+    const point={
         x:clamp01(p.x),
         y:clamp01(p.y)
-    });
+    };
 
+    // 전체 경로를 다시 계산하지 않고
+    // 새로 추가된 구간만 거리 계산
+    if(last){
+        routeDistance+=Math.hypot(
+            (point.x-last.x)*W,
+            (point.y-last.y)*H
+        );
+    }
 
-    routeDistance=calculateRouteDistance();
+    route.push(point);
+
     return true;
 }
 
@@ -3048,7 +3055,7 @@ function startRoutePlanning(){
 
 
     routeDistance=0;
-
+    destinationCheckIndex=0;
 
     damage=0;
 
@@ -3165,11 +3172,10 @@ function pointerDown(e){
    POINTER MOVE
 ===================================================== */
 
-function pointerMove(e){
+let pointerMoveQueued=false;
+let latestPointerEvent=null;
 
-
-    e.preventDefault();
-
+function processPointerMove(e){
 
     if(
         !drawing ||
@@ -3179,45 +3185,72 @@ function pointerMove(e){
     )
         return;
 
-
     const rect=canvas.getBoundingClientRect();
-
 
     const x=e.clientX-rect.left;
     const y=e.clientY-rect.top;
 
-
     lastPointer={x,y};
 
-
     const hit=findRoad(x,y);
-
 
     if(!hit)
         return;
 
-
     if(hit.road.id===activeRoadId){
 
-
         if(continueOnCurrentRoad(hit)){
+
             checkDestinationsOnRoute();
             updateAll();
             draw();
+
         }
 
         return;
     }
 
-
     if(switchToNextRoad(hit)){
+
         checkDestinationsOnRoute();
         updateAll();
         draw();
+
     }
 }
 
 
+function pointerMove(e){
+
+    e.preventDefault();
+
+    if(
+        !drawing ||
+        !planning ||
+        delivering ||
+        pausedByEvent
+    )
+        return;
+
+    latestPointerEvent=e;
+
+    if(pointerMoveQueued)
+        return;
+
+    pointerMoveQueued=true;
+
+    requestAnimationFrame(()=>{
+
+        pointerMoveQueued=false;
+
+        const event=latestPointerEvent;
+        latestPointerEvent=null;
+
+        if(event)
+            processPointerMove(event);
+
+    });
+}
 /* =====================================================
    POINTER UP
 ===================================================== */
@@ -3253,32 +3286,31 @@ function pointerUp(e){
 
 function checkDestinationsOnRoute(){
 
-
     if(route.length===0)
         return;
 
+    // 이미 검사한 경로 점은 다시 검사하지 않는다.
+    const startIndex=destinationCheckIndex;
 
     for(const item of cargoData){
 
-
         if(
-            !selectedCargo.includes(
-                item.id
-            )
+            !selectedCargo.includes(item.id)
         )
             continue;
 
-
         if(
-            deliveredCargo.has(
-                item.id
-            )
+            deliveredCargo.has(item.id)
         )
             continue;
 
+        for(
+            let i=startIndex;
+            i<route.length;
+            i++
+        ){
 
-        for(const p of route){
-
+            const p=route[i];
 
             if(
                 Math.hypot(
@@ -3287,15 +3319,14 @@ function checkDestinationsOnRoute(){
                 )<.065
             ){
 
-                deliveredCargo.add(
-                    item.id
-                );
-
+                deliveredCargo.add(item.id);
 
                 break;
             }
         }
     }
+
+    destinationCheckIndex=route.length;
 }
 
 
@@ -3326,6 +3357,7 @@ function clearRoute(){
 
 
     routeDistance=0;
+    destinationCheckIndex=0;
 
     deliveredCargo.clear();
 

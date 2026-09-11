@@ -229,6 +229,7 @@ button{
 .b6{left:67%;width:17%;height:94px;}
 .b7{left:82%;width:17%;height:59px;}
 
+
 .neon-sign{
     position:absolute;
     z-index:2;
@@ -248,6 +249,7 @@ button{
     top:38px;
     color:#ff3c91;
 }
+
 
 .neon-blue{
     left:59%;
@@ -416,6 +418,7 @@ button{
 
     flex-direction:column;
 
+
     padding:18px;
 
 
@@ -541,6 +544,7 @@ button{
 
     display:flex;
 
+
     align-items:center;
     justify-content:center;
 
@@ -581,6 +585,7 @@ button{
 .cargo-start{
     width:100%;
 
+
     padding:14px;
 
 
@@ -601,6 +606,7 @@ button{
     border-color:#2d3340;
     color:#555b67;
 }
+
 
 
 
@@ -705,6 +711,7 @@ button{
     margin-bottom:18px;
 }
 
+
 .pad-apps{
     flex:1;
     display:grid;
@@ -725,6 +732,7 @@ button{
     cursor:pointer;
     transition:.12s;
 }
+
 
 .pad-app:active{
     transform:scale(.97);
@@ -806,26 +814,23 @@ button{
 
 #gameScreen{
     background:#070910;
-    flex-direction:column;
-    overflow:hidden;
 }
 
-#gameMapArea{
-    position:relative;
-    width:100%;
-    height:auto;
-    flex:1 1 auto;
-    min-height:0;
-    overflow:hidden;
-    display:block;
-}
 
 #gameCanvas{
     position:absolute;
+
+
     inset:0;
+
+
     width:100%;
     height:100%;
+
+
     image-rendering:pixelated;
+
+
     touch-action:none;
 }
 
@@ -833,22 +838,9 @@ button{
 
 
 /* =====================================================
-   GAME TOP BAR
-===================================================== */
-.game-top-panel{height:46px;flex:0 0 46px;padding:6px 9px;background:#080c14;border-bottom:1px solid #2b3443;display:flex;align-items:center;gap:7px;z-index:35;}
-.game-top-info{display:flex;align-items:center;gap:6px;min-width:0;flex:1;}
-.game-top-chip{padding:6px 7px;background:#101722;border:1px solid #303847;color:#aeb4c0;font-size:8px;white-space:nowrap;}
-.game-top-chip strong{color:#63f5ff;margin-left:3px;}
-.game-top-chip.money strong{color:#ffcf55;}
-.game-top-bgm{display:flex;align-items:center;gap:4px;min-width:0;flex:1;}
-.game-top-bgm select{width:100%;min-width:0;padding:6px 5px;background:#101722;border:1px solid #3a4252;color:#63f5ff;font-size:8px;outline:none;}
-.game-top-bgm button{width:28px;height:28px;padding:0;background:#101722;border:1px solid #3a4252;color:#63f5ff;font-size:10px;}
-.game-abandon{height:28px;padding:0 8px;background:#17111a;border:1px solid #ff3c91;color:#ff78ae;font-size:8px;font-weight:bold;white-space:nowrap;}
-@media(max-width:430px){.game-top-panel{gap:4px;padding:5px 6px}.game-top-chip{padding:6px 5px}.game-top-bgm button{width:25px}.game-abandon{padding:0 6px}}
-
-/* =====================================================
    HUD
 ===================================================== */
+
 
 .hud{
     position:absolute;
@@ -995,6 +987,7 @@ button{
 
     padding:7px;
 
+
     background:rgba(5,7,14,.82);
 
 
@@ -1037,6 +1030,7 @@ button{
 
     border:1px solid #63f5ff;
 
+
     color:#63f5ff;
 
 
@@ -1054,6 +1048,7 @@ button{
 
     pointer-events:none;
 }
+
 
 
 
@@ -1119,127 +1114,65 @@ button{
 
 
 /* =====================================================
-   GAME BOTTOM PANEL
+   CONTROLS
 ===================================================== */
 
-.game-bottom-panel{
-    height:150px;
-    flex:0 0 150px;
-    padding:9px 10px 10px;
-    background:linear-gradient(180deg,#0b1019 0%,#070910 100%);
-    border-top:1px solid #2b3443;
-    box-shadow:0 -8px 22px rgba(0,0,0,.28);
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    z-index:30;
-}
 
-.game-control-group{
-    display:flex;
-    gap:7px;
-    align-items:center;
-}
-
-.game-control-group.left{width:40%;}
-.game-control-group.right{width:60%; justify-content:flex-end;}
-
-.game-control{
-    min-width:72px;
-    height:62px;
-    padding:6px 5px;
-    background:#101722;
-    border:1px solid #3a4252;
-    color:#c4cad3;
-    font-size:8px;
-    font-weight:bold;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:5px;
-}
-
-.game-control .control-icon{font-size:19px; line-height:1;}
-.game-control.deliver{color:#63f5ff; border-color:#63f5ff; box-shadow:0 0 14px rgba(99,245,255,.08);}
-.game-control:active:not(:disabled){transform:translateY(1px);}
-.game-control:disabled{color:#555; border-color:#292e38; opacity:.65;}
-
-@media(max-width:430px){
-    .game-control-group.left{width:38%;}
-    .game-control-group.right{width:62%;}
-    .game-control{min-width:0; flex:1; height:60px; font-size:8px;}
-}
-
-/* =====================================================
-   GAME MODALS
-===================================================== */
-
-.game-modal{
-    display:none;
+.controls{
     position:absolute;
-    inset:0;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(2,4,8,.64);
-    z-index:60;
-}
 
-.game-modal-box{
-    width:min(92vw,390px);
-    max-height:72vh;
-    overflow:auto;
-    padding:18px;
-    background:#10141e;
-    border:1px solid #63f5ff;
-    box-shadow:0 0 28px rgba(99,245,255,.12);
-}
 
-.game-modal-title{
-    margin:0 0 12px;
-    color:#63f5ff;
-    font-size:15px;
-    letter-spacing:2px;
-}
-.game-modal-row{
+    left:10px;
+    right:10px;
+    bottom:10px;
+
+
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin:12px 0;
-    padding-bottom:10px;
-    border-bottom:1px solid #29303c;
-    color:#c4cad3;
-    font-size:10px;
+
+
+    gap:8px;
+
+
+    z-index:20;
 }
 
-.game-modal-row input[type="range"]{width:58%; accent-color:#63f5ff;}
 
-.game-modal-close{
-    width:100%;
-    margin-top:8px;
-    padding:11px;
-    background:#111722;
-    border:1px solid #63f5ff;
-    color:#63f5ff;
+.control{
+    flex:1;
+
+
+    padding:14px 5px;
+
+
+    background:rgba(10,13,21,.96);
+
+
+    border:1px solid #3a4252;
+
+
+    color:#bbb;
+
+
+    font-size:12px;
+
+
     font-weight:bold;
-    font-size:10px;
 }
 
-.cargo-info-item{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-    padding:9px 0;
-    border-bottom:1px solid #252c38;
-    color:#c2c8d2;
-    font-size:10px;
+
+.control.deliver{
+    color:#63f5ff;
+    border-color:#63f5ff;
 }
 
-.cargo-info-item.done{color:#5cff9a;}
 
-.help-list{color:#aeb4c0; font-size:10px; line-height:1.8;}
+.control:disabled{
+    color:#555;
+    border-color:#292e38;
+}
+
+
+
 
 /* =====================================================
    EVENT
@@ -1264,6 +1197,7 @@ button{
 
 
     padding:20px;
+
 
     background:#11141e;
 
@@ -1326,6 +1260,7 @@ button{
     align-items:center;
     justify-content:center;
 
+
     padding:20px;
 }
 
@@ -1368,6 +1303,7 @@ button{
 
     color:#ffd75a;
 
+
     margin:13px 0 18px;
 }
 
@@ -1387,6 +1323,7 @@ button{
 
     font-size:12px;
 }
+
 
 .result-row strong{
     color:#63f5ff;
@@ -1408,6 +1345,7 @@ button{
 
     border:2px solid #63f5ff;
 
+
     color:#63f5ff;
 
 
@@ -1427,6 +1365,7 @@ button{
 <!-- =====================================================
      TITLE
 ===================================================== -->
+
 
 <section id="titleScreen" class="screen active">
 
@@ -1448,6 +1387,7 @@ button{
 
     <div class="title-city" aria-label="픽셀 스타일의 사이버펑크 도시 풍경">
 
+
         <div class="city-stars"></div>
         <div class="title-moon"></div>
 
@@ -1466,6 +1406,7 @@ button{
             <div class="neon-sign neon-blue">N-01</div>
             <div class="neon-sign neon-yellow">24H</div>
         </div>
+
 
         <div class="title-road"></div>
         <div class="title-car"></div>
@@ -1592,6 +1533,7 @@ button{
 
             <div class="pad-apps">
 
+
                 <button class="pad-app active-app" onclick="openDeliveryApp()">
                     <span class="app-status">READY</span>
                     <div class="pad-app-icon">▣</div>
@@ -1651,115 +1593,163 @@ button{
      GAME
 ===================================================== -->
 
+
 <section id="gameScreen" class="screen">
 
-    <div class="game-top-panel">
-        <div class="game-top-info">
-            <div class="game-top-chip">DAY <strong id="gameDayDisplay">01</strong></div>
-            <div class="game-top-chip money">¥ <strong id="moneyDisplay">10,000</strong></div>
-        </div>
-        <div class="game-top-bgm">
-            <select id="bgmSelect" aria-label="BGM 선택">
-                <option value="night">NIGHT DRIVE</option>
-                <option value="rush">NEON RUSH</option>
-                <option value="rain">RAIN CIRCUIT</option>
-            </select>
-            <button id="bgmToggle" onclick="toggleBgm()">▶</button>
-        </div>
-        <button class="game-abandon" onclick="abandonDelivery()">ABANDON</button>
-    </div>
 
-    <div id="gameMapArea">
-        <canvas id="gameCanvas"></canvas>
+    <canvas id="gameCanvas"></canvas>
 
-        <div class="hud">
-            <div class="hud-inner">
-                <div class="hud-item">DIST <span id="distance">0m</span></div>
-                <div class="hud-item">CARGO <span id="cargoCount">0/0</span></div>
-                <div class="hud-item damage">DAMAGE <span id="damage">0%</span></div>
+
+
+
+    <div class="hud">
+
+
+        <div class="hud-inner">
+
+
+            <div class="hud-item">
+                DIST
+                <span id="distance">0m</span>
             </div>
-        </div>
-        <div class="mode-message" id="modeMessage">
-            출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요
+
+
+            <div class="hud-item">
+                CARGO
+                <span id="cargoCount">0/0</span>
+            </div>
+
+
+            <div class="hud-item damage">
+                DAMAGE
+                <span id="damage">0%</span>
+            </div>
+
+
         </div>
 
-        <div class="delivery-status" id="deliveryStatus">
-            ● DELIVERING...
-        </div>
+
     </div>
 
-    <div class="game-bottom-panel">
-        <div class="game-control-group left">
-            <button class="game-control" id="clearButton" onclick="clearRoute(); playSound('clear')">
-                <span class="control-icon">⌫</span>
-                <span>CLEAR</span>
-            </button>
-            <button class="game-control deliver" id="deliverButton" onclick="startDelivery()" disabled>
-                <span class="control-icon">➤</span>
-                <span>DELIVER</span>
-            </button>
+
+    <div class="bgm-player">
+        <span class="bgm-label">BGM</span>
+        <span class="bgm-title" id="bgmTitle">NIGHT DRIVE</span>
+        <select class="bgm-select" id="bgmSelect" aria-label="BGM 선택">
+            <option value="night">NIGHT DRIVE</option>
+            <option value="rush">NEON RUSH</option>
+            <option value="rain">RAIN CIRCUIT</option>
+        </select>
+        <button class="bgm-btn" id="bgmToggle" onclick="toggleBgm()">▶</button>
+    </div>
+
+
+
+
+    <div
+        class="mode-message"
+        id="modeMessage">
+
+
+        출발점에서 손가락을 누르고
+        도로를 따라 경로를 그리세요
+
+
+    </div>
+
+
+
+
+    <div
+        class="delivery-status"
+        id="deliveryStatus">
+
+
+        ● DELIVERING...
+
+
+    </div>
+
+
+
+
+    <div
+        class="cargo-hud"
+        id="cargoHud">
+
+
+        <div class="cargo-hud-title">
+            DELIVERY LIST
         </div>
 
-        <div class="game-control-group right">
-            <button class="game-control" onclick="playSound('click'); openCargoModal()">
-                <span class="control-icon">▣</span>
-                <span>CARGO</span>
-            </button>
-            <button class="game-control" onclick="playSound('click'); openGameSettings()">
-                <span class="control-icon">⚙</span>
-                <span>SETTINGS</span>
-            </button>
-            <button class="game-control" onclick="playSound('click'); openHelp()">
-                <span class="control-icon">?</span>
-                <span>HELP</span>
-            </button>
-        </div>
+
     </div>
+
+
+
+
+    <div class="controls">
+
+
+        <button
+            class="control"
+            id="clearButton"
+            onclick="clearRoute()">
+
+
+            CLEAR
+
+
+        </button>
+
+
+        <button
+            class="control deliver"
+            id="deliverButton"
+            onclick="startDelivery()"
+            disabled>
+
+
+            DELIVER
+
+
+        </button>
+
+
+    </div>
+
+
+
 
     <div id="event">
-        <h2 id="eventTitle">EVENT</h2>
+
+
+        <h2 id="eventTitle">
+            EVENT
+        </h2>
+
+
         <p id="eventText"></p>
-        <button class="event-button" onclick="closeEvent()">CONTINUE</button>
+
+
+        <button
+            class="event-button"
+            onclick="closeEvent()">
+
+
+            CONTINUE
+
+
+        </button>
+
+
     </div>
 
-    <div class="game-modal" id="cargoModal">
-        <div class="game-modal-box">
-            <h2 class="game-modal-title">DELIVERY CARGO</h2>
-            <div id="cargoModalList"></div>
-            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('cargoModal')">CLOSE</button>
-        </div>
-    </div>
 
-    <div class="game-modal" id="gameSettingsModal">
-        <div class="game-modal-box">
-            <h2 class="game-modal-title">GAME SETTINGS</h2>
-            <div class="game-modal-row">
-                <label for="sfxVolume">SFX VOLUME</label>
-                <input id="sfxVolume" type="range" min="0" max="100" value="100">
-            </div>
-            <div class="game-modal-row">
-                <label for="bgmVolume">BGM VOLUME</label>
-                <input id="bgmVolume" type="range" min="0" max="100" value="70">
-            </div>
-            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('gameSettingsModal')">CLOSE</button>
-        </div>
-    </div>
-
-    <div class="game-modal" id="helpModal">
-        <div class="game-modal-box">
-            <h2 class="game-modal-title">HOW TO PLAY</h2>
-            <div class="help-list">
-                1. 손가락을 출발점에 대고 도로를 따라 경로를 그리세요.<br>
-                2. 이미 지나간 도로는 다시 사용할 수 없습니다.<br>
-                3. 손가락을 떼어도 현재 경로는 유지됩니다.<br>
-                4. 교차로에서는 연결된 다른 도로로 이동할 수 있습니다.<br>
-                5. 모든 배송품의 목적지를 포함하면 DELIVER가 활성화됩니다.<br>
-                6. 이벤트 발생 시 CONTINUE를 눌러 배송을 재개합니다.
-            </div>
-            <button class="game-modal-close" onclick="playSound('back'); closeGameModal('helpModal')">CLOSE</button>
-        </div>
-    </div>
 </section>
+
+
+
 
 <!-- =====================================================
      RESULT
@@ -1822,6 +1812,7 @@ button{
             class="restart"
             onclick="nextDelivery()">
 
+
             NEXT DELIVERY
 
 
@@ -1845,7 +1836,6 @@ button{
 
 
 let gameDay = 1;
-let playerMoney = 10000;
 let audioCtx = null;
 
 
@@ -1867,7 +1857,7 @@ function tone(freq=440, duration=.07, type="square", volume=.035, slide=0){
     osc.type=type;
     osc.frequency.setValueAtTime(freq,now);
     if(slide) osc.frequency.exponentialRampToValueAtTime(Math.max(40,freq+slide),now+duration);
-    gain.gain.setValueAtTime(volume*(window.sfxMasterVolume??1),now);
+    gain.gain.setValueAtTime(volume,now);
     gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
     osc.connect(gain).connect(audioCtx.destination);
     osc.start(now);
@@ -1921,7 +1911,7 @@ function bgmNote(freq, duration, when, volume=.018, type="triangle"){
     osc.type=type;
     osc.frequency.setValueAtTime(freq,when);
     gain.gain.setValueAtTime(.0001,when);
-    gain.gain.linearRampToValueAtTime(volume*(window.bgmMasterVolume??.7),when+.015);
+    gain.gain.linearRampToValueAtTime(volume,when+.015);
     gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
     osc.connect(gain).connect(audioCtx.destination);
     osc.start(when);
@@ -1988,9 +1978,12 @@ function setBgm(name, autoStart=true){
     updateBgmUI();
 }
 
+
 function updateBgmUI(){
+    const title=$("bgmTitle");
     const select=$("bgmSelect");
     const toggle=$("bgmToggle");
+    if(title) title.textContent=bgmTracks[currentBgm].name;
     if(select) select.value=currentBgm;
     if(toggle) toggle.textContent=bgmPlaying?"Ⅱ":"▶";
 }
@@ -2002,12 +1995,6 @@ function autoBgmForScreen(screen){
 }
 
 
-function updateTopGameUI(){
-    const day=$("gameDayDisplay");
-    const money=$("moneyDisplay");
-    if(day) day.textContent=String(gameDay).padStart(2,"0");
-    if(money) money.textContent=Math.max(0,Math.floor(playerMoney)).toLocaleString();
-}
 function updatePadDay(){
     const el=$("padDay");
     if(el) el.textContent="DAY "+String(gameDay).padStart(2,"0");
@@ -2152,60 +2139,6 @@ if(bgmSelect){
 
 
 
-
-
-/* =====================================================
-   GAME BOTTOM PANEL MODALS
-===================================================== */
-
-function closeGameModal(id){
-    const el=document.getElementById(id);
-    if(el) el.style.display="none";
-}
-
-function openCargoModal(){
-    const list=document.getElementById("cargoModalList");
-    if(!list) return;
-    let html="";
-    if(selectedCargo.length===0){
-        html='<div class="help-list">현재 선택된 배송품이 없습니다.</div>';
-    }else{
-        for(const id of selectedCargo){
-            const item=cargoData.find(x=>x.id===id);
-            if(!item) continue;
-            const done=deliveredCargo.has(id);
-            html+=`<div class="cargo-info-item ${done?"done":""}"><span>${done?"✓":"○"} ${item.name}</span><span>${item.destination}</span></div>`;
-        }
-    }
-    list.innerHTML=html;
-    document.getElementById("cargoModal").style.display="flex";
-}
-
-function openGameSettings(){
-    const el=document.getElementById("gameSettingsModal");
-    if(el) el.style.display="flex";
-}
-
-function openHelp(){
-    const el=document.getElementById("helpModal");
-    if(el) el.style.display="flex";
-}
-
-function applyGameVolumes(){
-    const s=document.getElementById("sfxVolume");
-    const b=document.getElementById("bgmVolume");
-    window.sfxMasterVolume=s?Number(s.value)/100:1;
-    window.bgmMasterVolume=b?Number(b.value)/100:.7;
-}
-
-document.addEventListener("input",e=>{
-    if(e.target && (e.target.id==="sfxVolume" || e.target.id==="bgmVolume")){
-        applyGameVolumes();
-    }
-});
-
-applyGameVolumes();
-
 /* =====================================================
    SCREEN
 ===================================================== */
@@ -2222,7 +2155,6 @@ function showScreen(screen){
 
 
     screen.classList.add("active");
-    updateTopGameUI();
     autoBgmForScreen(screen);
 }
 
@@ -2280,6 +2212,7 @@ function openDeliveryApp(){
 function showPadNotice(message){
     playSound("error");
     const old = $("padNotice");
+
 
     if(old) old.remove();
 
@@ -2343,6 +2276,7 @@ function renderCargo(){
 
     cargoGrid.innerHTML="";
 
+
     const selectedSet=new Set(selectedCargo);
 
 
@@ -2384,6 +2318,7 @@ function renderCargo(){
                 ¥${item.reward.toLocaleString()}
             </div>
 
+
         `;
 
 
@@ -2404,6 +2339,7 @@ function renderCargo(){
 
 
 
+
 function toggleCargo(id){
 
 
@@ -2421,6 +2357,7 @@ function toggleCargo(id){
 
     renderCargo();
 }
+
 
 
 
@@ -2486,7 +2423,9 @@ const startPoint={
    GAME STATE
 ===================================================== */
 
+
 let route=[];
+let routeRoadIds=[];
 
 
 /*
@@ -2505,7 +2444,7 @@ let visitedRoads=new Set();
 
 
 let routeDistance=0;
-let destinationCheckIndex=0;
+
 
 let drawing=false;
 
@@ -2566,31 +2505,30 @@ const ctx=canvas.getContext("2d");
 
 
 function resize(){
+
+
     const dpr=Math.min(
         window.devicePixelRatio||1,
         2
     );
 
-    const mapArea=document.getElementById("gameMapArea");
 
-    W=mapArea ? mapArea.clientWidth : window.innerWidth;
-    H=mapArea ? mapArea.clientHeight : window.innerHeight;
+    W=window.innerWidth;
+    H=window.innerHeight;
 
-    if(W<=0 || H<=0){
-        requestAnimationFrame(resize);
-        return;
-    }
 
-    canvas.width=Math.round(W*dpr);
-    canvas.height=Math.round(H*dpr);
+    canvas.width=W*dpr;
+    canvas.height=H*dpr;
+
 
     canvas.style.width=W+"px";
     canvas.style.height=H+"px";
-    canvas.style.display="block";
+
 
     ctx.setTransform(
         dpr,0,0,dpr,0,0
     );
+
 
     draw();
 }
@@ -2601,12 +2539,6 @@ window.addEventListener(
     resize
 );
 
-window.addEventListener(
-    "orientationchange",
-    ()=>{
-        requestAnimationFrame(resize);
-    }
-);
 
 
 
@@ -2694,6 +2626,7 @@ function findRoad(x,y){
 
     for(const road of roads){
 
+
         const hit=projectToRoad(road,x,y);
 
 
@@ -2712,6 +2645,7 @@ function findRoad(x,y){
             bestDistance=hit.distance;
         }
     }
+
 
     return best && best.distance<=78 ? best : null;
 }
@@ -2769,14 +2703,9 @@ function normalizedDistance(a,b){
 }
 
 
-function pushRoutePoint(p){
+function pushRoutePoint(p,roadId=null){
 
     if(!p)
-        return false;
-
-    const last=route[route.length-1];
-
-    if(last && normalizedDistance(last,p)<ROUTE_POINT_MIN_DISTANCE)
         return false;
 
     const point={
@@ -2784,18 +2713,39 @@ function pushRoutePoint(p){
         y:clamp01(p.y)
     };
 
-    // 전체 경로를 다시 계산하지 않고
-    // 새로 추가된 구간만 거리 계산
+    const last=route[route.length-1];
+
+    if(last && normalizedDistance(last,point)<ROUTE_POINT_MIN_DISTANCE)
+        return false;
+
     if(last){
-        routeDistance+=Math.hypot(
+        routeDistance += Math.hypot(
             (point.x-last.x)*W,
             (point.y-last.y)*H
         );
     }
 
     route.push(point);
+    routeRoadIds.push(
+        roadId!==null ? roadId : activeRoadId
+    );
 
     return true;
+}
+
+function rebuildRouteDistance(){
+
+    routeDistance=0;
+
+    for(let i=1;i<route.length;i++){
+
+        routeDistance += Math.hypot(
+            (route[i].x-route[i-1].x)*W,
+            (route[i].y-route[i-1].y)*H
+        );
+    }
+
+    return routeDistance;
 }
 
 
@@ -2843,6 +2793,7 @@ function directionFromT(previousT,currentT){
     if(Math.abs(delta)<0.002)
         return 0;
 
+
     return delta>0 ? 1 : -1;
 }
 
@@ -2865,13 +2816,13 @@ function continueOnCurrentRoad(hit){
 
     const lastT=getLastRoadT();
 
-
     if(lastT===null)
         return false;
 
-
-    const newDirection=directionFromT(lastT,hit.t);
-
+    const newDirection=directionFromT(
+        lastT,
+        hit.t
+    );
 
     if(
         activeRoadDirection===0 &&
@@ -2880,104 +2831,127 @@ function continueOnCurrentRoad(hit){
         activeRoadDirection=newDirection;
     }
 
-
     /*
-       같은 도로를 이미 방문했으므로
-       현재 진행방향의 반대로 되돌아가는 것을 막는다.
+       같은 도로 위에서 앞으로 이동할 때만
+       새로운 경로를 추가한다.
+
+       반대 방향으로 이동하면
+       기존 경로를 되돌아가는 것으로 처리한다.
     */
     if(
         activeRoadDirection!==0 &&
         newDirection!==0 &&
         newDirection!==activeRoadDirection
     ){
-        showTemporaryMessage(
-            "이미 지나간 방향으로 되돌아갈 수 없습니다"
+        return backtrackRoute(
+            hit.x,
+            hit.y,
+            hit.road.id
         );
-        return false;
     }
 
-
-    return pushRoutePoint(hit.point);
+    return pushRoutePoint(
+        hit.point,
+        hit.road.id
+    );
 }
-
 
 function beginFirstRoad(hit){
 
-
     if(!isNearStart(hit)){
+
         showTemporaryMessage(
             "출발점 근처에서 시작하세요"
         );
+
         return false;
     }
 
-
     activeRoadId=hit.road.id;
     routeRoads=[hit.road];
+
+    visitedRoads.clear();
     visitedRoads.add(hit.road.id);
+
     activeRoadDirection=0;
 
+    route=[];
+    routeRoadIds=[];
+    routeDistance=0;
 
-    route=[{
-        x:startPoint.x,
-        y:startPoint.y
-    }];
+    pushRoutePoint(
+        startPoint,
+        hit.road.id
+    );
 
+    pushRoutePoint(
+        hit.point,
+        hit.road.id
+    );
 
-    pushRoutePoint(hit.point);
-
-    lastPointer={x:hit.x,y:hit.y};
-
+    lastPointer={
+        x:hit.x,
+        y:hit.y
+    };
 
     checkDestinationsOnRoute();
     updateAll();
     draw();
 
-
     return true;
 }
 
-
 function switchToNextRoad(hit){
 
+    const previous=
+        getRoadById(activeRoadId);
 
-    const previous=getRoadById(activeRoadId);
-
-
-    if(!previous || hit.road.id===previous.id)
+    if(
+        !previous ||
+        hit.road.id===previous.id
+    )
         return false;
 
-
     if(!roadsConnected(previous,hit.road)){
+
         showTemporaryMessage(
             "교차로에서 다른 도로로 이동하세요"
         );
+
         return false;
     }
 
+    /*
+       이미 사용한 도로라면
+       새 경로로 진입시키지 않는다.
 
+       현재 경로 위에서 pointer가 뒤쪽에 있다면
+       backtrackRoute()가 먼저 경로 꼬리를 제거한다.
+    */
     if(visitedRoads.has(hit.road.id)){
+
         showTemporaryMessage(
             "이미 지나간 도로입니다"
         );
+
         return false;
     }
 
-
-    const corner=getIntersection(previous,hit.road);
+    const corner=
+        getIntersection(
+            previous,
+            hit.road
+        );
 
     if(!corner)
         return false;
 
-
     const cx=corner.x*W;
     const cy=corner.y*H;
 
-
     /*
-       새 도로는 실제 교차로 근처에서만 선택 가능.
-       멀리 떨어진 도로를 향해 포인터가 순간 이동해도
-       경로가 갑자기 꺾이지 않는다.
+       실제 교차로 근처에서만
+       다른 도로로 전환한다.
     */
     if(
         Math.hypot(
@@ -2988,19 +2962,28 @@ function switchToNextRoad(hit){
         return false;
     }
 
+    /*
+       이전 도로의 마지막 지점과
+       교차로를 연결한다.
+    */
+    pushRoutePoint(
+        corner,
+        previous.id
+    );
 
-    pushRoutePoint(corner);
+    routeRoads.push(
+        hit.road
+    );
 
+    visitedRoads.add(
+        hit.road.id
+    );
 
-    routeRoads.push(hit.road);
-    visitedRoads.add(hit.road.id);
-    activeRoadId=hit.road.id;
+    activeRoadId=
+        hit.road.id;
+
     activeRoadDirection=0;
 
-
-    /*
-       교차로에서 어느 방향으로 출발했는지 결정.
-    */
     const cornerT=
         hit.road.type==="h"
             ? clamp01(
@@ -3012,25 +2995,303 @@ function switchToNextRoad(hit){
                 (hit.road.y2-hit.road.y1)
             );
 
-
     activeRoadDirection=
-        directionFromT(cornerT,hit.t);
+        directionFromT(
+            cornerT,
+            hit.t
+        );
 
+    pushRoutePoint(
+        hit.point,
+        hit.road.id
+    );
 
-    pushRoutePoint(hit.point);
-
-
-    lastPointer={x:hit.x,y:hit.y};
-
+    lastPointer={
+        x:hit.x,
+        y:hit.y
+    };
 
     checkDestinationsOnRoute();
     updateAll();
     draw();
 
-
     return true;
 }
 
+/* =====================================================
+   BACKTRACK
+   이전 경로를 따라 되돌아가면
+   그 지점 이후의 경로를 삭제한다.
+===================================================== */
+
+function backtrackRoute(
+    x,
+    y,
+    hitRoadId=activeRoadId
+){
+
+    if(route.length<2)
+        return false;
+
+    const px=x;
+    const py=y;
+
+    let bestIndex=-1;
+    let bestDistance=Infinity;
+    let bestT=0;
+
+    /*
+       현재 pointer가 올라간 도로와
+       같은 도로에 속한 경로 segment만 검사한다.
+
+       따라서 수직/수평 교차점에서
+       다른 방향의 도로를 잘못 잘라내는 것을 방지한다.
+    */
+    for(let i=0;i<route.length-1;i++){
+
+        if(
+            routeRoadIds[i]!==hitRoadId &&
+            routeRoadIds[i+1]!==hitRoadId
+        )
+            continue;
+
+        const a=route[i];
+        const b=route[i+1];
+
+        const ax=a.x*W;
+        const ay=a.y*H;
+        const bx=b.x*W;
+        const by=b.y*H;
+
+        const dx=bx-ax;
+        const dy=by-ay;
+
+        const len2=
+            dx*dx+
+            dy*dy;
+
+        if(len2<=0)
+            continue;
+
+        const t=
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    (
+                        (px-ax)*dx+
+                        (py-ay)*dy
+                    )/len2
+                )
+            );
+
+        const qx=
+            ax+
+            dx*t;
+
+        const qy=
+            ay+
+            dy*t;
+
+        const distance=
+            Math.hypot(
+                px-qx,
+                py-qy
+            );
+
+        if(distance<bestDistance){
+
+            bestDistance=distance;
+            bestIndex=i;
+            bestT=t;
+        }
+    }
+
+    /*
+       도로에서 충분히 멀면
+       되돌아가기로 판단하지 않는다.
+    */
+    if(
+        bestIndex<0 ||
+        bestDistance>INTERSECTION_TOUCH_DISTANCE
+    )
+        return false;
+
+    /*
+       현재 끝점과 거의 같은 위치라면
+       삭제하지 않는다.
+    */
+    const end=
+        route[route.length-1];
+
+    const endDistance=
+        Math.hypot(
+            px-end.x*W,
+            py-end.y*H
+        );
+
+    if(endDistance<12)
+        return false;
+
+    /*
+       segment 안의 pointer 위치를
+       새로운 route 끝점으로 사용한다.
+    */
+    const a=route[bestIndex];
+    const b=route[bestIndex+1];
+
+    const cutPoint={
+        x:a.x+
+            (b.x-a.x)*bestT,
+
+        y:a.y+
+            (b.y-a.y)*bestT
+    };
+
+    /*
+       pointer가 현재 route 끝보다 뒤쪽에 있을 때만
+       실제로 tail을 제거한다.
+    */
+    let cutIndex=bestIndex+1;
+
+    route=
+        route.slice(
+            0,
+            cutIndex
+        );
+
+    routeRoadIds=
+        routeRoadIds.slice(
+            0,
+            cutIndex
+        );
+
+    /*
+       segment 중간을 가리키는 경우
+       해당 위치를 새 끝점으로 추가한다.
+    */
+    if(
+        normalizedDistance(
+            route[route.length-1],
+            cutPoint
+        )>=ROUTE_POINT_MIN_DISTANCE
+    ){
+
+        route.push(cutPoint);
+
+        routeRoadIds.push(
+            hitRoadId
+        );
+    }
+
+    /*
+       현재 route에 실제로 남아 있는 도로만
+       visited 상태를 유지한다.
+    */
+    const retainedRoadIds=
+        new Set(
+            routeRoadIds.filter(
+                id=>id!==null &&
+                    id!==undefined
+            )
+        );
+
+    visitedRoads=
+        new Set(
+            [...visitedRoads].filter(
+                id=>retainedRoadIds.has(id)
+            )
+        );
+
+    routeRoads=
+        routeRoads.filter(
+            road=>
+                retainedRoadIds.has(
+                    road.id
+                )
+        );
+
+    /*
+       현재 마지막 도로를 다시 설정한다.
+    */
+    if(routeRoadIds.length){
+
+        activeRoadId=
+            routeRoadIds[
+                routeRoadIds.length-1
+            ];
+
+        if(!visitedRoads.has(activeRoadId))
+            visitedRoads.add(
+                activeRoadId
+            );
+
+        const road=
+            getRoadById(activeRoadId);
+
+        if(road){
+
+            const last=
+                route[route.length-1];
+
+            const lastT=
+                road.type==="h"
+                    ? clamp01(
+                        (last.x-road.x1)/
+                        (road.x2-road.x1)
+                    )
+                    : clamp01(
+                        (last.y-road.y1)/
+                        (road.y2-road.y1)
+                    );
+
+            const prevIndex=
+                route.length-2;
+
+            let prevT=lastT;
+
+            if(prevIndex>=0){
+
+                const prev=
+                    route[prevIndex];
+
+                prevT=
+                    road.type==="h"
+                        ? clamp01(
+                            (prev.x-road.x1)/
+                            (road.x2-road.x1)
+                        )
+                        : clamp01(
+                            (prev.y-road.y1)/
+                            (road.y2-road.y1)
+                        );
+            }
+
+            activeRoadDirection=
+                directionFromT(
+                    prevT,
+                    lastT
+                );
+        }
+    }else{
+
+        activeRoadId=null;
+        activeRoadDirection=0;
+    }
+
+    rebuildRouteDistance();
+
+    lastPointer={
+        x:px,
+        y:py
+    };
+
+    checkDestinationsOnRoute();
+    updateAll();
+    draw();
+
+    return true;
+}
 
 /* =====================================================
    START PLANNING
@@ -3050,12 +3311,13 @@ function startRoutePlanning(){
 
 
     route=[];
+    routeRoadIds=[];
     routeRoads=[];
     visitedRoads.clear();
 
 
     routeDistance=0;
-    destinationCheckIndex=0;
+
 
     damage=0;
 
@@ -3092,11 +3354,14 @@ function startRoutePlanning(){
    POINTER DOWN
 ===================================================== */
 
+
+let pointerMoveQueued=false;
+let latestPointerEvent=null;
+let cachedCanvasRect=null;
+
 function pointerDown(e){
 
-
     e.preventDefault();
-
 
     if(
         !planning ||
@@ -3105,39 +3370,45 @@ function pointerDown(e){
     )
         return;
 
+    const rect=
+        canvas.getBoundingClientRect();
 
-    const rect=canvas.getBoundingClientRect();
+    cachedCanvasRect=rect;
 
+    const x=
+        e.clientX-rect.left;
 
-    const x=e.clientX-rect.left;
-    const y=e.clientY-rect.top;
+    const y=
+        e.clientY-rect.top;
 
-    const hit=findRoad(x,y);
-
+    const hit=
+        findRoad(x,y);
 
     if(!hit)
         return;
 
-
     if(routeRoads.length===0){
 
-
         if(beginFirstRoad(hit)){
+
             drawing=true;
-            canvas.setPointerCapture?.(e.pointerId);
+
+            canvas.setPointerCapture?.(
+                e.pointerId
+            );
+
             draw();
         }
-
 
         return;
     }
 
     /*
-       드래그를 다시 시작할 때는 반드시
-       현재 경로의 끝에서 시작해야 한다.
+       다시 그리기를 시작할 때는
+       반드시 현재 route의 끝점 근처여야 한다.
     */
-    const end=route[route.length-1];
-
+    const end=
+        route[route.length-1];
 
     if(
         Math.hypot(
@@ -3145,35 +3416,34 @@ function pointerDown(e){
             hit.y-end.y*H
         )>90
     ){
+
         showTemporaryMessage(
             "현재 경로의 끝에서 이어가세요"
         );
+
         return;
     }
 
     drawing=true;
-    lastPointer={x,y};
-    canvas.setPointerCapture?.(e.pointerId);
 
+    lastPointer={
+        x,
+        y
+    };
+
+    canvas.setPointerCapture?.(
+        e.pointerId
+    );
 
     if(hit.road.id===activeRoadId)
         continueOnCurrentRoad(hit);
     else
         switchToNextRoad(hit);
 
-
     checkDestinationsOnRoute();
     updateAll();
     draw();
 }
-
-
-/* =====================================================
-   POINTER MOVE
-===================================================== */
-
-let pointerMoveQueued=false;
-let latestPointerEvent=null;
 
 function processPointerMove(e){
 
@@ -3185,40 +3455,64 @@ function processPointerMove(e){
     )
         return;
 
-    const rect=canvas.getBoundingClientRect();
+    const rect=
+        cachedCanvasRect ||
+        canvas.getBoundingClientRect();
 
-    const x=e.clientX-rect.left;
-    const y=e.clientY-rect.top;
+    const x=
+        e.clientX-rect.left;
 
-    lastPointer={x,y};
+    const y=
+        e.clientY-rect.top;
 
-    const hit=findRoad(x,y);
+    lastPointer={
+        x,
+        y
+    };
+
+    const hit=
+        findRoad(x,y);
 
     if(!hit)
         return;
 
+    /*
+       먼저 이전 경로 위로 되돌아갔는지 검사한다.
+       이 검사를 새 도로 전환보다 먼저 해야
+       route tail 삭제가 제대로 작동한다.
+    */
+    if(
+        backtrackRoute(
+            x,
+            y,
+            hit.road.id
+        )
+    )
+        return;
+
     if(hit.road.id===activeRoadId){
 
-        if(continueOnCurrentRoad(hit)){
+        if(
+            continueOnCurrentRoad(hit)
+        ){
 
             checkDestinationsOnRoute();
             updateAll();
             draw();
-
         }
 
         return;
     }
 
-    if(switchToNextRoad(hit)){
+    if(
+        switchToNextRoad(hit)
+    ){
 
         checkDestinationsOnRoute();
         updateAll();
         draw();
-
     }
 }
-
 
 function pointerMove(e){
 
@@ -3243,14 +3537,16 @@ function pointerMove(e){
 
         pointerMoveQueued=false;
 
-        const event=latestPointerEvent;
+        const event=
+            latestPointerEvent;
+
         latestPointerEvent=null;
 
         if(event)
             processPointerMove(event);
-
     });
 }
+
 /* =====================================================
    POINTER UP
 ===================================================== */
@@ -3258,24 +3554,25 @@ function pointerMove(e){
 
 function pointerUp(e){
 
-    if(e)
-        e.preventDefault();
-
-
-    if(e?.pointerId!==undefined){
-        try{
-            canvas.releasePointerCapture?.(e.pointerId);
-        }catch(_){}
-    }
-
-
     drawing=false;
-    lastPointer=null;
 
+    latestPointerEvent=null;
+    cachedCanvasRect=null;
 
-    updateDeliverButton();
-    draw();
+    try{
+        if(
+            e &&
+            canvas.hasPointerCapture?.(
+                e.pointerId
+            )
+        ){
+            canvas.releasePointerCapture(
+                e.pointerId
+            );
+        }
+    }catch(err){}
 }
+
 
 
 
@@ -3286,31 +3583,32 @@ function pointerUp(e){
 
 function checkDestinationsOnRoute(){
 
+
     if(route.length===0)
         return;
 
-    // 이미 검사한 경로 점은 다시 검사하지 않는다.
-    const startIndex=destinationCheckIndex;
 
     for(const item of cargoData){
 
+
         if(
-            !selectedCargo.includes(item.id)
+            !selectedCargo.includes(
+                item.id
+            )
         )
             continue;
 
+
         if(
-            deliveredCargo.has(item.id)
+            deliveredCargo.has(
+                item.id
+            )
         )
             continue;
 
-        for(
-            let i=startIndex;
-            i<route.length;
-            i++
-        ){
 
-            const p=route[i];
+        for(const p of route){
+
 
             if(
                 Math.hypot(
@@ -3319,14 +3617,16 @@ function checkDestinationsOnRoute(){
                 )<.065
             ){
 
-                deliveredCargo.add(item.id);
+
+                deliveredCargo.add(
+                    item.id
+                );
+
 
                 break;
             }
         }
     }
-
-    destinationCheckIndex=route.length;
 }
 
 
@@ -3345,6 +3645,7 @@ function clearRoute(){
 
 
     route=[];
+    routeRoadIds=[];
     routeRoads=[];
 
 
@@ -3357,7 +3658,7 @@ function clearRoute(){
 
 
     routeDistance=0;
-    destinationCheckIndex=0;
+
 
     deliveredCargo.clear();
 
@@ -3422,6 +3723,7 @@ function calculateRouteDistance(){
    DELIVER BUTTON
 ===================================================== */
 
+
 function updateDeliverButton(){
 
 
@@ -3462,6 +3764,7 @@ function updateAll(){
 
 
 function startDelivery(){
+
 
     playSound("deliver");
 
@@ -3504,6 +3807,7 @@ function startDelivery(){
     clearButton.disabled=true;
     deliverButton.disabled=true;
 
+
     modeMessage.textContent=
         "계획한 경로를 따라 배송 중";
 
@@ -3525,6 +3829,7 @@ function startDelivery(){
 
 
 
+
 /* =====================================================
    DELIVERY LOOP
 ===================================================== */
@@ -3543,6 +3848,7 @@ function deliveryLoop(now){
        이벤트가 열린 동안
        캐릭터는 완전히 정지한다.
     */
+
 
     if(pausedByEvent){
 
@@ -3584,6 +3890,7 @@ function deliveryLoop(now){
 
     deliveryLoop.lastTime=now;
 
+
     deliveryElapsed=
         (
             now-
@@ -3603,6 +3910,7 @@ function deliveryLoop(now){
 
     let remaining=
         speed*dt;
+
 
 
 
@@ -3642,6 +3950,7 @@ function deliveryLoop(now){
                     b.y-a.y
                 )*H
             );
+
 
 
 
@@ -3728,6 +4037,7 @@ function deliveryLoop(now){
     updateHUD();
     updateCargoHud();
 
+
     drawDelivery();
 
 
@@ -3812,6 +4122,7 @@ function getDeliveryPosition(){
                 b.x-a.x
             )*fraction,
 
+
         y:
             a.y+
             (
@@ -3831,6 +4142,7 @@ function getDeliveryPosition(){
 
 
 function checkDeliveryDestinations(){
+
 
     const p=
         getDeliveryPosition();
@@ -3871,6 +4183,7 @@ function checkDeliveryDestinations(){
         }
     }
 }
+
 
 
 
@@ -3935,6 +4248,7 @@ function checkEvent(){
 
 
 
+
     if(
         Math.hypot(
             p.x-.50,
@@ -3977,6 +4291,7 @@ function checkEvent(){
 
 
 
+
 function showEvent(
     title,
     text
@@ -3994,6 +4309,7 @@ function showEvent(
     eventBox.style.display=
         "block";
 }
+
 
 
 
@@ -4060,6 +4376,7 @@ function finishDelivery(){
 
 
 
+
     const ideal=
         getIdealDistance();
 
@@ -4098,6 +4415,7 @@ function finishDelivery(){
                 x=>x.id===id
             );
 
+
         if(item)
             reward+=item.reward;
     }
@@ -4116,6 +4434,7 @@ function finishDelivery(){
 
     reward*=
         efficiency/100;
+
 
 
 
@@ -4138,6 +4457,7 @@ function finishDelivery(){
     else if(score>=82)
         grade="A";
 
+
     else if(score>=68)
         grade="B";
 
@@ -4158,6 +4478,7 @@ function finishDelivery(){
 
     $("resultDamage").textContent=
         damage.toFixed(1)+"%";
+
 
     $("resultEfficiency").textContent=
         Math.round(efficiency)+"%";
@@ -4181,21 +4502,6 @@ function finishDelivery(){
 
 
 
-function abandonDelivery(){
-    if(!gameScreen.classList.contains("active")) return;
-    playSound("back");
-    if(delivering){
-        delivering=false;
-        pausedByEvent=false;
-        deliveryLoop.lastTime=null;
-        deliveryStatus.style.display="none";
-    }
-    clearTimeout(messageTimer);
-    closeGameModal("cargoModal");
-    closeGameModal("gameSettingsModal");
-    closeGameModal("helpModal");
-    showPadScreen();
-}
 
 /* =====================================================
    NEXT DELIVERY / NEW DAY
@@ -4206,7 +4512,6 @@ function nextDelivery(){
     playSound("newday");
     gameDay++;
     updatePadDay();
-    updateTopGameUI();
     showPadScreen();
 }
 
@@ -4240,6 +4545,7 @@ function updateHUD(){
         Math.round(
             routeDistance
         )+"m";
+
 
     cargoCountEl.textContent=
         deliveredCargo.size+
@@ -4324,6 +4630,7 @@ function updateCargoHud(){
 
 
 
+
 /* =====================================================
    TEMPORARY MESSAGE
 ===================================================== */
@@ -4344,6 +4651,7 @@ function showTemporaryMessage(text){
         messageTimer
     );
 
+
     messageTimer=
         setTimeout(
             ()=>{
@@ -4363,6 +4671,7 @@ function showTemporaryMessage(text){
             1400
         );
 }
+
 
 
 
@@ -4407,6 +4716,7 @@ function draw(){
 
 
 
+
     /*
        CITY BLOCKS
     */
@@ -4424,6 +4734,7 @@ function draw(){
             y<H;
             y+=42
         ){
+
 
             const roadX=
                 roads.some(
@@ -4443,6 +4754,7 @@ function draw(){
                             y/H-r.y1
                         )<.07
                 );
+
 
             if(
                 roadX||
@@ -4485,6 +4797,7 @@ function draw(){
 
         ctx.beginPath();
 
+
         ctx.moveTo(
             road.x1*W,
             road.y1*H
@@ -4507,6 +4820,7 @@ function draw(){
 
 
 
+
         ctx.lineWidth=2;
 
 
@@ -4524,6 +4838,7 @@ function draw(){
 
 
         ctx.lineWidth=1;
+
 
         ctx.strokeStyle=
             "rgba(130,140,155,.35)";
@@ -4650,6 +4965,7 @@ function draw(){
             Math.PI*2
         );
 
+
         ctx.stroke();
 
 
@@ -4692,6 +5008,7 @@ function draw(){
 
 
 
+
         ctx.fillText(
             done?"✓":"!",
             x,
@@ -4710,6 +5027,7 @@ function draw(){
     if(
         route.length>1
     ){
+
 
         ctx.save();
 
@@ -4733,6 +5051,7 @@ function draw(){
 
 
 
+
             if(i===0)
                 ctx.moveTo(x,y);
 
@@ -4752,6 +5071,7 @@ function draw(){
 
         ctx.lineWidth=12;
 
+
         ctx.strokeStyle=
             delivering
             ? "rgba(255,60,145,.18)"
@@ -4770,6 +5090,7 @@ function draw(){
             delivering
             ? "#ff3c91"
             : "#63f5ff";
+
 
         ctx.shadowColor=
             delivering
@@ -4814,6 +5135,7 @@ function draw(){
 
 
 
+
     ctx.beginPath();
 
 
@@ -4830,6 +5152,7 @@ function draw(){
 
 
     ctx.shadowBlur=0;
+
 
 
 
@@ -4854,6 +5177,7 @@ function draw(){
 
 
 
+
     /*
        START HIGHLIGHT
     */
@@ -4870,6 +5194,7 @@ function draw(){
 
 
         ctx.lineWidth=2;
+
 
 
 
@@ -4937,6 +5262,7 @@ function draw(){
 
 
 
+
         ctx.shadowBlur=0;
     }
 }
@@ -4953,6 +5279,7 @@ function drawDelivery(){
 
 
     draw();
+
 
 
 
@@ -4974,6 +5301,7 @@ function drawDelivery(){
 
 
     ctx.fillStyle="#ff3c91";
+
 
 
 
@@ -5014,6 +5342,7 @@ function drawDelivery(){
         0,
         Math.PI*2
     );
+
 
     ctx.fill();
 
@@ -5073,4 +5402,4 @@ resize();
 
 
 </body>
-      </html>
+</html>

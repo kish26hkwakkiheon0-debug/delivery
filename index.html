@@ -1555,6 +1555,11 @@ button{
     border-color:#63f5ff;
 }
 
+.control.auto{
+    color:#ffcf55;
+    border-color:#ffcf55;
+}
+
 
 
 
@@ -2387,6 +2392,20 @@ button{
 
         </button>
 
+        <button
+            class="control auto"
+            id="autoButton"
+            onclick="playSound('click'); autoRoute()"
+            disabled>
+
+
+
+            AUTO
+
+
+
+        </button>
+
 
 
 
@@ -2921,6 +2940,7 @@ const cargoHud=$("cargoHud");
 
 const clearButton=$("clearButton");
 const deliverButton=$("deliverButton");
+const autoButton=$("autoButton");
 
 
 
@@ -4735,6 +4755,292 @@ function calculateRouteDistance(){
 
 
 /* =====================================================
+   AUTO ROUTE
+   선택한 모든 배달지를 방문하는 전체 이동거리 최소 경로
+===================================================== */
+
+function autoRoute(){
+    if(!planning || delivering || pausedByEvent) return;
+
+    if(selectedCargo.length===0){
+        showTemporaryMessage("먼저 배달품을 선택하세요");
+        return;
+    }
+
+    /* 기존 수동 경로가 있다면 자동 경로로 교체한다. */
+    route=[];
+    routeRoadIds=[];
+    routeRoads=[];
+    visitedRoads.clear();
+    routeDistance=0;
+    deliveredCargo.clear();
+    drawing=false;
+    activeRoadId=null;
+    activeRoadDirection=0;
+    lastPointer=null;
+
+    /* 현재 맵의 3x3 교차점 */
+    const points=[];
+    const seen=new Set();
+
+    for(const h of roads){
+        if(h.type!=="h") continue;
+        for(const v of roads){
+            if(v.type!=="v") continue;
+            if(!roadsConnected(h,v)) continue;
+
+            const key=v.x1.toFixed(5)+","+h.y1.toFixed(5);
+            if(seen.has(key)) continue;
+            seen.add(key);
+            points.push({x:v.x1,y:h.y1,key});
+        }
+    }
+
+    const graphPoints=[
+        {x:startPoint.x,y:startPoint.y,key:"START"},
+        ...points
+    ];
+
+    /* 두 점이 같은 도로 위에 있는지 확인하고 도로 ID를 반환한다. */
+    function sharedRoad(a,b){
+        for(const road of roads){
+            if(road.type==="h" &&
+               Math.abs(a.y-road.y1)<0.00001 &&
+               Math.abs(b.y-road.y1)<0.00001 &&
+               a.x>=road.x1-0.00001 && a.x<=road.x2+0.00001 &&
+               b.x>=road.x1-0.00001 && b.x<=road.x2+0.00001){
+                return road;
+            }
+
+            if(road.type==="v" &&
+               Math.abs(a.x-road.x1)<0.00001 &&
+               Math.abs(b.x-road.x1)<0.00001 &&
+               a.y>=road.y1-0.00001 && a.y<=road.y2+0.00001 &&
+               b.y>=road.y1-0.00001 && b.y<=road.y2+0.00001){
+                return road;
+            }
+        }
+        return null;
+    }
+
+    const graph=Array.from({length:graphPoints.length},()=>[]);
+
+    function addEdge(a,b,road){
+        const p=graphPoints[a];
+        const q=graphPoints[b];
+        const distance=Math.hypot(
+            (p.x-q.x)*W,
+            (p.y-q.y)*H
+        );
+        graph[a].push({to:b,distance,roadId:road.id});
+        graph[b].push({to:a,distance,roadId:road.id});
+    }
+
+    /* 같은 도로 위의 모든 교차점/시작점을 연결한다. */
+    for(let i=0;i<graphPoints.length;i++){
+        for(let j=i+1;j<graphPoints.length;j++){
+            const road=sharedRoad(graphPoints[i],graphPoints[j]);
+            if(road) addEdge(i,j,road);
+        }
+    }
+
+    /* 다익스트라 */
+    function dijkstra(source){
+        const n=graphPoints.length;
+        const dist=new Array(n).fill(Infinity);
+        const prev=new Array(n).fill(-1);
+        const prevRoad=new Array(n).fill(null);
+        const used=new Array(n).fill(false);
+        dist[source]=0;
+
+        for(let step=0;step<n;step++){
+            let u=-1;
+            let best=Infinity;
+            for(let i=0;i<n;i++){
+                if(!used[i] && dist[i]<best){
+                    best=dist[i];
+                    u=i;
+                }
+            }
+            if(u<0) break;
+            used[u]=true;
+
+            for(const edge of graph[u]){
+                const nd=dist[u]+edge.distance;
+                if(nd<dist[edge.to]){
+                    dist[edge.to]=nd;
+                    prev[edge.to]=u;
+                    prevRoad[edge.to]=edge.roadId;
+                }
+            }
+        }
+
+        return {dist,prev,prevRoad};
+    }
+
+    const shortest=[];
+    for(let i=0;i<graphPoints.length;i++)
+        shortest.push(dijkstra(i));
+
+    function findGraphPoint(point){
+        const key=point.x.toFixed(5)+","+point.y.toFixed(5);
+        for(let i=1;i<graphPoints.length;i++){
+            if(graphPoints[i].key===key) return i;
+        }
+        return -1;
+    }
+
+    const cargos=selectedCargo
+        .map(id=>cargoData.find(item=>item.id===id))
+        .filter(Boolean);
+
+    const cargoNodes=cargos.map(findGraphPoint);
+
+    if(cargoNodes.some(n=>n<0)){
+        showTemporaryMessage("배달지의 도로 위치를 찾을 수 없습니다");
+        updateAll();
+        draw();
+        return;
+    }
+
+    function buildNodePath(a,b){
+        if(a===b) return [a];
+        const info=shortest[a];
+        if(!Number.isFinite(info.dist[b])) return null;
+
+        const path=[];
+        let cur=b;
+        while(cur>=0){
+            path.push(cur);
+            if(cur===a) break;
+            cur=info.prev[cur];
+        }
+        path.reverse();
+        return path[0]===a ? path : null;
+    }
+
+    /* 배달지 방문 순서를 전부 비교한다. 최대 6개라 매우 가볍다. */
+    const used=new Array(cargoNodes.length).fill(false);
+    const order=[];
+    let bestOrder=null;
+    let bestDistance=Infinity;
+
+    function dfs(depth,lastNode,total){
+        if(total>=bestDistance) return;
+
+        if(depth===cargoNodes.length){
+            bestDistance=total;
+            bestOrder=order.slice();
+            return;
+        }
+
+        for(let i=0;i<cargoNodes.length;i++){
+            if(used[i]) continue;
+
+            const next=cargoNodes[i];
+            const d=shortest[lastNode].dist[next];
+            if(!Number.isFinite(d)) continue;
+
+            used[i]=true;
+            order.push(i);
+            dfs(depth+1,next,total+d);
+            order.pop();
+            used[i]=false;
+        }
+    }
+
+    dfs(0,0,0);
+
+    if(!bestOrder){
+        showTemporaryMessage("자동 경로를 계산할 수 없습니다");
+        updateAll();
+        draw();
+        return;
+    }
+
+    const nodeRoute=[];
+    const edgeRoads=[];
+
+    let currentNode=0;
+
+    for(const cargoIndex of bestOrder){
+        const targetNode=cargoNodes[cargoIndex];
+        const path=buildNodePath(currentNode,targetNode);
+        if(!path){
+            showTemporaryMessage("자동 경로를 계산할 수 없습니다");
+            return;
+        }
+
+        const info=shortest[currentNode];
+
+        for(let i=0;i<path.length;i++){
+            const node=path[i];
+            if(nodeRoute.length===0){
+                nodeRoute.push(node);
+                continue;
+            }
+            if(node===nodeRoute[nodeRoute.length-1]) continue;
+            nodeRoute.push(node);
+            edgeRoads.push(info.prevRoad[node]);
+        }
+
+        currentNode=targetNode;
+    }
+
+    if(nodeRoute.length<2) return;
+
+    route=[];
+    routeRoadIds=[];
+    routeRoads=[];
+    visitedRoads.clear();
+
+    for(let i=0;i<nodeRoute.length;i++){
+        const point=graphPoints[nodeRoute[i]];
+        route.push({x:point.x,y:point.y});
+
+        const roadId=i===0 ? edgeRoads[0] : edgeRoads[i-1];
+        routeRoadIds.push(roadId);
+
+        if(roadId!==null && roadId!==undefined){
+            visitedRoads.add(roadId);
+            const road=getRoadById(roadId);
+            if(road && !routeRoads.some(r=>r.id===road.id))
+                routeRoads.push(road);
+        }
+    }
+
+    rebuildRouteDistance();
+
+    activeRoadId=routeRoadIds[routeRoadIds.length-1] ?? null;
+    activeRoadDirection=0;
+
+    if(route.length>=2 && activeRoadId!==null){
+        const road=getRoadById(activeRoadId);
+        if(road){
+            const a=route[route.length-2];
+            const b=route[route.length-1];
+            const t0=road.type==="h"
+                ? clamp01((a.x-road.x1)/(road.x2-road.x1))
+                : clamp01((a.y-road.y1)/(road.y2-road.y1));
+            const t1=road.type==="h"
+                ? clamp01((b.x-road.x1)/(road.x2-road.x1))
+                : clamp01((b.y-road.y1)/(road.y2-road.y1));
+            activeRoadDirection=directionFromT(t0,t1);
+        }
+    }
+
+    /* 모든 목적지를 경로 위에서 발견한 것으로 처리한다. */
+    checkDestinationsOnRoute();
+
+    modeMessage.textContent=
+        `AUTO ROUTE READY • ${Math.round(routeDistance)}m`;
+
+    updateAll();
+    draw();
+}
+
+
+/* =====================================================
    DELIVER BUTTON
 ===================================================== */
 
@@ -4758,7 +5064,16 @@ function updateDeliverButton(){
         !complete ||
         route.length<2 ||
         delivering;
+
+
+    if(autoButton){
+        autoButton.disabled=
+            !planning ||
+            selectedCargo.length===0 ||
+            delivering;
+    }
 }
+
 
 
 

@@ -3544,8 +3544,57 @@ let H=0;
 const canvas=$("gameCanvas");
 const ctx=canvas.getContext("2d");
 
+/* STATIC MAP CACHE */
+let mapCacheCanvas=null;
+let mapCacheCtx=null;
+let mapCacheDpr=1;
 
+function rebuildMapCache(dpr){
+    if(!W || !H) return;
 
+    mapCacheDpr=dpr||1;
+
+    if(!mapCacheCanvas){
+        mapCacheCanvas=document.createElement("canvas");
+        mapCacheCtx=mapCacheCanvas.getContext("2d");
+    }
+
+    mapCacheCanvas.width=Math.max(1,Math.round(W*mapCacheDpr));
+    mapCacheCanvas.height=Math.max(1,Math.round(H*mapCacheDpr));
+    mapCacheCtx.setTransform(mapCacheDpr,0,0,mapCacheDpr,0,0);
+
+    const m=mapCacheCtx;
+    m.clearRect(0,0,W,H);
+    m.fillStyle="#070910";
+    m.fillRect(0,0,W,H);
+
+    for(let x=0;x<W;x+=42){
+        for(let y=0;y<H;y+=42){
+            const roadX=roads.some(r=>r.type==="v" && Math.abs(x/W-r.x1)<.07);
+            const roadY=roads.some(r=>r.type==="h" && Math.abs(y/H-r.y1)<.07);
+            if(roadX || roadY) continue;
+            m.fillStyle=((x+y)/42)%2===0 ? "#111521" : "#0d111a";
+            m.fillRect(x+2,y+2,36,36);
+        }
+    }
+
+    for(const road of roads){
+        m.beginPath();
+        m.moveTo(road.x1*W,road.y1*H);
+        m.lineTo(road.x2*W,road.y2*H);
+        m.lineWidth=31;
+        m.strokeStyle="#252a36";
+        m.stroke();
+        m.lineWidth=2;
+        m.strokeStyle="#4a5060";
+        m.stroke();
+        m.setLineDash([8,9]);
+        m.lineWidth=1;
+        m.strokeStyle="rgba(130,140,155,.35)";
+        m.stroke();
+        m.setLineDash([]);
+    }
+}
 
 function resize(){
 
@@ -3582,9 +3631,7 @@ function resize(){
         dpr,0,0,dpr,0,0
     );
 
-
-
-
+    rebuildMapCache(dpr);
     draw();
 }
 
@@ -4056,11 +4103,6 @@ function beginFirstRoad(hit){
     };
 
 
-    checkDestinationsOnRoute();
-    updateAll();
-    draw();
-
-
     return true;
 }
 
@@ -4206,11 +4248,6 @@ function switchToNextRoad(hit){
         x:hit.x,
         y:hit.y
     };
-
-
-    checkDestinationsOnRoute();
-    updateAll();
-    draw();
 
 
     return true;
@@ -4379,17 +4416,34 @@ function pointerDown(e){
     lastPointer={x,y};
     canvas.setPointerCapture?.(e.pointerId);
 
+    let changed=false;
+    let cargoChanged=false;
+
     if(hit.road.id===activeRoadId){
-        continueOnCurrentRoad(hit);
+        const beforeLength=route.length;
+        changed=continueOnCurrentRoad(hit);
+        if(changed && route.length>beforeLength){
+            cargoChanged=checkDestinationsAtPoint(route[route.length-1]);
+        }
     }else if(visitedRoads.has(hit.road.id)){
-        backtrackRoute(x,y,hit.road.id);
+        changed=backtrackRoute(x,y,hit.road.id);
+        if(changed){
+            cargoChanged=checkDestinationsOnRoute();
+        }
     }else{
-        switchToNextRoad(hit);
+        const beforeLength=route.length;
+        changed=switchToNextRoad(hit);
+        if(changed && route.length>beforeLength){
+            cargoChanged=checkDestinationsAtPoint(route[route.length-1]);
+        }
     }
 
-    checkDestinationsOnRoute();
-    updateAll();
-    draw();
+    if(changed){
+        updateHUD();
+        updateDeliverButton();
+        if(cargoChanged) updateCargoHud();
+        draw();
+    }
 }
 
 
@@ -4409,26 +4463,33 @@ function processPointerMove(e){
     if(!hit) return;
 
     let changed=false;
+    let cargoChanged=false;
 
-    /*
-       backtrack을 무조건 먼저 실행하지 않는다.
-       현재 도로에서는 진행 방향을 먼저 판단하고,
-       다른 도로에서는 실제로 방문했던 도로일 때만
-       되돌아가기를 허용한다.
-    */
     if(hit.road.id===activeRoadId){
+        const beforeLength=route.length;
         changed=continueOnCurrentRoad(hit);
+        if(changed && route.length>beforeLength){
+            cargoChanged=checkDestinationsAtPoint(route[route.length-1]);
+        }
     }else if(visitedRoads.has(hit.road.id)){
         changed=backtrackRoute(x,y,hit.road.id);
+        if(changed){
+            cargoChanged=checkDestinationsOnRoute();
+        }
     }else{
+        const beforeLength=route.length;
         changed=switchToNextRoad(hit);
+        if(changed && route.length>beforeLength){
+            cargoChanged=checkDestinationsAtPoint(route[route.length-1]);
+        }
     }
 
     lastPointer={x,y};
 
     if(changed){
-        checkDestinationsOnRoute();
-        updateAll();
+        updateHUD();
+        updateDeliverButton();
+        if(cargoChanged) updateCargoHud();
         draw();
     }
 }
@@ -4500,74 +4561,49 @@ function pointerUp(e){
 
 
 
-function checkDestinationsOnRoute(){
+function checkDestinationsAtPoint(point){
+    if(!point) return false;
 
-
-
-
-    if(route.length===0)
-        return;
-
-
-
+    let changed=false;
+    const limit2=.065*.065;
 
     for(const item of cargoData){
+        if(!selectedCargo.includes(item.id)) continue;
+        if(deliveredCargo.has(item.id)) continue;
 
+        const dx=point.x-item.x;
+        const dy=point.y-item.y;
 
+        if(dx*dx+dy*dy<limit2){
+            deliveredCargo.add(item.id);
+            changed=true;
+        }
+    }
+    return changed;
+}
 
+function checkDestinationsOnRoute(){
+    if(route.length===0) return false;
 
-        if(
-            !selectedCargo.includes(
-                item.id
-            )
-        )
-            continue;
+    let changed=false;
+    const limit2=.065*.065;
 
-
-
-
-        if(
-            deliveredCargo.has(
-                item.id
-            )
-        )
-            continue;
-
-
-
+    for(const item of cargoData){
+        if(!selectedCargo.includes(item.id)) continue;
+        if(deliveredCargo.has(item.id)) continue;
 
         for(const p of route){
-
-
-
-
-            if(
-                Math.hypot(
-                    p.x-item.x,
-                    p.y-item.y
-                )<.065
-            ){
-
-
-
-
-                deliveredCargo.add(
-                    item.id
-                );
-
-
-
-
+            const dx=p.x-item.x;
+            const dy=p.y-item.y;
+            if(dx*dx+dy*dy<limit2){
+                deliveredCargo.add(item.id);
+                changed=true;
                 break;
             }
         }
     }
+    return changed;
 }
-
-
-
-
-
 
 
 
@@ -6139,292 +6175,32 @@ function showTemporaryMessage(text){
 
 function draw(){
 
-
-
-
-    if(!W || !H)
-        return;
-
-
-
-
-
-
-
-
-    ctx.clearRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-
-
-
-
-
-
-    /*
-       BACKGROUND
-    */
-
-
-
-
-    ctx.fillStyle="#070910";
-
-
-
-
-    ctx.fillRect(
-        0,
-        0,
-        W,
-        H
-    );
-
-
-
-
-
-
-
-
-    /*
-       CITY BLOCKS
-    */
-
-
-
-
-    for(
-        let x=0;
-        x<W;
-        x+=42
-    ){
-
-
-
-
-        for(
-            let y=0;
-            y<H;
-            y+=42
-        ){
-
-
-
-
-            const roadX=
-                roads.some(
-                    r=>
-                        r.type==="v" &&
-                        Math.abs(
-                            x/W-r.x1
-                        )<.07
-                );
-
-
-
-
-            const roadY=
-                roads.some(
-                    r=>
-                        r.type==="h" &&
-                        Math.abs(
-                            y/H-r.y1
-                        )<.07
-                );
-
-
-
-
-            if(
-                roadX||
-                roadY
-            )
-                continue;
-
-
-
-
-
-
-
-
-            ctx.fillStyle=
-                (
-                    (x+y)/42
-                )%2===0
-                ? "#111521"
-                : "#0d111a";
-
-
-
-
-
-
-
-
-            ctx.fillRect(
-                x+2,
-                y+2,
-                36,
-                36
-            );
-        }
+    if(!W || !H) return;
+
+    ctx.clearRect(0,0,W,H);
+
+    if(mapCacheCanvas){
+        ctx.drawImage(
+            mapCacheCanvas,
+            0,0,mapCacheCanvas.width,mapCacheCanvas.height,
+            0,0,W,H
+        );
+    }else{
+        ctx.fillStyle="#070910";
+        ctx.fillRect(0,0,W,H);
     }
 
-
-
-
-
-
-
-
-    /*
-       ROADS
-    */
-
-
-
-
-    for(const road of roads){
-
-
-
-
-        ctx.beginPath();
-
-
-
-
-        ctx.moveTo(
-            road.x1*W,
-            road.y1*H
-        );
-
-
-
-
-        ctx.lineTo(
-            road.x2*W,
-            road.y2*H
-        );
-
-
-
-
-        ctx.lineWidth=31;
-
-
-
-
-        ctx.strokeStyle="#252a36";
-
-
-
-
-        ctx.stroke();
-
-
-
-
-
-
-
-
-        ctx.lineWidth=2;
-
-
-
-
-        ctx.strokeStyle="#4a5060";
-
-
-
-
-        ctx.stroke();
-
-
-
-
-
-
-
-
-        ctx.setLineDash(
-            [8,9]
-        );
-
-
-
-
-        ctx.lineWidth=1;
-
-
-
-
-        ctx.strokeStyle=
-            "rgba(130,140,155,.35)";
-
-
-
-
-        ctx.stroke();
-
-
-
-
-        ctx.setLineDash([]);
-
-
-
-
-
-
-
-
-        /*
-           이미 방문한 도로 표시
-        */
-
-
-
-
-        if(
-            planning &&
-            visitedRoads.has(
-                road.id
-            )
-        ){
-
-
-
-
-            ctx.lineWidth=4;
-
-
-
-
-            ctx.strokeStyle=
-                "rgba(99,245,255,.12)";
-
-
-
-
+    if(planning && visitedRoads.size){
+        ctx.lineWidth=4;
+        ctx.strokeStyle="rgba(99,245,255,.12)";
+        for(const road of roads){
+            if(!visitedRoads.has(road.id)) continue;
+            ctx.beginPath();
+            ctx.moveTo(road.x1*W,road.y1*H);
+            ctx.lineTo(road.x2*W,road.y2*H);
             ctx.stroke();
         }
     }
-
-
-
-
-
-
-
 
     /*
        EVENT MARKER

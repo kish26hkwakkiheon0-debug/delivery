@@ -3302,6 +3302,63 @@ function updateCargoSelection(){
 
 
 /* =====================================================
+   START PLANNING
+===================================================== */
+
+
+function startRoutePlanning(){
+
+
+    showScreen(gameScreen);
+
+
+    planning=true;
+    delivering=false;
+    pausedByEvent=false;
+    drawing=false;
+
+
+    route=[];
+    routeRoadIds=[];
+    routeRoads=[];
+    visitedRoads.clear();
+
+
+    routeDistance=0;
+
+
+    damage=0;
+
+
+    deliveredCargo.clear();
+    triggeredEvents.clear();
+
+
+    activeRoadId=null;
+    activeRoadDirection=0;
+    lastPointer=null;
+
+
+    modeMessage.textContent=
+        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
+
+
+    deliveryStatus.style.display="none";
+
+
+    clearButton.disabled=false;
+
+
+    updateCargoHud();
+    updateHUD();
+    updateDeliverButton();
+
+
+    resize();
+}
+
+
+/* =====================================================
    ROAD MAP
    각 도로를 하나의 블록으로 취급
 ===================================================== */

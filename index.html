@@ -486,6 +486,146 @@ button{
 
 
 /* =====================================================
+   MAP SELECT
+===================================================== */
+
+#mapSelectScreen{
+    background:#080a11;
+    flex-direction:column;
+    padding:18px;
+    overflow:hidden;
+}
+
+.map-header{
+    flex-shrink:0;
+    padding:5px 0 14px;
+    border-bottom:1px solid #292f3b;
+}
+
+.map-header h1{
+    margin:0;
+    color:#63f5ff;
+    font-size:21px;
+    letter-spacing:2px;
+}
+
+.map-header p{
+    margin:7px 0 0;
+    color:#777f8e;
+    font-size:11px;
+}
+
+.map-grid{
+    flex:1;
+    overflow-y:auto;
+    padding:14px 0;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+    touch-action:pan-y;
+}
+
+.map-card{
+    position:relative;
+    padding:10px;
+    min-height:170px;
+    background:#10141e;
+    border:1px solid #303746;
+}
+
+.map-card:hover{
+    border-color:#63f5ff;
+}
+
+.map-preview{
+    width:100%;
+    aspect-ratio:1.45;
+    background:#090c14;
+    border:1px solid #222937;
+    margin-bottom:8px;
+    overflow:hidden;
+}
+
+.map-preview svg{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+.map-name{
+    color:#ddd;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.map-subtitle{
+    margin-top:4px;
+    color:#777f8e;
+    font-size:8px;
+    line-height:1.4;
+}
+
+.map-meta{
+    margin-top:8px;
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.map-tag{
+    padding:3px 5px;
+    font-size:7px;
+    border:1px solid #333b4b;
+    color:#9ca4b3;
+}
+
+.map-tag.required{
+    color:#ffcf55;
+    border-color:#6b5931;
+}
+
+.map-tag.events{
+    color:#ff3c91;
+    border-color:#6d2949;
+}
+
+.map-select-button{
+    width:100%;
+    margin-top:8px;
+    padding:9px;
+    background:#101722;
+    border:1px solid #63f5ff;
+    color:#63f5ff;
+    font-size:9px;
+    font-weight:bold;
+}
+
+.map-select-button:active{
+    background:#142431;
+}
+
+.map-footer{
+    flex-shrink:0;
+    border-top:1px solid #292f3b;
+    padding-top:11px;
+}
+
+.map-back-button{
+    width:100%;
+    padding:11px;
+    background:#11151e;
+    border:1px solid #333a48;
+    color:#7f8795;
+    font-size:9px;
+}
+
+@media(max-width:650px){
+    .map-grid{grid-template-columns:1fr;}
+    .map-card{min-height:160px;}
+}
+
+
+/* =====================================================
    CARGO
 ===================================================== */
 
@@ -634,6 +774,18 @@ button{
     color:#ddd;
     font-size:11px;
     font-weight:bold;
+    padding-right:28px;
+}
+
+.cargo-kind{
+    margin-top:5px;
+    color:#ffcf55;
+    font-size:7px;
+    letter-spacing:1px;
+}
+
+.cargo-card.optional .cargo-kind{
+    color:#777f8e;
 }
 
 
@@ -1979,6 +2131,28 @@ button{
 
 
 <!-- =====================================================
+     MAP SELECT
+===================================================== -->
+
+<section id="mapSelectScreen" class="screen">
+
+    <div class="map-header">
+        <h1>SELECT MAP</h1>
+        <p>배달할 구역을 선택하세요</p>
+    </div>
+
+    <div class="map-grid" id="mapGrid"></div>
+
+    <div class="map-footer">
+        <button class="map-back-button" onclick="playSound('back'); showPadScreen()">
+            ← BACK TO PAD
+        </button>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
      CARGO
 ===================================================== -->
 
@@ -2003,7 +2177,7 @@ button{
 
 
         <p>
-            배달할 물품을 선택하세요
+            배달할 물품을 선택하세요 · <span id="cargoMapName">MAP</span>
         </p>
 
 
@@ -2256,6 +2430,11 @@ button{
                 <span id="damage">0%</span>
             </div>
 
+            <div class="hud-item">
+                WALLET
+                <span id="money">¥5,000</span>
+            </div>
+
 
 
 
@@ -2432,22 +2611,10 @@ button{
 
         <p id="eventText"></p>
 
-
-
-
-        <button
-            class="event-button"
-            onclick="closeEvent()">
-
-
-
-
-            CONTINUE
-
-
-
-
-        </button>
+        <div
+            class="event-choices"
+            id="eventChoices">
+        </div>
 
 
 
@@ -2793,101 +2960,252 @@ function updatePadDay(){
 
 
 
-const cargoData=[
+let cargoData=[];
+let currentMap=null;
+let selectedMapId="back1";
 
+function C(id,name,icon,x,y,reward,damageRate,required){
+    return {id,name,icon,x,y,reward,damageRate,required:!!required};
+}
 
+function R(x1,y1,x2,y2,type){
+    return {x1,y1,x2,y2,type};
+}
 
-
+const MAP_DEFINITIONS=[
     {
-        id:"ramen",
-        icon:"🍜",
-        name:"NEON RAMEN",
-        destination:"Noodle District",
-        x:.80,
-        y:.20,
-        damageRate:.7,
-        reward:1200
+        id:"back1", name:"뒷골목 1", subtitle:"좁은 골목과 오래된 상업 지구",
+        roads:[R(.06,.20,.94,.20,"h"),R(.06,.50,.94,.50,"h"),R(.06,.80,.94,.80,"h"),R(.20,.08,.20,.92,"v"),R(.50,.08,.50,.92,"v"),R(.80,.08,.80,.92,"v")],
+        start:{x:.06,y:.50}, idealDistance:720,
+        cargo:[
+            C("b1_r1","암시장 식료품","🍜",.20,.20,1200,.7,true),
+            C("b1_o1","익명 데이터칩","💾",.80,.20,3000,.25,false),
+            C("b1_o2","수리용 나노툴","🔧",.80,.80,1500,.35,false),
+            C("b1_o3","골목 의뢰서","📦",.20,.80,1800,.8,false)
+        ],
+        events:[
+            {id:"b1_e1",type:"storm",x:.50,y:.20},{id:"b1_e2",type:"medicine",x:.80,y:.50},
+            {id:"b1_e3",type:"ally",x:.20,y:.50},{id:"b1_e4",type:"checkpoint",x:.50,y:.80},
+            {id:"b1_e5",type:"riot",x:.20,y:.80},{id:"b1_e6",type:"reward",x:.80,y:.80}
+        ]
     },
-
-
-
-
     {
-        id:"medicine",
-        icon:"💊",
-        name:"MEDICAL CHIP",
-        destination:"Medical Sector",
-        x:.80,
-        y:.80,
-        damageRate:1.4,
-        reward:2200
+        id:"back2", name:"뒷골목 2", subtitle:"구불구불한 주거 구역과 폐상점가",
+        roads:[R(.05,.15,.95,.15,"h"),R(.05,.42,.95,.42,"h"),R(.05,.70,.95,.70,"h"),R(.05,.90,.95,.90,"h"),R(.14,.08,.14,.94,"v"),R(.38,.08,.38,.94,"v"),R(.68,.08,.68,.94,"v"),R(.88,.08,.88,.94,"v")],
+        start:{x:.05,y:.70}, idealDistance:760,
+        cargo:[
+            C("b2_r1","골목 배달봉투","✉️",.14,.15,1300,.65,true),
+            C("b2_o1","폐구역 메모리","💾",.88,.15,3100,.28,false),
+            C("b2_o2","검은 상자","📦",.68,.70,2100,1.1,false),
+            C("b2_o3","수리용 드론칩","🛠️",.14,.90,1700,.55,false)
+        ],
+        events:[
+            {id:"b2_e1",type:"storm",x:.38,y:.15},{id:"b2_e2",type:"ally",x:.68,y:.42},
+            {id:"b2_e3",type:"checkpoint",x:.88,y:.70},{id:"b2_e4",type:"medicine",x:.14,y:.42},
+            {id:"b2_e5",type:"riot",x:.38,y:.70},{id:"b2_e6",type:"reward",x:.88,y:.90}
+        ]
     },
-
-
-
-
     {
-        id:"component",
-        icon:"🔧",
-        name:"CYBER COMPONENT",
-        destination:"Industrial Zone",
-        x:.20,
-        y:.80,
-        damageRate:.35,
-        reward:1500
+        id:"city1", name:"도심 1", subtitle:"고층 빌딩 사이의 직선 도심망",
+        roads:[R(.08,.18,.92,.18,"h"),R(.08,.45,.92,.45,"h"),R(.08,.72,.92,.72,"h"),R(.18,.08,.18,.92,"v"),R(.45,.08,.45,.92,"v"),R(.72,.08,.72,.92,"v"),R(.88,.08,.88,.92,"v")],
+        start:{x:.08,y:.45}, idealDistance:820,
+        cargo:[
+            C("c1_r1","시청 행정 데이터","💾",.18,.18,3200,.25,true),
+            C("c1_r2","응급 의료칩","💊",.72,.72,3500,1.15,true),
+            C("c1_o1","프리미엄 부품","💎",.72,.18,5200,1.5,false),
+            C("c1_o2","미디어 저장장치","📀",.45,.45,2200,.4,false),
+            C("c1_o3","광고 홀로그램","📺",.88,.72,2400,.6,false),
+            C("c1_o4","도시 연구 샘플","🧬",.18,.72,3000,1.2,false)
+        ],
+        events:[
+            {id:"c1_e1",type:"storm",x:.45,y:.18},{id:"c1_e2",type:"medicine",x:.72,y:.45},
+            {id:"c1_e3",type:"ally",x:.18,y:.72},{id:"c1_e4",type:"checkpoint",x:.88,y:.45},
+            {id:"c1_e5",type:"riot",x:.45,y:.72},{id:"c1_e6",type:"reward",x:.88,y:.18}
+        ]
     },
-
-
-
-
     {
-        id:"data",
-        icon:"💾",
-        name:"ENCRYPTED DATA",
-        destination:"Data District",
-        x:.20,
-        y:.20,
-        damageRate:.25,
-        reward:3000
+        id:"city2", name:"도심 2", subtitle:"대형 교차로가 이어지는 금융 지구",
+        roads:[R(.06,.12,.94,.12,"h"),R(.06,.33,.94,.33,"h"),R(.06,.62,.94,.62,"h"),R(.06,.86,.94,.86,"h"),R(.18,.06,.18,.92,"v"),R(.44,.06,.44,.92,"v"),R(.70,.06,.70,.92,"v"),R(.84,.06,.84,.92,"v")],
+        start:{x:.06,y:.33}, idealDistance:900,
+        cargo:[
+            C("c2_r1","금융 보안키","🔐",.18,.12,3900,.3,true),
+            C("c2_r2","기업 의료패키지","💊",.70,.86,4100,1.25,true),
+            C("c2_o1","주가 분석칩","📊",.84,.12,2800,.35,false),
+            C("c2_o2","VIP 데이터","💎",.44,.62,5400,1.4,false),
+            C("c2_o3","스마트 광고모듈","📱",.18,.62,2300,.55,false),
+            C("c2_o4","법무 문서","📁",.70,.33,1900,.45,false)
+        ],
+        events:[
+            {id:"c2_e1",type:"storm",x:.44,y:.12},{id:"c2_e2",type:"ally",x:.70,y:.33},
+            {id:"c2_e3",type:"checkpoint",x:.18,y:.62},{id:"c2_e4",type:"medicine",x:.84,y:.62},
+            {id:"c2_e5",type:"riot",x:.44,y:.86},{id:"c2_e6",type:"reward",x:.18,y:.86}
+        ]
     },
-
-
-
-
     {
-        id:"bio",
-        icon:"🧬",
-        name:"BIO SAMPLE",
-        destination:"Bio Lab",
-        x:.50,
-        y:.80,
-        damageRate:1.8,
-        reward:2800
+        id:"city3", name:"도심 3", subtitle:"낡은 상권과 신도심이 뒤섞인 지역",
+        roads:[R(.06,.18,.94,.18,"h"),R(.06,.50,.94,.50,"h"),R(.06,.82,.94,.82,"h"),R(.12,.08,.12,.92,"v"),R(.32,.08,.32,.92,"v"),R(.56,.08,.56,.92,"v"),R(.82,.08,.82,.92,"v")],
+        start:{x:.06,y:.82}, idealDistance:860,
+        cargo:[
+            C("c3_r1","도심 통합키","🔑",.12,.18,2800,.45,true),
+            C("c3_r2","연구소 시약","🧪",.56,.50,3600,1.0,true),
+            C("c3_o1","고급 식재료","🍜",.82,.18,1700,.75,false),
+            C("c3_o2","스마트 렌즈","👁️",.32,.50,2500,.55,false),
+            C("c3_o3","개인 정보칩","💾",.12,.82,3300,.28,false),
+            C("c3_o4","건축 설계칩","📐",.82,.82,2900,.38,false)
+        ],
+        events:[
+            {id:"c3_e1",type:"storm",x:.32,y:.18},{id:"c3_e2",type:"medicine",x:.56,y:.82},
+            {id:"c3_e3",type:"ally",x:.82,y:.50},{id:"c3_e4",type:"checkpoint",x:.12,y:.50},
+            {id:"c3_e5",type:"riot",x:.56,y:.18},{id:"c3_e6",type:"reward",x:.32,y:.82}
+        ]
     },
-
-
-
-
     {
-        id:"luxury",
-        icon:"💎",
-        name:"LUXURY CHIP",
-        destination:"Corporate Tower",
-        x:.50,
-        y:.20,
-        damageRate:1.5,
-        reward:5000
+        id:"park", name:"도심 공원", subtitle:"공원 순환도로와 녹지 보행 구간",
+        roads:[R(.06,.15,.94,.15,"h"),R(.06,.40,.94,.40,"h"),R(.06,.68,.94,.68,"h"),R(.06,.87,.94,.87,"h"),R(.25,.08,.25,.92,"v"),R(.50,.08,.50,.92,"v"),R(.76,.08,.76,.92,"v")],
+        start:{x:.06,y:.40}, idealDistance:790,
+        cargo:[
+            C("p_r1","공원 관리 데이터","💾",.25,.15,2400,.3,true),
+            C("p_o1","반려동물 의약품","💊",.76,.40,2800,1.0,false),
+            C("p_o2","야외 장비","🎒",.25,.68,1800,.55,false),
+            C("p_o3","식물 연구 샘플","🧬",.50,.87,3100,1.1,false),
+            C("p_o4","행사 초대장","✉️",.76,.87,1400,.25,false),
+            C("p_o5","환경 센서","📡",.50,.15,2200,.45,false)
+        ],
+        events:[
+            {id:"p_e1",type:"storm",x:.50,y:.40},{id:"p_e2",type:"medicine",x:.25,y:.40},
+            {id:"p_e3",type:"ally",x:.76,y:.68},{id:"p_e4",type:"checkpoint",x:.50,y:.68},
+            {id:"p_e5",type:"riot",x:.25,y:.87},{id:"p_e6",type:"reward",x:.76,y:.15}
+        ]
+    },
+    {
+        id:"dev1", name:"개발구역 1", subtitle:"공사 중인 블록과 임시 연결도로",
+        roads:[R(.05,.10,.95,.10,"h"),R(.05,.35,.95,.35,"h"),R(.05,.60,.95,.60,"h"),R(.05,.84,.95,.84,"h"),R(.16,.05,.16,.95,"v"),R(.38,.05,.38,.95,"v"),R(.58,.05,.58,.95,"v"),R(.78,.05,.78,.95,"v"),R(.90,.05,.90,.95,"v")],
+        start:{x:.05,y:.60}, idealDistance:980,
+        cargo:[
+            C("d1_r1","건설 자재칩","🔧",.16,.10,1600,.5,true),
+            C("d1_r2","설계 메모리","💾",.58,.60,3400,.3,true),
+            C("d1_r3","현장 의료팩","💊",.90,.84,2900,1.2,true),
+            C("d1_o1","광산형 센서","📡",.38,.35,2700,.55,false),
+            C("d1_o2","중장비 제어키","🔑",.78,.10,3300,.65,false),
+            C("d1_o3","로봇 부품","🤖",.16,.84,2500,.42,false),
+            C("d1_o4","시제품 코어","💎",.78,.60,4800,1.35,false)
+        ],
+        events:[
+            {id:"d1_e1",type:"storm",x:.38,y:.10},{id:"d1_e2",type:"medicine",x:.58,y:.35},
+            {id:"d1_e3",type:"ally",x:.16,y:.60},{id:"d1_e4",type:"checkpoint",x:.78,y:.84},
+            {id:"d1_e5",type:"riot",x:.38,y:.84},{id:"d1_e6",type:"reward",x:.90,y:.35}
+        ]
+    },
+    {
+        id:"dev2", name:"개발구역 2", subtitle:"철거 구역과 새 도로가 겹치는 외곽지대",
+        roads:[R(.06,.14,.94,.14,"h"),R(.06,.30,.94,.30,"h"),R(.06,.55,.94,.55,"h"),R(.06,.77,.94,.77,"h"),R(.10,.06,.10,.92,"v"),R(.30,.06,.30,.92,"v"),R(.52,.06,.52,.92,"v"),R(.70,.06,.70,.92,"v"),R(.90,.06,.90,.92,"v")],
+        start:{x:.06,y:.55}, idealDistance:930,
+        cargo:[
+            C("d2_r1","철거 승인칩","📄",.10,.14,1700,.35,true),
+            C("d2_r2","현장용 AI 모듈","🤖",.70,.55,3900,.6,true),
+            C("d2_o1","재개발 설계도","📐",.30,.77,3100,.4,false),
+            C("d2_o2","전력 컨버터","⚡",.52,.30,2200,.7,false),
+            C("d2_o3","광학 센서","🔭",.90,.14,2700,.5,false),
+            C("d2_o4","보호 장비","🛡️",.10,.77,1500,.3,false)
+        ],
+        events:[
+            {id:"d2_e1",type:"storm",x:.52,y:.14},{id:"d2_e2",type:"ally",x:.70,y:.30},
+            {id:"d2_e3",type:"checkpoint",x:.30,y:.55},{id:"d2_e4",type:"medicine",x:.90,y:.55},
+            {id:"d2_e5",type:"riot",x:.30,y:.14},{id:"d2_e6",type:"reward",x:.52,y:.77}
+        ]
+    },
+    {
+        id:"industrial", name:"산업단지", subtitle:"공장과 물류창고가 밀집한 중공업 지대",
+        roads:[R(.06,.16,.94,.16,"h"),R(.06,.45,.94,.45,"h"),R(.06,.72,.94,.72,"h"),R(.06,.90,.94,.90,"h"),R(.20,.06,.20,.94,"v"),R(.45,.06,.45,.94,"v"),R(.70,.06,.70,.94,"v"),R(.86,.06,.86,.94,"v")],
+        start:{x:.06,y:.72}, idealDistance:960,
+        cargo:[
+            C("i_r1","공장 제어칩","🛠️",.20,.16,2600,.65,true),
+            C("i_r2","대형 의료팩","💊",.70,.45,3700,1.25,true),
+            C("i_r3","고순도 소재","🔩",.86,.90,3100,.9,true),
+            C("i_o1","배관 부품","🔧",.45,.72,1900,.45,false),
+            C("i_o2","산업용 데이터","💾",.20,.90,2300,.3,false),
+            C("i_o3","정밀 공구","🪛",.70,.90,2200,.38,false)
+        ],
+        events:[
+            {id:"i_e1",type:"storm",x:.45,y:.16},{id:"i_e2",type:"medicine",x:.70,y:.72},
+            {id:"i_e3",type:"ally",x:.20,y:.45},{id:"i_e4",type:"checkpoint",x:.86,y:.45},
+            {id:"i_e5",type:"riot",x:.45,y:.90},{id:"i_e6",type:"reward",x:.20,y:.72}
+        ]
+    },
+    {
+        id:"shopping", name:"상가단지", subtitle:"상점가와 창고형 매장이 이어지는 상업지구",
+        roads:[R(.06,.11,.94,.11,"h"),R(.06,.39,.94,.39,"h"),R(.06,.62,.94,.62,"h"),R(.06,.84,.94,.84,"h"),R(.16,.06,.16,.92,"v"),R(.38,.06,.38,.92,"v"),R(.62,.06,.62,.92,"v"),R(.82,.06,.82,.92,"v")],
+        start:{x:.06,y:.39}, idealDistance:880,
+        cargo:[
+            C("s_r1","백화점 금고키","🔑",.16,.11,3000,.25,true),
+            C("s_r2","상가 의료키트","💊",.82,.84,2900,1.05,true),
+            C("s_o1","한정판 전자기기","📱",.62,.11,4500,.9,false),
+            C("s_o2","패션 데이터칩","💾",.38,.62,2500,.35,false),
+            C("s_o3","레스토랑 식재료","🍜",.16,.84,1800,.72,false),
+            C("s_o4","광고 계약서","📄",.62,.84,2100,.3,false)
+        ],
+        events:[
+            {id:"s_e1",type:"storm",x:.38,y:.11},{id:"s_e2",type:"medicine",x:.82,y:.39},
+            {id:"s_e3",type:"ally",x:.16,y:.62},{id:"s_e4",type:"checkpoint",x:.62,y:.39},
+            {id:"s_e5",type:"riot",x:.38,y:.84},{id:"s_e6",type:"reward",x:.82,y:.62}
+        ]
+    },
+    {
+        id:"nightlife", name:"유흥가", subtitle:"네온 간판과 혼잡한 야간 거리",
+        roads:[R(.06,.18,.94,.18,"h"),R(.06,.50,.94,.50,"h"),R(.06,.80,.94,.80,"h"),R(.10,.06,.10,.92,"v"),R(.28,.06,.28,.92,"v"),R(.50,.06,.50,.92,"v"),R(.72,.06,.72,.92,"v"),R(.90,.06,.90,.92,"v")],
+        start:{x:.06,y:.18}, idealDistance:850,
+        cargo:[
+            C("n_o1","클럽 예약 데이터","💾",.10,.18,2600,.25,false),
+            C("n_o2","야간 공연 장비","🎸",.28,.50,2200,.7,false),
+            C("n_o3","프리미엄 음료 재료","🍹",.72,.18,1900,1.0,false),
+            C("n_o4","DJ 프로젝트 파일","🎵",.50,.80,2800,.35,false),
+            C("n_o5","VIP 신분키","💎",.90,.50,4300,1.2,false),
+            C("n_o6","보안 백업칩","🔐",.28,.80,3200,.28,false)
+        ],
+        events:[
+            {id:"n_e1",type:"storm",x:.50,y:.18},{id:"n_e2",type:"medicine",x:.72,y:.50},
+            {id:"n_e3",type:"ally",x:.10,y:.80},{id:"n_e4",type:"checkpoint",x:.28,y:.18},
+            {id:"n_e5",type:"riot",x:.72,y:.80},{id:"n_e6",type:"reward",x:.90,y:.80}
+        ]
     }
-
-
-
-
 ];
 
-
-
-
 let selectedCargo=[];
+
+function applyMap(mapId){
+    const map=MAP_DEFINITIONS.find(m=>m.id===mapId) || MAP_DEFINITIONS[0];
+    currentMap=map;
+    selectedMapId=map.id;
+    roads=map.roads.map((r,i)=>({...r,id:i}));
+    startPoint={...map.start};
+    cargoData=map.cargo.map(item=>({...item}));
+    eventSlots=map.events.map(e=>({...e}));
+    selectedCargo=cargoData.filter(item=>item.required).map(item=>item.id);
+    clearPlanningState();
+}
+
+function clearPlanningState(){
+    route=[];
+    routeRoadIds=[];
+    routeRoads=[];
+    visitedRoads.clear();
+    routeDistance=0;
+    deliveredCargo.clear();
+    triggeredEvents.clear();
+    activeRoadId=null;
+    activeRoadDirection=0;
+    lastPointer=null;
+    drawing=false;
+    deliveryProgress=0;
+    deliveryElapsed=0;
+    deliveryTimeOffset=0;
+    deliverySpeedMultiplier=pendingNextDaySpeedMultiplier;
+    pendingNextDaySpeedMultiplier=1;
+    deliveryFailed=false;
+    allyHelped=false;
+    rewardAppearanceChance=0;
+}
+
 
 
 
@@ -2909,6 +3227,7 @@ const $=id=>document.getElementById(id);
 
 
 const titleScreen=$("titleScreen");
+const mapSelectScreen=$("mapSelectScreen");
 const cargoScreen=$("cargoScreen");
 const padScreen=$("padScreen");
 const gameScreen=$("gameScreen");
@@ -2917,9 +3236,11 @@ const resultScreen=$("resultScreen");
 
 
 
+const mapGrid=$("mapGrid");
 const cargoGrid=$("cargoGrid");
 const selectedCount=$("selectedCount");
 const cargoStart=$("cargoStart");
+const cargoMapName=$("cargoMapName");
 
 
 
@@ -2927,6 +3248,7 @@ const cargoStart=$("cargoStart");
 const distanceEl=$("distance");
 const cargoCountEl=$("cargoCount");
 const damageEl=$("damage");
+const moneyEl=$("money");
 
 
 
@@ -2948,6 +3270,7 @@ const autoButton=$("autoButton");
 const eventBox=$("event");
 const eventTitle=$("eventTitle");
 const eventText=$("eventText");
+const eventChoices=$("eventChoices");
 
 
 
@@ -2980,6 +3303,7 @@ function showScreen(screen){
 
 
     titleScreen.classList.remove("active");
+    mapSelectScreen.classList.remove("active");
     cargoScreen.classList.remove("active");
     padScreen.classList.remove("active");
     gameScreen.classList.remove("active");
@@ -3063,7 +3387,7 @@ function showPadScreen(){
 
 function openDeliveryApp(){
     playSound("click");
-    showCargoScreen();
+    showMapSelect();
 }
 
 
@@ -3137,188 +3461,100 @@ function exitToTitle(){
 
 
 
+function showMapSelect(){
+    showScreen(mapSelectScreen);
+    renderMapSelect();
+}
+
+function miniMapSvg(map){
+    let lines='';
+    for(const road of map.roads){
+        lines += `<line x1="${road.x1*100}" y1="${road.y1*100}" x2="${road.x2*100}" y2="${road.y2*100}" stroke="#303746" stroke-width="9" stroke-linecap="square"/>`;
+        lines += `<line x1="${road.x1*100}" y1="${road.y1*100}" x2="${road.x2*100}" y2="${road.y2*100}" stroke="#61697a" stroke-width="1.5"/>`;
+    }
+    const dest = map.cargo.map((c,i)=>`<circle cx="${c.x*100}" cy="${c.y*100}" r="${c.required?2.8:2}" fill="${c.required?'#ffcf55':'#63f5ff'}"/>`).join('');
+    const events = map.events.map(e=>`<circle cx="${e.x*100}" cy="${e.y*100}" r="1.4" fill="#ff3c91"/>`).join('');
+    return `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect width="100" height="100" fill="#090c14"/>${lines}${dest}${events}</svg>`;
+}
+
+function renderMapSelect(){
+    mapGrid.innerHTML='';
+    for(const map of MAP_DEFINITIONS){
+        const required=map.cargo.filter(c=>c.required).length;
+        const optional=map.cargo.filter(c=>!c.required).length;
+        const card=document.createElement('div');
+        card.className='map-card';
+        card.innerHTML=`
+            <div class="map-preview">${miniMapSvg(map)}</div>
+            <div class="map-name">${map.name}</div>
+            <div class="map-subtitle">${map.subtitle}</div>
+            <div class="map-meta">
+                <span class="map-tag required">필수 ${required}</span>
+                <span class="map-tag">선택 ${optional}</span>
+                <span class="map-tag events">EVENT ${map.events.length}</span>
+            </div>
+            <button class="map-select-button">SELECT MAP</button>
+        `;
+        card.querySelector('.map-select-button').addEventListener('click',()=>{
+            playSound('select');
+            selectMap(map.id);
+        });
+        mapGrid.appendChild(card);
+    }
+}
+
+function selectMap(mapId){
+    applyMap(mapId);
+    showCargoScreen();
+}
+
 function showCargoScreen(){
-
-
-
-
     showScreen(cargoScreen);
-
-
-
-
+    if(cargoMapName) cargoMapName.textContent=currentMap?.name||"MAP";
+    if(!currentMap) applyMap(selectedMapId);
+    else selectedCargo=cargoData.filter(item=>item.required).map(item=>item.id);
     renderCargo();
 }
 
-
-
-
-
-
-
-
 function renderCargo(){
-
-
-
-
-    cargoGrid.innerHTML="";
-
-
-
-
+    cargoGrid.innerHTML='';
     const selectedSet=new Set(selectedCargo);
-
-
-
-
     cargoData.forEach(item=>{
-
-
-
-
-        const card=document.createElement("div");
-
-
-
-
-        card.className="cargo-card";
-
-
-
-
-        if(selectedSet.has(item.id))
-            card.classList.add("selected");
-
-
-
-
+        const card=document.createElement('div');
+        card.className='cargo-card'+(item.required?' required':' optional');
+        if(selectedSet.has(item.id)) card.classList.add('selected');
         card.innerHTML=`
-
-
-
-
             <div class="check">✓</div>
-
-
-
-
-            <div class="cargo-icon">
-                ${item.icon}
-            </div>
-
-
-
-
-            <div class="cargo-name">
-                ${item.name}
-            </div>
-
-
-
-
-            <div class="cargo-destination">
-                → ${item.destination}
-            </div>
-
-
-
-
-            <div class="cargo-reward">
-                ¥${item.reward.toLocaleString()}
-            </div>
-
-
-
-
+            <div class="cargo-icon">${item.icon}</div>
+            <div class="cargo-name">${item.name}</div>
+            <div class="cargo-kind">${item.required?'REQUIRED':'OPTIONAL'}</div>
+            <div class="cargo-destination">→ ${currentMap?.name || ''}</div>
+            <div class="cargo-reward">¥${item.reward.toLocaleString()}</div>
         `;
-
-
-
-
-        card.addEventListener(
-            "click",
-            ()=>toggleCargo(item.id)
-        );
-
-
-
-
+        card.addEventListener('click',()=>toggleCargo(item.id));
         cargoGrid.appendChild(card);
-
-
-
-
     });
-
-
-
-
     updateCargoSelection();
 }
 
-
-
-
-
-
-
-
 function toggleCargo(id){
-
-
-
-
-    playSound("select");
-
-
-
-
+    const item=cargoData.find(x=>x.id===id);
+    if(!item || item.required){
+        playSound('error');
+        return;
+    }
+    playSound('select');
     const index=selectedCargo.indexOf(id);
-
-
-
-
-    if(index>=0)
-        selectedCargo.splice(index,1);
-    else
-        selectedCargo.push(id);
-
-
-
-
+    if(index>=0) selectedCargo.splice(index,1);
+    else selectedCargo.push(id);
     renderCargo();
 }
 
-
-
-
-
-
-
-
 function updateCargoSelection(){
-
-
-
-
-    selectedCount.textContent=
-        "선택된 물품: "+
-        selectedCargo.length+
-        "개";
-
-
-
-
-    cargoStart.disabled=
-        selectedCargo.length===0;
+    const requiredCount=cargoData.filter(x=>x.required).length;
+    selectedCount.textContent=`선택된 물품: ${selectedCargo.length}개 / 필수 ${requiredCount}개 포함`;
+    cargoStart.disabled=selectedCargo.length===0 || cargoData.filter(x=>x.required && selectedCargo.includes(x.id)).length!==requiredCount;
 }
-
-
-
-
-
-
 
 
 /* =====================================================
@@ -3327,53 +3563,46 @@ function updateCargoSelection(){
 
 
 function startRoutePlanning(){
-
+    if(!currentMap){
+        applyMap(selectedMapId);
+    }
 
     showScreen(gameScreen);
-
-
     planning=true;
     delivering=false;
     pausedByEvent=false;
     drawing=false;
 
-
     route=[];
     routeRoadIds=[];
     routeRoads=[];
     visitedRoads.clear();
-
-
     routeDistance=0;
-
-
     damage=0;
-
-
     deliveredCargo.clear();
     triggeredEvents.clear();
-
-
     activeRoadId=null;
     activeRoadDirection=0;
     lastPointer=null;
+    deliveryProgress=0;
+    deliveryElapsed=0;
+    deliveryTimeOffset=0;
+    totalEventPause=0;
+    eventPauseStarted=0;
+    deliverySpeedMultiplier=pendingNextDaySpeedMultiplier;
+    pendingNextDaySpeedMultiplier=1;
+    deliveryFailed=false;
+    allyHelped=false;
+    rewardAppearanceChance=0;
 
-
-    modeMessage.textContent=
-        "출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
-
-
+    modeMessage.textContent="출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
     deliveryStatus.style.display="none";
-
-
+    eventBox.style.display="none";
     clearButton.disabled=false;
-
 
     updateCargoHud();
     updateHUD();
     updateDeliverButton();
-
-
     resize();
 }
 
@@ -3400,38 +3629,9 @@ function startRoutePlanning(){
 
 
 
-const roads=[
-
-
-
-
-    {id:0,x1:.08,y1:.20,x2:.92,y2:.20,type:"h"},
-    {id:1,x1:.08,y1:.50,x2:.92,y2:.50,type:"h"},
-    {id:2,x1:.08,y1:.80,x2:.92,y2:.80,type:"h"},
-
-
-
-
-    {id:3,x1:.20,y1:.08,x2:.20,y2:.92,type:"v"},
-    {id:4,x1:.50,y1:.08,x2:.50,y2:.92,type:"v"},
-    {id:5,x1:.80,y1:.08,x2:.80,y2:.92,type:"v"}
-
-
-
-
-];
-
-
-
-
-
-
-
-
-const startPoint={
-    x:.08,
-    y:.50
-};
+let roads=[];
+let startPoint={x:.06,y:.50};
+let eventSlots=[];
 
 
 
@@ -3541,8 +3741,16 @@ let deliveredCargo=new Set();
 
 let triggeredEvents=new Set();
 
-
-
+let deliverySpeedMultiplier=1;
+let pendingNextDaySpeedMultiplier=1;
+let deliveryTimeOffset=0;
+let eventPauseStarted=0;
+let totalEventPause=0;
+let deliveryFailed=false;
+let allyHelped=false;
+let rewardAppearanceChance=0;
+let permanentRewardMultiplier=1;
+let money=5000;
 
 let W=0;
 let H=0;
@@ -4919,7 +5127,7 @@ function autoRoute(){
         return path[0]===a ? path : null;
     }
 
-    /* 배달지 방문 순서를 전부 비교한다. 최대 6개라 매우 가볍다. */
+    /* 배달지 방문 순서를 전부 비교한다. 최대 7개라 충분히 가볍다. */
     const used=new Array(cargoNodes.length).fill(false);
     const order=[];
     let bestOrder=null;
@@ -5305,11 +5513,9 @@ function deliveryLoop(now){
 
 
 
-    deliveryElapsed=
-        (
-            now-
-            deliveryStart
-        )/1000;
+    deliveryElapsed=Math.max(0,
+        (now-deliveryStart-totalEventPause)/1000 + deliveryTimeOffset
+    );
 
 
 
@@ -5808,179 +6014,222 @@ function getDamageRate(){
 
 
 
-function checkEvent(){
+function addDeliveryTime(seconds){
+    deliveryTimeOffset=Math.max(-Math.max(0,deliveryElapsed),deliveryTimeOffset+seconds);
+}
 
+function changeDeliverySpeed(multiplier){
+    deliverySpeedMultiplier=Math.max(.4,Math.min(2.5,deliverySpeedMultiplier*multiplier));
+}
 
-
-
-    if(
-        triggeredEvents.has(
-            "center"
-        )
-    )
-        return;
-
-
-
-
-
-
-
-
-    const p=
-        getDeliveryPosition();
-
-
-
-
-
-
-
-
-    if(
-        Math.hypot(
-            p.x-.50,
-            p.y-.50
-        )<.035
-    ){
-
-
-
-
-        triggeredEvents.add(
-            "center"
-        );
-
-
-
-
-        playSound("event");
-
-
-
-
-        damage+=5;
-
-
-
-
-        /*
-           배송 차량 즉시 정지
-        */
-
-
-
-
-        pausedByEvent=true;
-
-
-
-
-
-
-
-
-        showEvent(
-            "⚡ ELECTROMAGNETIC STORM",
-
-
-
-
-            "도시 중앙을 지나던 중 강한<br>"+
-            "전자기 폭풍이 발생했습니다.<br><br>"+
-            "배송품 손상도 +5%"
-        );
+function finishEventPause(){
+    if(eventPauseStarted){
+        totalEventPause+=Math.max(0,performance.now()-eventPauseStarted);
+        eventPauseStarted=0;
     }
 }
 
+let eventContinueAction=null;
 
-
-
-
-
-
-
-function showEvent(
-    title,
-    text
-){
-
-
-
-
-    eventTitle.textContent=
-        title;
-
-
-
-
-    eventText.innerHTML=
-        text;
-
-
-
-
-    eventBox.style.display=
-        "block";
+function showEvent(title,text,choices=[]){
+    eventTitle.textContent=title;
+    eventText.innerHTML=text;
+    eventChoices.innerHTML='';
+    eventChoices.style.display='flex';
+    for(const choice of choices){
+        const btn=document.createElement('button');
+        btn.className='event-button'+(choice.alt?' alt':'');
+        btn.textContent=choice.label;
+        btn.addEventListener('click',()=>{
+            playSound('click');
+            choice.action();
+        });
+        eventChoices.appendChild(btn);
+    }
+    eventBox.style.display='block';
 }
 
-
-
-
-
-
-
+function showEventResult(title,text,action=null,label='CONTINUE'){
+    eventContinueAction=action;
+    eventTitle.textContent=title;
+    eventText.innerHTML=text;
+    eventChoices.innerHTML='';
+    const btn=document.createElement('button');
+    btn.className='event-button';
+    btn.textContent=label;
+    btn.addEventListener('click',closeEvent);
+    eventChoices.appendChild(btn);
+    eventChoices.style.display='flex';
+    eventBox.style.display='block';
+}
 
 function closeEvent(){
+    playSound('continue');
+    eventBox.style.display='none';
+    eventChoices.innerHTML='';
+    const action=eventContinueAction;
+    eventContinueAction=null;
+    finishEventPause();
 
-
-
-
-    playSound("continue");
-
-
-
-
-    eventBox.style.display=
-        "none";
-
-
-
-
-    /*
-       확인 버튼을 누른 뒤에만 재개
-    */
-
-
-
+    if(action){
+        action();
+        return;
+    }
 
     pausedByEvent=false;
+    deliveryLoop.lastTime=performance.now();
+    if(delivering) requestAnimationFrame(deliveryLoop);
+}
 
+function failDelivery(reason){
+    deliveryFailed=true;
+    delivering=false;
+    planning=false;
+    pausedByEvent=true;
+    finishEventPause();
+    eventBox.style.display='none';
+    deliveryStatus.style.display='none';
 
+    const elapsed=Math.max(0,deliveryElapsed);
+    $('resultDistance').textContent=Math.round(routeDistance)+'m';
+    $('resultTime').textContent=elapsed.toFixed(1)+'s';
+    $('resultDamage').textContent=Math.min(100,damage).toFixed(1)+'%';
+    $('resultEfficiency').textContent='0%';
+    $('resultReward').textContent='¥ 0';
+    $('grade').textContent='F';
+    showScreen(resultScreen);
+    modeMessage.textContent=reason;
+}
 
+function openEventByType(type){
+    if(type==='storm'){
+        showEvent('⚡ 전자기 폭풍',
+            '당신은 도시 곳곳에 나타나는 전자기 폭풍을 마주쳤습니다.',
+            [
+                {label:'도망친다',action:()=>{ addDeliveryTime(8); showEventResult('폭풍 회피','안전한 길로 돌아갔습니다.<br><br>배달 시간 +8초'); }},
+                {label:'조심스럽게 폭풍을 지나간다',action:()=>{
+                    if(Math.random()<.5){ addDeliveryTime(-8); showEventResult('폭풍 돌파 성공','침착하게 폭풍을 통과했습니다.<br><br>배달 시간 -8초'); }
+                    else { damage=Math.min(100,damage+15); showEventResult('폭풍 돌파 실패','차량이 폭풍에 노출되었습니다.<br><br>파손도 +15%'); }
+                }}
+            ]);
+        return;
+    }
 
-    deliveryLoop.lastTime=
-        performance.now();
+    if(type==='medicine'){
+        showEvent('💊 미지의 약품',
+            '수상한 사람이 당신에게 약을 건넵니다.<br>시제품이기에 무료로 먹어보라고 부추깁니다.',
+            [
+                {label:'먹는다',action:()=>{ changeDeliverySpeed(1.65); pendingNextDaySpeedMultiplier*=.65; showEventResult('약품 복용','당장은 놀라울 정도로 몸이 가벼워집니다.<br><br>현재 배달 속도 크게 증가<br>다음 날 배달 속도 감소'); }},
+                {label:'먹지 않는다',action:()=>showEventResult('거절했다','아무 효과도 일어나지 않았습니다.')}
+            ]);
+        return;
+    }
 
+    if(type==='ally'){
+        showEvent('🚴 동료',
+            '당신은 동료 배달원을 마주칩니다.',
+            [
+                {label:'도움을 요청한다',action:()=>showEvent('🚴 동료 · 도움 요청',
+                    '어떤 도움을 받을까요?',[
+                        {label:'돈을 주며 부탁한다',action:()=>{
+                            if(money<1000){ showEventResult('돈 부족','지갑에 돈이 부족합니다.<br><br>아무 효과 없음'); return; }
+                            money-=1000;
+                            const pending=selectedCargo.filter(id=>!deliveredCargo.has(id));
+                            if(pending.length){
+                                const id=pending[Math.floor(Math.random()*pending.length)];
+                                deliveredCargo.add(id);
+                                updateAll();
+                                const item=cargoData.find(c=>c.id===id);
+                                showEventResult('도움 요청 성공',`¥1,000을 지불하고 ${item?.name||'랜덤 배달'}을 자동 완료했습니다.`);
+                            }else{
+                                showEventResult('완료할 배달 없음','이미 모든 배달이 완료된 상태였습니다.');
+                            }
+                        }},
+                        {label:'길을 열어달라고 부탁한다',action:()=>{
+                            if(Math.random()<.7){ changeDeliverySpeed(1.2); showEventResult('길 확보 성공','동료가 막힌 길을 열어줬습니다.<br><br>배달 속도 증가'); }
+                            else showEventResult('길 확보 실패','동료가 길을 열지 못했습니다.<br><br>아무 효과 없음');
+                        }},
+                        {label:'돌아가기',alt:true,action:()=>openEventByType('ally')}
+                    ]),alt:false},
+                {label:'배달원을 도와준다',action:()=>{ addDeliveryTime(10); allyHelped=true; rewardAppearanceChance=.6; showEventResult('도움을 주었다','동료의 일을 잠시 도와주었습니다.<br><br>배달 시간 +10초<br>이후 보답 이벤트 등장 확률 증가'); }}
+            ]);
+        return;
+    }
 
+    if(type==='reward'){
+        if(!allyHelped || Math.random()>rewardAppearanceChance){
+            pausedByEvent=false;
+            return;
+        }
+        showEvent('🤝 보답',
+            '당신이 도와줬던 배달원과 다시 마주칩니다.',
+            [
+                {label:'보답을 받는다',action:()=>{
+                    if(Math.random()<.5){ money+=3000; updateHUD(); showEventResult('보답을 받았다','동료가 돈을 건넸습니다.<br><br>¥3,000 획득'); }
+                    else { changeDeliverySpeed(1.2); showEventResult('보답을 받았다','동료가 서둘러 배송할 수 있게 도와주었습니다.<br><br>배달 속도 증가'); }
+                }}
+            ]);
+        return;
+    }
 
+    if(type==='checkpoint'){
+        showEvent('🚨 불심검문',
+            '당신은 길을 지키던 치안관들에게 음주운전이 의심된다는 이유로 검문을 받습니다.',
+            [
+                {label:'얌전히 조사받는다',action:()=>{ addDeliveryTime(10); showEventResult('조사 완료','문제없이 조사를 마쳤습니다.<br><br>배달 시간 +10초'); }},
+                {label:'도주한다',action:()=>{
+                    if(Math.random()<.3) showEventResult('도주 성공','검문을 따돌렸습니다.<br><br>아무 효과 없음');
+                    else showEventResult('도주 실패','추격을 피하지 못했습니다.<br><br>배송이 중단되었습니다.',()=>failDelivery('불심검문 도주 실패'), '결과 보기');
+                }}
+            ]);
+        return;
+    }
 
-    if(delivering){
-
-
-
-
-        requestAnimationFrame(
-            deliveryLoop
-        );
+    if(type==='riot'){
+        showEvent('🔥 폭동',
+            '소리를 들어보니, 주변에서 폭동이 일어난 모양입니다.',
+            [
+                {label:'가본다',action:()=>showEvent('🔥 폭동 현장',
+                    '어떻게 행동할까요?',[
+                        {label:'폭동에 참가한다',action:()=>{
+                            addDeliveryTime(10); damage=Math.min(100,damage+15);
+                            if(Math.random()<.15){ permanentRewardMultiplier*=1.10; showEventResult('예상 밖의 성과','폭동 속에서 얻은 경험이 이후 수익에 도움이 됩니다.<br><br>배달 시간 +10초<br>파손도 +15%<br>배달 수익 영구 +10%'); }
+                            else showEventResult('상황 악화','폭동에 휘말려 배송을 이어가기 어려워졌습니다.<br><br>배송 실패',()=>failDelivery('폭동 참가로 배달 실패'),'결과 보기');
+                        }},
+                        {label:'폭동에 휘말린다…',action:()=>{
+                            addDeliveryTime(10); damage=Math.min(100,damage+15);
+                            if(Math.random()<.10){ permanentRewardMultiplier*=1.10; showEventResult('예상 밖의 성과','혼란 속에서 뜻밖의 기회를 얻었습니다.<br><br>배달 시간 +10초<br>파손도 +15%<br>배달 수익 영구 +10%'); }
+                            else { damage=Math.min(100,damage+25); showEventResult('큰 피해','폭동을 피하지 못해 차량이 크게 흔들렸습니다.<br><br>파손도 추가 +25%'); }
+                        }},
+                        {label:'사람들을 말린다',action:()=>{
+                            addDeliveryTime(10);
+                            if(Math.random()<.4){ money+=3000; updateHUD(); showEventResult('진정시켰다','사람들을 설득해 상황을 진정시켰습니다.<br><br>배달 시간 +10초<br>¥3,000 획득'); }
+                            else { damage=Math.min(100,damage+10); showEventResult('실패','상황을 진정시키지 못했습니다.<br><br>배달 시간 +10초<br>파손도 +10%'); }
+                        }},
+                        {label:'돌아가기',alt:true,action:()=>openEventByType('riot')}
+                    ]),alt:false},
+                {label:'지나간다',action:()=>showEventResult('지나갔다','폭동에 관여하지 않고 지나쳤습니다.<br><br>아무 효과 없음')}
+            ]);
     }
 }
 
+function checkEvent(){
+    if(!delivering || pausedByEvent) return;
+    const p=getDeliveryPosition();
+    for(const event of eventSlots){
+        if(triggeredEvents.has(event.id)) continue;
+        if(Math.hypot(p.x-event.x,p.y-event.y)>.04) continue;
 
+        triggeredEvents.add(event.id);
+        if(event.type==='reward' && (!allyHelped || Math.random()>rewardAppearanceChance)) continue;
 
-
-
-
+        playSound('event');
+        pausedByEvent=true;
+        eventPauseStarted=performance.now();
+        openEventByType(event.type);
+        return;
+    }
+}
 
 
 /* =====================================================
@@ -6113,6 +6362,10 @@ function finishDelivery(){
     reward*=
         efficiency/100;
 
+    reward*=permanentRewardMultiplier;
+    money+=Math.round(reward);
+    updateHUD();
+
 
 
 
@@ -6232,6 +6485,7 @@ function nextDelivery(){
     playSound("newday");
     gameDay++;
     updatePadDay();
+    deliverySpeedMultiplier=pendingNextDaySpeedMultiplier;
     showPadScreen();
 }
 
@@ -6250,10 +6504,7 @@ function getIdealDistance(){
 
 
 
-    return(
-        750+
-        selectedCargo.length*90
-    );
+    return currentMap?.idealDistance ?? (750+selectedCargo.length*90);
 }
 
 
@@ -6294,6 +6545,8 @@ function updateHUD(){
     damageEl.textContent=
         damage.toFixed(1)+
         "%";
+
+    if(moneyEl) moneyEl.textContent="¥"+Math.max(0,Math.round(money)).toLocaleString();
 }
 
 
@@ -6518,56 +6771,27 @@ function draw(){
     }
 
     /*
-       EVENT MARKER
+       EVENT MARKERS
     */
-
-
-
-
-    ctx.fillStyle="#ffcf55";
-
-
-
-
-    ctx.shadowColor="#ffcf55";
-
-
-
-
-    ctx.shadowBlur=10;
-
-
-
-
-    ctx.beginPath();
-
-
-
-
-    ctx.arc(
-        W*.50,
-        H*.50,
-        7,
-        0,
-        Math.PI*2
-    );
-
-
-
-
-    ctx.fill();
-
-
-
-
-    ctx.shadowBlur=0;
-
-
-
-
-
-
-
+    for(const event of eventSlots){
+        if(triggeredEvents.has(event.id) && delivering) continue;
+        const x=event.x*W;
+        const y=event.y*H;
+        const colors={storm:'#ffcf55',medicine:'#c084fc',ally:'#63f5ff',reward:'#5cff9a',checkpoint:'#ff6464',riot:'#ff3c91'};
+        const glyphs={storm:'⚡',medicine:'✚',ally:'↔',reward:'★',checkpoint:'!',riot:'!'};
+        ctx.fillStyle=colors[event.type]||'#ffcf55';
+        ctx.shadowColor=colors[event.type]||'#ffcf55';
+        ctx.shadowBlur=8;
+        ctx.beginPath();
+        ctx.arc(x,y,7,0,Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur=0;
+        ctx.fillStyle='#080910';
+        ctx.font='bold 8px Arial';
+        ctx.textAlign='center';
+        ctx.textBaseline='middle';
+        ctx.fillText(glyphs[event.type]||'!',x,y+.3);
+    }
 
     /*
        DESTINATIONS
@@ -7301,6 +7525,8 @@ canvas.addEventListener(
 
 
 
+applyMap(selectedMapId);
+showScreen(titleScreen);
 resize();
 
 

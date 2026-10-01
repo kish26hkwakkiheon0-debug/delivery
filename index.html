@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -16,7 +16,6 @@
 
 
 <title>CYBER DELIVERY</title>
-
 
 
 
@@ -58,7 +57,6 @@ button{
     height:100%;
     display:none;
 }
-
 
 
 
@@ -122,7 +120,6 @@ button{
     margin-bottom:9px;
     text-shadow:0 0 8px rgba(99,245,255,.65);
 }
-
 
 
 
@@ -204,7 +201,6 @@ button{
     border-radius:50%;
     background:#0b111d;
 }
-
 
 
 
@@ -291,7 +287,6 @@ button{
 
 
 
-
 .neon-pink{
     left:14%;
     top:38px;
@@ -330,7 +325,6 @@ button{
     border-top:2px solid #566074;
     border-bottom:2px solid #10151f;
 }
-
 
 
 
@@ -459,7 +453,6 @@ button{
 
 
 
-
 .version{
     position:relative;
     z-index:3;
@@ -494,6 +487,7 @@ button{
     flex-direction:column;
     padding:18px;
     overflow:hidden;
+    min-height:0;
 }
 
 .map-header{
@@ -516,23 +510,32 @@ button{
 }
 
 .map-grid{
-    flex:1;
+    flex:1 1 0;
+    min-height:0;
+    width:100%;
     overflow-y:auto;
-    padding:14px 0;
+    overflow-x:hidden;
+    padding:14px 2px;
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:9px;
+    grid-auto-rows:max-content;
+    align-content:start;
+    gap:12px;
     touch-action:pan-y;
+    overscroll-behavior:contain;
 }
 
 .map-card{
     position:relative;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
     padding:10px;
-    min-height:170px;
+    min-height:0;
     background:#10141e;
     border:1px solid #303746;
+    overflow:hidden;
 }
-
 .map-card:hover{
     border-color:#63f5ff;
 }
@@ -590,6 +593,10 @@ button{
 }
 
 .map-select-button{
+    display:block;
+    flex-shrink:0;
+    position:relative;
+    z-index:2;
     width:100%;
     margin-top:8px;
     padding:9px;
@@ -620,8 +627,9 @@ button{
 }
 
 @media(max-width:650px){
-    .map-grid{grid-template-columns:1fr;}
-    .map-card{min-height:160px;}
+   .map-grid{grid-template-columns:1fr; gap:10px;}
+   .map-card{min-height:0;}
+    .map-preview{aspect-ratio:2.1;}
 }
 
 
@@ -650,7 +658,6 @@ button{
 
     overflow:hidden;
 }
-
 
 
 
@@ -694,7 +701,6 @@ button{
 
 
     padding:15px 0;
-
 
 
 
@@ -758,7 +764,6 @@ button{
         inset 0 0 20px
         rgba(99,245,255,.08);
 }
-
 
 
 
@@ -842,7 +847,6 @@ button{
 
 
 
-
     color:transparent;
 
 
@@ -905,7 +909,6 @@ button{
 
 
 
-
     border:2px solid #63f5ff;
 
 
@@ -926,7 +929,6 @@ button{
     border-color:#2d3340;
     color:#555b67;
 }
-
 
 
 
@@ -1117,7 +1119,6 @@ button{
 
 
 
-
 .pad-app-desc{
     color:#697382;
     font-size:8px;
@@ -1138,7 +1139,6 @@ button{
 
 
 
-
 .pad-app.active-app .app-status{
     color:#63f5ff;
 }
@@ -1156,7 +1156,6 @@ button{
     display:flex;
     justify-content:space-between;
 }
-
 
 
 
@@ -1201,7 +1200,6 @@ button{
 
 
 
-
     width:100%;
     height:100%;
 
@@ -1215,7 +1213,6 @@ button{
 
     touch-action:none;
 }
-
 
 
 
@@ -1242,7 +1239,6 @@ button{
 
 
 
-
     padding:8px;
 
 
@@ -1261,7 +1257,6 @@ button{
 
 .hud-inner{
     background:rgba(5,7,14,.94);
-
 
 
 
@@ -1284,7 +1279,6 @@ button{
 
 
 
-
     font-size:10px;
 }
 
@@ -1301,7 +1295,6 @@ button{
 .hud-item.damage span{
     color:#ff648d;
 }
-
 
 
 
@@ -1325,7 +1318,6 @@ button{
     border:1px solid #303847;
     box-shadow:0 0 12px rgba(99,245,255,.08);
 }
-
 
 
 
@@ -1388,7 +1380,6 @@ button{
     .bgm-title{flex:1; min-width:0;}
     .bgm-select{max-width:125px;}
 }
-
 
 
 
@@ -1472,7 +1463,6 @@ button{
 
 
 
-
     position:absolute;
 
 
@@ -1490,7 +1480,6 @@ button{
 
 
     background:rgba(5,7,14,.94);
-
 
 
 
@@ -1557,7 +1546,6 @@ button{
 
 
 
-
     background:rgba(5,7,14,.86);
 
 
@@ -1574,7 +1562,6 @@ button{
 
 
     z-index:8;
-
 
 
 
@@ -1597,7 +1584,6 @@ button{
 
     margin-bottom:5px;
 }
-
 
 
 
@@ -1641,7 +1627,6 @@ button{
 
 
 
-
     left:10px;
     right:10px;
     bottom:10px;
@@ -1664,7 +1649,6 @@ button{
 
 
 
-
 .control{
     flex:1;
 
@@ -1682,7 +1666,6 @@ button{
 
 
     border:1px solid #3a4252;
-
 
 
 
@@ -1719,7 +1702,6 @@ button{
     color:#555;
     border-color:#292e38;
 }
-
 
 
 
@@ -1811,7 +1793,6 @@ button{
 
 
 
-
 .event-button{
     width:100%;
 
@@ -1829,7 +1810,6 @@ button{
 
 
     border:1px solid #ffcf55;
-
 
 
 
@@ -1871,7 +1851,6 @@ button{
 .result-box{
     width:100%;
     max-width:400px;
-
 
 
 
@@ -1934,7 +1913,6 @@ button{
 
 
 
-
 .result-row{
     display:flex;
 
@@ -1952,7 +1930,6 @@ button{
 
 
     border-bottom:1px solid #292f3a;
-
 
 
 
@@ -1979,7 +1956,6 @@ button{
 
 
 
-
     padding:14px;
 
 
@@ -1996,7 +1972,6 @@ button{
 
 
     color:#63f5ff;
-
 
 
 
@@ -2020,7 +1995,6 @@ button{
 
 
 
-
 <!-- =====================================================
      TITLE
 ===================================================== -->
@@ -2036,7 +2010,6 @@ button{
     <div class="logo-small">
         NIGHT CITY LOGISTICS
     </div>
-
 
 
 
@@ -2084,7 +2057,6 @@ button{
 
 
 
-
         <div class="title-road"></div>
         <div class="title-car"></div>
         <div class="title-ground"></div>
@@ -2100,7 +2072,6 @@ button{
     <button
         class="start-button"
         onclick="playSound('click'); showPadScreen()">
-
 
 
 
@@ -2122,7 +2093,6 @@ button{
 
 
 </section>
-
 
 
 
@@ -2168,7 +2138,6 @@ button{
 
 
 
-
         <h1>
             SELECT CARGO
         </h1>
@@ -2184,7 +2153,6 @@ button{
 
 
     </div>
-
 
 
 
@@ -2204,7 +2172,6 @@ button{
         <div
             class="selected-count"
             id="selectedCount">
-
 
 
 
@@ -2231,7 +2198,6 @@ button{
 
 
 
-
         </button>
 
 
@@ -2243,7 +2209,6 @@ button{
 
 
 </section>
-
 
 
 
@@ -2268,7 +2233,6 @@ button{
 
 
     <div class="pad-device">
-
 
 
 
@@ -2377,7 +2341,6 @@ button{
 
 
 
-
 <!-- =====================================================
      GAME
 ===================================================== -->
@@ -2391,7 +2354,6 @@ button{
 
 
     <canvas id="gameCanvas"></canvas>
-
 
 
 
@@ -2465,7 +2427,6 @@ button{
 
 
 
-
     <div
         class="mode-message"
         id="modeMessage">
@@ -2480,7 +2441,6 @@ button{
 
 
     </div>
-
 
 
 
@@ -2508,7 +2468,6 @@ button{
 
 
 
-
     <div
         class="cargo-hud"
         id="cargoHud">
@@ -2519,7 +2478,6 @@ button{
         <div class="cargo-hud-title">
             DELIVERY LIST
         </div>
-
 
 
 
@@ -2541,7 +2499,6 @@ button{
             class="control"
             id="clearButton"
             onclick="clearRoute()">
-
 
 
 
@@ -2587,7 +2544,6 @@ button{
 
 
 
-
     </div>
 
 
@@ -2605,7 +2561,6 @@ button{
         <h2 id="eventTitle">
             EVENT
         </h2>
-
 
 
 
@@ -2632,7 +2587,6 @@ button{
 
 
 
-
 <!-- =====================================================
      RESULT
 ===================================================== -->
@@ -2646,7 +2600,6 @@ button{
 
 
     <div class="result-box">
-
 
 
 
@@ -2713,7 +2666,6 @@ button{
 
 
 
-
         <button
             class="restart"
             onclick="nextDelivery()">
@@ -2735,7 +2687,6 @@ button{
 
 
 
-
 </section>
 
 
@@ -2753,7 +2704,6 @@ button{
 /* =====================================================
    GAME DAY + SYNTHETIC UI SOUNDS + BGM
 ===================================================== */
-
 
 
 
@@ -2837,7 +2787,6 @@ let bgmNodes=[];
 
 
 
-
 function bgmNote(freq, duration, when, volume=.018, type="triangle"){
     if(!audioCtx) return;
     const osc=audioCtx.createOscillator();
@@ -2901,7 +2850,6 @@ function stopBgm(){
 
 
 
-
 function toggleBgm(){
     initAudio();
     playSound("click");
@@ -2924,7 +2872,6 @@ function setBgm(name, autoStart=true){
 
 
 
-
 function updateBgmUI(){
     const title=$("bgmTitle");
     const select=$("bgmSelect");
@@ -2941,7 +2888,6 @@ function autoBgmForScreen(screen){
     if(screen===gameScreen) setBgm("rush",true);
     else if(screen===padScreen || screen===resultScreen) setBgm("night",true);
 }
-
 
 
 
@@ -2963,7 +2909,6 @@ function updatePadDay(){
 let cargoData=[];
 let currentMap=null;
 let selectedMapId="back1";
-
 function C(id,name,icon,x,y,reward,damageRate,required){
     return {id,name,icon,x,y,reward,damageRate,required:!!required};
 }
@@ -3172,6 +3117,26 @@ const MAP_DEFINITIONS=[
 
 let selectedCargo=[];
 
+function shuffleInPlace(items){
+    for(let i=items.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [items[i],items[j]]=[items[j],items[i]];
+    }
+    return items;
+}
+
+// Every new run keeps the map's event count, but shuffles event types and their locations.
+function createRandomizedEvents(map){
+    const locations=shuffleInPlace(map.events.map(e=>({x:e.x,y:e.y})));
+    const types=shuffleInPlace(map.events.map(e=>e.type));
+    return locations.map((spot,index)=>({
+        id:`${map.id}_run${Date.now()}_${index}`,
+        type:types[index],
+        x:spot.x,
+        y:spot.y
+    }));
+}
+
 function applyMap(mapId){
     const map=MAP_DEFINITIONS.find(m=>m.id===mapId) || MAP_DEFINITIONS[0];
     currentMap=map;
@@ -3179,7 +3144,7 @@ function applyMap(mapId){
     roads=map.roads.map((r,i)=>({...r,id:i}));
     startPoint={...map.start};
     cargoData=map.cargo.map(item=>({...item}));
-    eventSlots=map.events.map(e=>({...e}));
+    eventSlots=createRandomizedEvents(map);
     selectedCargo=cargoData.filter(item=>item.required).map(item=>item.id);
     clearPlanningState();
 }
@@ -3259,7 +3224,6 @@ const cargoHud=$("cargoHud");
 
 
 
-
 const clearButton=$("clearButton");
 const deliverButton=$("deliverButton");
 const autoButton=$("autoButton");
@@ -3301,7 +3265,6 @@ function showScreen(screen){
 
 
 
-
     titleScreen.classList.remove("active");
     mapSelectScreen.classList.remove("active");
     cargoScreen.classList.remove("active");
@@ -3315,7 +3278,6 @@ function showScreen(screen){
     screen.classList.add("active");
     autoBgmForScreen(screen);
 }
-
 
 
 
@@ -3364,7 +3326,6 @@ function showPadScreen(){
 
 
 
-
         clock.textContent =
             String(now.getHours()).padStart(2,"0") +
             ":" +
@@ -3381,7 +3342,6 @@ function showPadScreen(){
 
     requestAnimationFrame(updatePadClock);
 }
-
 
 
 
@@ -3445,7 +3405,6 @@ function showPadNotice(message){
             notice.remove();
     },1800);
 }
-
 
 
 
@@ -3594,7 +3553,6 @@ function startRoutePlanning(){
     deliveryFailed=false;
     allyHelped=false;
     rewardAppearanceChance=0;
-
     modeMessage.textContent="출발점에서 손가락을 누르고 도로를 따라 경로를 그리세요";
     deliveryStatus.style.display="none";
     eventBox.style.display="none";
@@ -3632,7 +3590,6 @@ function startRoutePlanning(){
 let roads=[];
 let startPoint={x:.06,y:.50};
 let eventSlots=[];
-
 
 
 
@@ -3681,7 +3638,6 @@ let drawing=false;
 
 
 
-
 /*
    현재 드래그 중인 도로와 진행 방향.
    같은 도로에서 뒤로 되돌아가는 입력은 막는다.
@@ -3720,7 +3676,6 @@ let deliveryProgress=0;
 
 
 let deliveryStart=0;
-
 
 
 
@@ -3828,7 +3783,6 @@ function resize(){
 
 
 
-
     const dpr=Math.min(
         window.devicePixelRatio||1,
         2
@@ -3845,7 +3799,6 @@ function resize(){
 
     canvas.width=W*dpr;
     canvas.height=H*dpr;
-
 
 
 
@@ -3886,7 +3839,6 @@ window.addEventListener(
 
 
 function getRoadPoint(road,t){
-
 
 
 
@@ -3950,7 +3902,6 @@ function projectToRoad(road,x,y){
     if(len2>0){
         t=((x-ax)*dx+(y-ay)*dy)/len2;
     }
-
 
 
 
@@ -4018,7 +3969,6 @@ function findRoad(x,y){
 
 
 
-
 function roadsConnected(a,b){
 
 
@@ -4032,7 +3982,6 @@ function roadsConnected(a,b){
 
     if(a.type===b.type)
         return false;
-
 
 
 
@@ -4057,7 +4006,6 @@ function getIntersection(a,b){
 
 
 
-
     if(!roadsConnected(a,b))
         return null;
 
@@ -4075,7 +4023,6 @@ function getIntersection(a,b){
         y:h.y1
     };
 }
-
 
 
 
@@ -4099,7 +4046,6 @@ function pushRoutePoint(p,roadId=null){
     if(!p)
         return false;
 
-
     const point={
         x:clamp01(p.x),
         y:clamp01(p.y)
@@ -4119,7 +4065,6 @@ function pushRoutePoint(p,roadId=null){
             (point.y-last.y)*H
         );
     }
-
 
     route.push(point);
     routeRoadIds.push(
@@ -4164,7 +4109,6 @@ function getLastRoadT(){
 
 
 
-
     if(route.length===0)
         return null;
 
@@ -4203,7 +4147,6 @@ function getLastRoadT(){
 
 
 
-
 function directionFromT(previousT,currentT){
 
 
@@ -4225,7 +4168,6 @@ function directionFromT(previousT,currentT){
 
 
 
-
 function isNearStart(hit){
 
 
@@ -4242,7 +4184,6 @@ function isNearStart(hit){
         hit.y-sy
     )<=90;
 }
-
 
 
 
@@ -4287,7 +4228,6 @@ function beginFirstRoad(hit){
 
     if(!isNearStart(hit)){
 
-
         showTemporaryMessage(
             "출발점 근처에서 시작하세요"
         );
@@ -4330,7 +4270,6 @@ function beginFirstRoad(hit){
         y:hit.y
     };
 
-
     return true;
 }
 
@@ -4351,7 +4290,6 @@ function switchToNextRoad(hit){
 
     if(!roadsConnected(previous,hit.road)){
 
-
         showTemporaryMessage(
             "교차로에서 다른 도로로 이동하세요"
         );
@@ -4370,7 +4308,6 @@ function switchToNextRoad(hit){
        backtrackRoute()가 먼저 경로 꼬리를 제거한다.
     */
     if(visitedRoads.has(hit.road.id)){
-
 
         showTemporaryMessage(
             "이미 지나간 도로입니다"
@@ -4434,7 +4371,6 @@ function switchToNextRoad(hit){
         hit.road
     );
 
-
     visitedRoads.add(
         hit.road.id
     );
@@ -4476,7 +4412,6 @@ function switchToNextRoad(hit){
         x:hit.x,
         y:hit.y
     };
-
 
     return true;
 }
@@ -4665,7 +4600,6 @@ function pointerDown(e){
             cargoChanged=checkDestinationsAtPoint(route[route.length-1]);
         }
     }
-
     if(changed){
         updateHUD();
         updateDeliverButton();
@@ -4686,7 +4620,6 @@ function processPointerMove(e){
     const rect=cachedCanvasRect || canvas.getBoundingClientRect();
     const x=e.clientX-rect.left;
     const y=e.clientY-rect.top;
-
     const hit=findRoad(x,y);
     if(!hit) return;
 
@@ -4728,7 +4661,6 @@ function pointerMove(e){
     e.preventDefault();
 
     if(!drawing || !planning || delivering || pausedByEvent) return;
-
     latestPointerEvent=e;
 
     if(pointerMoveQueued) return;
@@ -4747,7 +4679,6 @@ function pointerMove(e){
 /* =====================================================
    POINTER UP
 ===================================================== */
-
 
 
 
@@ -4791,7 +4722,6 @@ function pointerUp(e){
 
 function checkDestinationsAtPoint(point){
     if(!point) return false;
-
     let changed=false;
     const limit2=.065*.065;
 
@@ -4812,7 +4742,6 @@ function checkDestinationsAtPoint(point){
 
 function checkDestinationsOnRoute(){
     if(route.length===0) return false;
-
     let changed=false;
     const limit2=.065*.065;
 
@@ -4832,7 +4761,6 @@ function checkDestinationsOnRoute(){
     }
     return changed;
 }
-
 
 
 /* =====================================================
@@ -4873,7 +4801,6 @@ function clearRoute(){
 
 
     routeDistance=0;
-
 
 
 
@@ -4918,7 +4845,6 @@ function calculateRouteDistance(){
 
 
 
-
     let total=0;
 
 
@@ -4941,7 +4867,6 @@ function calculateRouteDistance(){
 
 
 
-
             (
                 route[i].y-
                 route[i-1].y
@@ -4954,7 +4879,6 @@ function calculateRouteDistance(){
 
     return total;
 }
-
 
 
 
@@ -5043,7 +4967,6 @@ function autoRoute(){
         graph[a].push({to:b,distance,roadId:road.id});
         graph[b].push({to:a,distance,roadId:road.id});
     }
-
     /* 같은 도로 위의 모든 교차점/시작점을 연결한다. */
     for(let i=0;i<graphPoints.length;i++){
         for(let j=i+1;j<graphPoints.length;j++){
@@ -5085,7 +5008,6 @@ function autoRoute(){
 
         return {dist,prev,prevRoad};
     }
-
     const shortest=[];
     for(let i=0;i<graphPoints.length;i++)
         shortest.push(dijkstra(i));
@@ -5148,7 +5070,6 @@ function autoRoute(){
             const next=cargoNodes[i];
             const d=shortest[lastNode].dist[next];
             if(!Number.isFinite(d)) continue;
-
             used[i]=true;
             order.push(i);
             dfs(depth+1,next,total+d);
@@ -5254,7 +5175,6 @@ function autoRoute(){
 
 
 
-
 function updateDeliverButton(){
 
 
@@ -5293,7 +5213,6 @@ function updateDeliverButton(){
 /* =====================================================
    UPDATE
 ===================================================== */
-
 
 
 
@@ -5339,7 +5258,6 @@ function startDelivery(){
 
 
 
-
     if(
         deliveredCargo.size!==
         selectedCargo.length
@@ -5360,7 +5278,6 @@ function startDelivery(){
 
 
 
-
     deliveryProgress=0;
 
 
@@ -5378,7 +5295,6 @@ function startDelivery(){
 
 
     deliveredCargo.clear();
-
 
 
 
@@ -5421,7 +5337,6 @@ function startDelivery(){
 
 
 
-
 /* =====================================================
    DELIVERY LOOP
 ===================================================== */
@@ -5436,7 +5351,6 @@ function deliveryLoop(now){
 
     if(!delivering)
         return;
-
 
 
 
@@ -5485,7 +5399,6 @@ function deliveryLoop(now){
 
 
 
-
         deliveryLoop.lastTime=now;
     }
 
@@ -5504,7 +5417,6 @@ function deliveryLoop(now){
                 deliveryLoop.lastTime
             )/1000
         );
-
 
 
 
@@ -5568,7 +5480,6 @@ function deliveryLoop(now){
 
 
 
-
         const a=
             route[index];
 
@@ -5586,7 +5497,6 @@ function deliveryLoop(now){
                 (
                     b.x-a.x
                 )*W,
-
 
 
 
@@ -5612,7 +5522,6 @@ function deliveryLoop(now){
 
 
 
-
             continue;
         }
 
@@ -5626,7 +5535,6 @@ function deliveryLoop(now){
         const remainingOnSegment=
             segmentLength*
             (1-fraction);
-
 
 
 
@@ -5653,7 +5561,6 @@ function deliveryLoop(now){
 
 
 
-
         }else{
 
 
@@ -5676,7 +5583,6 @@ function deliveryLoop(now){
 
 
 
-
     checkDeliveryDestinations();
 
 
@@ -5688,7 +5594,6 @@ function deliveryLoop(now){
 
     const rate=
         getDamageRate();
-
 
 
 
@@ -5720,7 +5625,6 @@ function deliveryLoop(now){
 
 
 
-
     checkEvent();
 
 
@@ -5733,7 +5637,6 @@ function deliveryLoop(now){
 
 
     drawDelivery();
-
 
 
 
@@ -5756,7 +5659,6 @@ function deliveryLoop(now){
 
         return;
     }
-
 
 
 
@@ -5805,7 +5707,6 @@ function getDeliveryPosition(){
 
 
 
-
     if(
         index>=route.length-1
     ){
@@ -5817,7 +5718,6 @@ function getDeliveryPosition(){
             route.length-1
         ];
     }
-
 
 
 
@@ -5839,7 +5739,6 @@ function getDeliveryPosition(){
 
     const b=
         route[index+1];
-
 
 
 
@@ -5883,7 +5782,6 @@ function getDeliveryPosition(){
 /* =====================================================
    DELIVERY DESTINATIONS
 ===================================================== */
-
 
 
 
@@ -5950,7 +5848,6 @@ function checkDeliveryDestinations(){
 
 
 
-
 /* =====================================================
    DAMAGE
 ===================================================== */
@@ -5965,7 +5862,6 @@ function getDamageRate(){
 
     let total=0;
     let count=0;
-
 
 
 
@@ -6030,7 +5926,6 @@ function finishEventPause(){
 }
 
 let eventContinueAction=null;
-
 function showEvent(title,text,choices=[]){
     eventTitle.textContent=title;
     eventText.innerHTML=text;
@@ -6114,7 +6009,6 @@ function openEventByType(type){
             ]);
         return;
     }
-
     if(type==='medicine'){
         showEvent('💊 미지의 약품',
             '수상한 사람이 당신에게 약을 건넵니다.<br>시제품이기에 무료로 먹어보라고 부추깁니다.',
@@ -6219,7 +6113,6 @@ function checkEvent(){
     for(const event of eventSlots){
         if(triggeredEvents.has(event.id)) continue;
         if(Math.hypot(p.x-event.x,p.y-event.y)>.04) continue;
-
         triggeredEvents.add(event.id);
         if(event.type==='reward' && (!allyHelped || Math.random()>rewardAppearanceChance)) continue;
 
@@ -6240,7 +6133,6 @@ function checkEvent(){
 
 
 function finishDelivery(){
-
 
 
 
@@ -6287,7 +6179,6 @@ function finishDelivery(){
 
 
 
-
     const efficiency=
         Math.max(
             0,
@@ -6326,7 +6217,6 @@ function finishDelivery(){
 
 
 
-
         const item=
             cargoData.find(
                 x=>x.id===id
@@ -6338,7 +6228,6 @@ function finishDelivery(){
         if(item)
             reward+=item.reward;
     }
-
 
 
 
@@ -6372,7 +6261,6 @@ function finishDelivery(){
 
 
 
-
     const score=
         efficiency*.55+
         (100-damage)*.45;
@@ -6385,7 +6273,6 @@ function finishDelivery(){
 
 
     let grade="D";
-
 
 
 
@@ -6410,7 +6297,6 @@ function finishDelivery(){
 
 
 
-
     else if(score>=52)
         grade="C";
 
@@ -6429,7 +6315,6 @@ function finishDelivery(){
 
     $("resultTime").textContent=
         deliveryElapsed.toFixed(1)+"s";
-
 
 
 
@@ -6453,7 +6338,6 @@ function finishDelivery(){
 
 
 
-
     $("grade").textContent=
         grade;
 
@@ -6466,7 +6350,6 @@ function finishDelivery(){
 
     showScreen(resultScreen);
 }
-
 
 
 
@@ -6506,7 +6389,6 @@ function getIdealDistance(){
 
     return currentMap?.idealDistance ?? (750+selectedCargo.length*90);
 }
-
 
 
 
@@ -6555,7 +6437,6 @@ function updateHUD(){
 
 
 
-
 /* =====================================================
    CARGO HUD
 ===================================================== */
@@ -6576,7 +6457,6 @@ function updateCargoHud(){
         <div class="cargo-hud-title">
             DELIVERY LIST
         </div>
-
 
 
 
@@ -6623,7 +6503,6 @@ function updateCargoHud(){
 
 
 
-
         html+=`
 
 
@@ -6637,7 +6516,6 @@ function updateCargoHud(){
 
                 ${done?"✓":"○"}
                 ${item.name}
-
 
 
 
@@ -6665,7 +6543,6 @@ function updateCargoHud(){
 
 
 
-
 /* =====================================================
    TEMPORARY MESSAGE
 ===================================================== */
@@ -6674,7 +6551,6 @@ function updateCargoHud(){
 
 
 let messageTimer=null;
-
 
 
 
@@ -6702,7 +6578,6 @@ function showTemporaryMessage(text){
     messageTimer=
         setTimeout(
             ()=>{
-
 
 
 
@@ -6744,7 +6619,6 @@ function showTemporaryMessage(text){
 function draw(){
 
     if(!W || !H) return;
-
     ctx.clearRect(0,0,W,H);
 
     if(mapCacheCanvas){
@@ -6853,7 +6727,6 @@ function draw(){
 
 
 
-
         ctx.beginPath();
 
 
@@ -6915,7 +6788,6 @@ function draw(){
 
 
 
-
         ctx.fillStyle="#080910";
 
 
@@ -6929,7 +6801,6 @@ function draw(){
 
         ctx.textAlign="center";
         ctx.textBaseline="middle";
-
 
 
 
@@ -6954,7 +6825,6 @@ function draw(){
     /*
        ROUTE
     */
-
 
 
 
@@ -6992,7 +6862,6 @@ function draw(){
 
             const y=
                 route[i].y*H;
-
 
 
 
@@ -7039,7 +6908,6 @@ function draw(){
 
 
 
-
         ctx.stroke();
 
 
@@ -7058,7 +6926,6 @@ function draw(){
             delivering
             ? "#ff3c91"
             : "#63f5ff";
-
 
 
 
@@ -7102,7 +6969,6 @@ function draw(){
 
 
 
-
     const sy=
         startPoint.y*H;
 
@@ -7119,7 +6985,6 @@ function draw(){
 
 
     ctx.shadowColor="#63f5ff";
-
 
 
 
@@ -7163,7 +7028,6 @@ function draw(){
 
 
     ctx.fillStyle="#071016";
-
 
 
 
@@ -7230,7 +7094,6 @@ function draw(){
 
 
 
-
         ctx.arc(
             sx,
             sy,
@@ -7244,7 +7107,6 @@ function draw(){
 
         ctx.stroke();
     }
-
 
 
 
@@ -7297,7 +7159,6 @@ function draw(){
 
 
 
-
         ctx.beginPath();
 
 
@@ -7310,7 +7171,6 @@ function draw(){
             0,
             Math.PI*2
         );
-
 
 
 
@@ -7333,7 +7193,6 @@ function draw(){
 
 
 
-
 /* =====================================================
    DELIVERY DRAW
 ===================================================== */
@@ -7347,7 +7206,6 @@ function drawDelivery(){
 
 
     draw();
-
 
 
 
@@ -7397,7 +7255,6 @@ function drawDelivery(){
 
 
 
-
     ctx.arc(
         p.x*W,
         p.y*H,
@@ -7410,7 +7267,6 @@ function drawDelivery(){
 
 
     ctx.fill();
-
 
 
 
@@ -7440,7 +7296,6 @@ function drawDelivery(){
 
 
 
-
     ctx.arc(
         p.x*W+5,
         p.y*H-4,
@@ -7453,7 +7308,6 @@ function drawDelivery(){
 
 
     ctx.fill();
-
 
 
 
@@ -7524,7 +7378,6 @@ canvas.addEventListener(
 
 
 
-
 applyMap(selectedMapId);
 showScreen(titleScreen);
 resize();
@@ -7538,4 +7391,4 @@ resize();
 
 
 </body>
-</html>
+              </html>
